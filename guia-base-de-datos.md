@@ -42,34 +42,31 @@ Una vez que el servicio esté en estado **`Running`**, en la pantalla **Overview
 
 ---
 
-## 🛠️ Cómo Conectarse para Comenzar a Trabajar
+## 🛠️ Conexión Oficial desde VS Code (Extensión Database Client)
 
-### 1. Conexión recomendada desde VS Code (Extensión Database Client / MySQL):
+Todo el trabajo con la base de datos se realiza **100% dentro de Visual Studio Code** utilizando la extensión **Database Client** (de *cweijan*):
+
 1. Abrir **Visual Studio Code**.
-2. Ir al panel izquierdo y hacer clic en el ícono de la extensión de Base de Datos (**Database Client** / **MySQL**).
-3. Hacer clic en **"Create Connection"** (o en el botón **`+`**).
-4. Seleccionar el tipo de base de datos: **`MySQL`**.
-5. Completar los campos con los datos de Aiven:
+2. En la barra lateral izquierda, hacer clic en la pestaña de **Extensiones** (`Ctrl` + `Shift` + `X`), buscar **`Database Client`** e instalarla.
+3. Hacer clic en el ícono del cilindro de base de datos en la barra lateral izquierda.
+4. Hacer clic en **"Create Connection"** (o en el botón **`+`**).
+5. Seleccionar el tipo de servidor: **`MySQL`**.
+6. Completar los campos con los datos obtenidos en Aiven:
    * **Host / Server:** *(Copiar el Host de Aiven)*
-   * **Port:** *(Copiar el puerto de Aiven, ej. 27892)*
-   * **User:** `avnadmin`
-   * **Password:** *(Copiar la contraseña de Aiven)*
+   * **Port:** `27892` *(o el puerto asignado por Aiven)*
+   * **Username:** `avnadmin`
+   * **Password:** *(Copiar la contraseña mostrada en Aiven)*
    * **Database:** `defaultdb`
-   * **Use SSL / SSL Mode:** `Require` / Habilitado
-6. Hacer clic en **"Test Connection"** y luego en **"Save and Connect"**.
-7. ¡Listo! Ya podés ver la base de datos, escribir consultas SQL y ejecutar scripts `.sql` directamente dentro de VS Code sin salir del editor.
-
----
-
-### 2. Opciones alternativas (HeidiSQL o phpMyAdmin):
-* Si prefieren usar un cliente externo como **HeidiSQL**: Abrir HeidiSQL $\rightarrow$ Nueva Conexión $\rightarrow$ Tipo: `MySQL (TCP/IP)` $\rightarrow$ Cargar Host, Puerto (27892), Usuario (`avnadmin`) y Contraseña de Aiven $\rightarrow$ Habilitar SSL $\rightarrow$ Abrir.
-
+   * **SSL:** Habilitado / Activado (Modo `Require`)
+7. Hacer clic en **"Test Connection"** y al confirmar la barra verde (**`Success! Connection Saved!`**), hacer clic en **"Save and Connect"**.
+8. **¡Listo!** En la barra lateral izquierda verás la base de datos `defaultdb`. Hacer clic derecho $\rightarrow$ **`New Query`** para escribir y ejecutar sentencias SQL directamente en tu editor.
 
 ---
 
 ## 📌 Próximo Paso
-Una vez abierta la conexión en HeidiSQL con la base de datos limpia, el equipo de Barufaldi estará listo para comenzar a diseñar y ejecutar las sentencias `CREATE TABLE` de las entidades del proyecto.
+Una vez establecida la conexión en **VS Code con Database Client** sobre la base limpia de Aiven, el equipo de Barufaldi estará listo para comenzar a ejecutar los scripts `CREATE TABLE` de las entidades del proyecto.
 
 ---
 
-📌 *Guía de Base de Datos Nube — E.E.S.T. N° 5 (2026)*
+📌 *Guía Oficial de Base de Datos Nube — E.E.S.T. N° 5 (2026)*
+
