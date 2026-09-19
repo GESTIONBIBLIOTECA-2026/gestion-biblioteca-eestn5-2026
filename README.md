@@ -25,7 +25,9 @@ Toda la documentación técnica, guías de instalación y paso a paso por grupo 
 
 
 * 🗄️ **[Guía de Base de Datos MySQL Cloud](docs/guia-base-de-datos.md):** Conexión paso a paso desde VS Code (Database Client) a Aiven.io.
+* 🌐 **[Guía de Despliegue PWA en Vercel](docs/guia-despliegue-vercel-dylan.md):** Despliegue automático y dominio HTTPS para Dylan Andrada.
 * 🌿 **[Guía de Flujo Git & Gobernanza](docs/guia-git-flujo-trabajo.md):** Instrucciones de ramas y Pull Requests para Devs, Líderes y Admin.
+
 * 🚀 **Guías de Inicio a la Programación e Hilo Conductor por Sub-Equipo:**
   - 🟢 **[Guía Grupo 5 — Usuarios, DB y Admin](docs/guia-inicio-grupo-5.md)**
   - 🔵 **[Guía Grupo 6 — Inventario y Catálogo](docs/guia-inicio-grupo-6.md)**
