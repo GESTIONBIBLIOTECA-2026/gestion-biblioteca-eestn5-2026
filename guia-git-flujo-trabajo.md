@@ -72,12 +72,17 @@ git push origin g5-barufaldi
 
 ### Paso 4: Abrir Pull Request (PR) hacia tu rama de subgrupo
 1. Ingresa al repositorio en GitHub: [gestion-biblioteca-eestn5-2026](https://github.com/GESTIONBIBLIOTECA-2026/gestion-biblioteca-eestn5-2026).
-2. Haz clic en el botón verde **"Compare & pull request"**.
-3. **CONFIGURACIÓN OBLIGATORIA DE LA PR:**
+2. Haz clic en la pestaña **"Pull requests"**.
+3. Haz clic en el botón verde **"New pull request"**.
+4. Selecciona las ramas de origen y destino:
    * **base:** `g5` *(o `g4` / `g6` según tu grupo — ¡NUNCA a `main` ni `develop` directamente!)*
    * **compare:** `g5-barufaldi` *(tu rama individual)*
-4. En **Reviewers**, selecciona al **Líder de tu Subgrupo**.
-5. Escribe un título claro y haz clic en **"Create pull request"**.
+5. Haz clic en el botón **"Create pull request"**.
+6. En la pantalla final de envío:
+   * Escribe un **Título** claro y una **Descripción** de lo que realizaste.
+   * En el panel derecho (**Reviewers**), selecciona al **Líder de tu Subgrupo**.
+   * Haz clic en el botón verde **"Create pull request"** para confirmarla.
+
 
 ---
 
