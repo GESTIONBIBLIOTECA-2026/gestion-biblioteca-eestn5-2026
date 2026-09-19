@@ -1,4 +1,4 @@
-# 🚀 Guía de Inicio a la Programación — GRUPO 4
+# 🚀 Guía de Inicio y Flujo de Pantallas — GRUPO 4
 ## Módulo: Gestión de Pedidos, Reservas y Mesa de Entrada
 
 > **Integrantes:** Tiziano Latorre, Ivan Masalis, Leonel Mirez, Alex Gauto, Mateo Grajales.  
@@ -8,104 +8,46 @@
 
 ---
 
-## 🎬 1. El Hilo Conductor: Tu Rol en la Película del Proyecto
+## 📱 1. Flujo del Usuario en la App Móvil PWA (Experiencia en el Celular)
 
-Tu grupo es el **orquestador de las transacciones y préstamos**:
+### 📌 Paso A: Solicitud de Reserva desde el Celular
+1. **Inicio de Reserva:** Cuando un alumno encuentra un libro 🟢 **Disponible** en el catálogo (Grupo 6) y presiona **"Reservar Libro"**, se activa la pantalla de confirmación de reserva.
+2. **Confirmación:** La app le muestra un resumen del libro seleccionado y le pide seleccionar la fecha estimada en la que se presentará en la biblioteca a buscarlo.
+3. **Validaciones Automáticas:** Al tocar *"Confirmar Reserva"*, la app verifica automáticamente dos condiciones:
+   - Que el alumno esté **Habilitado** (sin suspensiones ni atrasos pendientes del Grupo 5).
+   - Que el libro tenga **Stock disponible** (del Grupo 6).
+4. **Generación del Pedido:** Si las validaciones son correctas, el pedido se registra con el estado **🟡 Pendiente de Retiro** y se le avisa al alumno con un mensaje en pantalla: *"¡Reserva creada! Tenés 48hs para retirar el libro por la biblioteca"*.
 
-1. **Cuando el alumno toca "Reservar" en la PWA:** Tu módulo toma el ID del alumno y del libro, consulta que el usuario esté habilitado (vía Grupo 5) y que haya stock (vía Grupo 6), y genera la solicitud en estado `Pendiente de Retiro`.
-2. **Cuando el alumno va a la Biblioteca:** El bibliotecario entra a la pantalla de la Web (Mesa de Entrada), busca la solicitud de retiro y presiona **"Confirmar Entrega"**. El pedido pasa a `En Préstamo` y se descuenta el stock.
-3. **Cuando el alumno devuelve el libro:** El bibliotecario registra la devolución en tu pantalla Web, el estado pasa a `Devuelto` y el stock vuelve a sumarse.
-
----
-
-## 🛠️ 2. Guía Paso a Paso para Empezar a Programar
-
-### 📌 PASO 1: Creación de la Tabla en Base de Datos
-Verifiquen que en MySQL exista la tabla `pedidos` (creada en equipo con el Grupo 5):
-
-```sql
-CREATE TABLE IF NOT EXISTS pedidos (
-    id_pedido INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    id_libro INT NOT NULL,
-    cantidad INT DEFAULT 1,
-    fecha_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
-    fecha_devolucion_estimada DATE NOT NULL,
-    fecha_devolucion_real DATETIME NULL,
-    estado ENUM('pendiente', 'aprobado', 'prestado', 'devuelto', 'vencido', 'cancelado') DEFAULT 'pendiente',
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_libro) REFERENCES libros(id_libro) ON DELETE CASCADE
-);
-```
+### 📋 Paso B: Sección "Mis Pedidos" (Seguimiento del Alumno)
+1. **Acceso:** El alumno cuenta con una pestaña llamada **"Mis Pedidos"** para consultar sus solicitudes.
+2. **Estados Visibles:** Cada tarjeta de pedido le informa claramente la situación actual de su libro:
+   * 🟡 **Pendiente de Retiro:** La reserva fue aceptada; el alumno debe ir a buscar el libro al mostrador.
+   * 🔵 **En Préstamo:** El alumno ya retiró el libro y lo tiene en su poder (muestra la fecha límite de devolución).
+   * 🟢 **Devuelto:** El libro fue entregado correctamente en la biblioteca y el préstamo se cerró.
+   * 🔴 **Vencido:** La fecha límite pasó y el alumno debe devolver el libro de inmediato.
 
 ---
 
-### 📌 PASO 2: Maquetación de Pantallas (HTML + CSS)
+## 💻 2. Flujo en la Plataforma Web (Mesa de Entrada / Mostrador)
 
-Creen dentro de su módulo:
+Esta interfaz está diseñada para que la utilice el bibliotecario cuando atiende a los alumnos en el mostrador:
 
-#### A) `frontend/pwa/mis-pedidos.html` (App Móvil PWA - Celular del Alumno)
-* Pantalla de seguimiento personal de solicitudes.
-* Listado de tarjetas de pedidos con fecha y estado: 
-  * 🟡 **Pendiente de Retiro** (esperando que vaya a la biblioteca)
-  * 🔵 **En Préstamo** (libro en mano del alumno)
-  * 🟢 **Devuelto**
-  * 🔴 **Vencido** (alerta de fecha límite superada)
-
-#### B) `frontend/web/mesa-entrada.html` (Plataforma Web - Escritorio del Bibliotecario)
-* Listado general de solicitudes del día.
-* Filtros por estado (*Pendientes de Entrega / En Préstamo*).
-* Botones de acción rápida: **"Confirmar Entrega de Libro"** y **"Registrar Devolución"**.
+1. **Panel de Recepción de Solicitudes:** El bibliotecario ve una lista en tiempo real de los alumnos que reservaron libros desde su celular.
+2. **Confirmación de Entrega:** Cuando el alumno se presenta físicamente en el mostrador, el bibliotecario busca la solicitud y presiona **"Confirmar Entrega"**. En ese instante:
+   - El estado del pedido pasa a 🔵 **En Préstamo**.
+   - El stock del libro se descuenta automáticamente en el catálogo.
+3. **Registro de Devolución:** Cuando el alumno trae el libro de regreso, el bibliotecario busca el préstamo activo y presiona **"Registrar Devolución"**. El préstamo pasa a 🟢 **Devuelto** y el libro vuelve a estar disponible para otros alumnos.
 
 ---
 
-### 📌 PASO 3: Lógica JavaScript y Peticiones API (`fetch`)
+## 🎯 Resumen: ¿Qué pantallas tiene que diseñar tu grupo?
 
-Creen el archivo `js/pedidos.js`:
-
-#### Ejemplo de Petición Fetch para crear una reserva desde la PWA:
-```javascript
-// Enviar solicitud de reserva desde el celular del alumno
-async function crearReserva(idUsuario, idLibro) {
-    try {
-        // 1. Validaciones previas
-        const respUsuario = await fetch(`http://localhost:3000/api/usuarios/${idUsuario}`);
-        const usuario = await respUsuario.json();
-        if (usuario.estado !== 'habilitado') {
-            alert('No podés reservar libros porque tu cuenta está suspendida por mora.');
-            return;
-        }
-
-        // 2. Enviar pedido de reserva
-        const respuesta = await fetch('http://localhost:3000/api/pedidos', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id_usuario: idUsuario,
-                id_libro: idLibro,
-                fecha_devolucion_estimada: '2026-10-01'
-            })
-        });
-
-        const resultado = await respuesta.json();
-        alert('¡Reserva creada con éxito! Pasá por la biblioteca a retirar tu libro.');
-        window.location.href = 'mis-pedidos.html';
-    } catch (error) {
-        console.error('Error al realizar reserva:', error);
-    }
-}
-```
+* **En la App Móvil (PWA Celular):**
+  - `confirmar-reserva.html`: Venta modal/pantalla para confirmar la solicitud con la fecha de retiro.
+  - `mis-pedidos.html`: Pantalla de seguimiento personal de solicitudes con badges de estado (Pendiente, En Préstamo, Devuelto, Vencido).
+* **En la Plataforma Web (Escritorio):**
+  - `mesa-entrada.html`: Panel del bibliotecario para confirmar entregas físicas y registrar devoluciones de libros.
 
 ---
 
-## 📡 Endpoints JSON que maneja tu módulo
-
-| Método | Ruta API | Descripción | Respuesta JSON Ejemplo |
-| :--- | :--- | :--- | :--- |
-| **POST** | `/api/pedidos` | Crea una nueva solicitud de reserva | `{"mensaje": "Reserva creada con éxito", "id_pedido": 101}` |
-| **GET** | `/api/pedidos/usuario/:id` | Obtené las reservas de un alumno (PWA) | `[{"id_pedido": 101, "titulo": "Física I", "estado": "pendiente"}]` |
-| **PUT** | `/api/pedidos/:id/estado` | Cambia estado (ej: `prestado` o `devuelto`) | `{"mensaje": "Estado de pedido actualizado"}` |
-
----
-
-📌 *Guía de Inicio Grupo 4 — E.E.S.T. N° 5 (2026)*
+📌 *Guía de Flujo Funcional Grupo 4 — E.E.S.T. N° 5 (2026)*

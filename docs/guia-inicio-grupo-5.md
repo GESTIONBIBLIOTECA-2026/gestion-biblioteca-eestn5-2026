@@ -1,5 +1,5 @@
-# 🚀 Guía de Inicio a la Programación — GRUPO 5
-## Módulo: Gestión de Usuarios, Base de Datos y Panel Admin
+# 🚀 Guía de Inicio y Flujo de Pantallas — GRUPO 5
+## Módulo: Gestión de Usuarios, Login y Panel Administrador
 
 > **Integrantes:** Franco Barufaldi *(Lead DB)*, Dylan Andrada *(Líder General)*, Francisco Peña, Marcos Palacios, Thiago Gioia.  
 > **Proyecto:** Sistema de Gestión de Biblioteca (E.E.S.T. N° 5 - 2026)  
@@ -8,105 +8,41 @@
 
 ---
 
-## 🎬 1. El Hilo Conductor: Tu Rol en la Película del Proyecto
+## 📱 1. Flujo del Usuario en la App Móvil PWA (Experiencia en el Celular)
 
-Tu grupo es el **corazón de datos e identificación del sistema**:
+### 🔑 Paso A: Registro e Inicio de Sesión (Login)
+1. **Pantalla de Bienvenida:** Cuando el alumno o docente abre la aplicación por primera vez en su celular, se encuentra con la pantalla de inicio de sesión.
+2. **Ingreso:** El usuario se identifica ingresando su **DNI** y su contraseña (o se registra si es un usuario nuevo completando Nombre, DNI, Curso, Email y Teléfono).
+3. **Validación:** Al presionar *"Ingresar"*, la app verifica los datos. Si son correctos, le permite acceder al sistema.
 
-1. **Cuando el alumno abre la PWA en su celular:** Entra a su Credencial Digital. La App le pregunta a tu módulo: *¿Quién es este alumno? ¿Está habilitado o suspendido?*.
-2. **Cuando el alumno intenta reservar un libro (Grupo 4):** El módulo de pedidos le consulta a tu módulo: *¿Juan Perez (DNI 45123456) puede llevarse un libro o tiene sanciones/moras?*.
-3. **En la Administración Web:** El bibliotecario usa tu pantalla para dar de alta nuevos alumnos, modificar sus datos o aplicar suspensiones si no devolvieron un libro a tiempo.
-
----
-
-## 🛠️ 2. Guía Paso a Paso para Empezar a Programar
-
-### 📌 PASO 1: Trabajo en Base de Datos (Franco Barufaldi & Equipo)
-Desde Visual Studio Code, abran la extensión **Database Client** conectada a **Aiven MySQL** y ejecuten el script de creación de las tablas de usuarios y sanciones:
-
-```sql
--- Tabla de Usuarios
-CREATE TABLE IF NOT EXISTS usuarios (
-    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_completo VARCHAR(150) NOT NULL,
-    dni VARCHAR(20) NOT NULL UNIQUE,
-    curso VARCHAR(50) DEFAULT 'Docente/Personal',
-    correo VARCHAR(100),
-    telefono VARCHAR(30),
-    direccion VARCHAR(150),
-    rol ENUM('alumno', 'docente', 'admin') DEFAULT 'alumno',
-    estado ENUM('habilitado', 'suspendido') DEFAULT 'habilitado',
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabla de Sanciones / Atrasos
-CREATE TABLE IF NOT EXISTS sanciones (
-    id_sancion INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    dias_atraso INT DEFAULT 0,
-    observacion TEXT,
-    fecha_sancion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
-);
-```
+### 💳 Paso B: Credencial Digital y Perfil del Alumno
+1. **Acceso al Perfil:** Una vez logueado, el alumno accede a su pantalla principal de perfil, que funciona como una **Credencial Digital de Biblioteca**.
+2. **Información Visible:** En la pantalla debe ver su foto/avatar, su Nombre Completo, DNI y Curso (ej. *7mo 5ta*).
+3. **Estado de Habilitación:** La credencial muestra una etiqueta clara sobre su condición actual:
+   * 🟢 **Habilitado:** Puede solicitar y reservar libros en la biblioteca.
+   * 🔴 **Suspendido:** No puede pedir libros temporalmente por atraso en una devolución o sanción.
+4. **Mi Historial:** Debajo de su credencial, el alumno puede consultar el listado de libros que pidió en el pasado y los préstamos que tiene activos en este momento.
 
 ---
 
-### 📌 PASO 2: Maquetación de Pantallas (HTML + CSS)
+## 💻 2. Flujo en la Plataforma Web (Gestión Bibliotecaria / Escritorio)
 
-Creen dentro de la estructura de carpetas de su módulo:
+Esta interfaz está diseñada para que la utilice el bibliotecario en la computadora de la escuela:
 
-#### A) `frontend/web/admin-usuarios.html` (Plataforma Web - Escritorio)
-* Un formulario para dar de alta nuevos alumnos (campos: Nombre completo, DNI, Curso, Email, Teléfono, Dirección).
-* Una tabla con la lista de usuarios cargados, un `<input type="search">` para buscar por DNI/Nombre, y un botón de acción *"Suspender / Habilitar"*.
-
-#### B) `frontend/pwa/perfil.html` (App Móvil PWA - Celular)
-* Una tarjeta estilo **Credencial Digital**: Foto/Avatar, Nombre del Alumno, DNI, Curso.
-* Un indicador visual (Badge): 🟢 **Habilitado** o 🔴 **Suspendido por Mora**.
-* Sección *"Mis préstamos activos e historial"*.
+1. **Búsqueda de Usuarios:** El bibliotecario cuenta con un buscador donde puede ingresar el DNI o el Apellido de cualquier estudiante para ver su ficha completa.
+2. **Alta y Edición:** Permite dar de alta a nuevos alumnos que ingresan a la escuela o editar sus datos de contacto (cambio de teléfono, mail o curso).
+3. **Control de Sanciones:** Si un alumno devuelve un libro fuera de término o dañado, el bibliotecario puede marcar la opción *"Suspender usuario"* para que la App Móvil le impida realizar nuevas reservas hasta regularizar su situación.
 
 ---
 
-### 📌 PASO 3: Lógica JavaScript y Peticiones API (`fetch`)
+## 🎯 Resumen: ¿Qué pantallas tiene que diseñar tu grupo?
 
-Creen el archivo `js/usuarios.js`:
-
-#### Ejemplo de Petición Fetch para consultar un usuario desde el cliente:
-```javascript
-// Obtener datos del perfil del alumno por DNI
-async function cargarPerfilUsuario(dni) {
-    try {
-        const respuesta = await fetch(`http://localhost:3000/api/usuarios/${dni}`);
-        const usuario = await respuesta.json();
-        
-        // Dibujar en el DOM
-        document.getElementById('nombre-alumno').textContent = usuario.nombre_completo;
-        document.getElementById('dni-alumno').textContent = usuario.dni;
-        document.getElementById('curso-alumno').textContent = usuario.curso;
-        
-        const badgeEstado = document.getElementById('badge-estado');
-        if (usuario.estado === 'habilitado') {
-            badgeEstado.className = 'badge badge-exito';
-            badgeEstado.textContent = '🟢 Habilitado';
-        } else {
-            badgeEstado.className = 'badge badge-error';
-            badgeEstado.textContent = '🔴 Suspendido';
-        }
-    } catch (error) {
-        console.error('Error al cargar perfil:', error);
-    }
-}
-```
+* **En la App Móvil (PWA Celular):**
+  - `login.html`: Formulario de ingreso/registro por DNI.
+  - `perfil.html`: Credencial digital del alumno con datos personales, badge de estado y su historial.
+* **En la Plataforma Web (Escritorio):**
+  - `admin-usuarios.html`: Tabla de administración con buscador por DNI, alta de usuarios y botones para suspender/habilitar.
 
 ---
 
-## 📡 Endpoints JSON que debe proveer tu módulo
-
-| Método | Ruta API | Descripción | Respuesta JSON Ejemplo |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/api/usuarios/:dni` | Devuelve datos de un usuario por DNI | `{"id_usuario": 1, "nombre_completo": "Juan Perez", "dni": "45123456", "curso": "7mo 5ta", "estado": "habilitado"}` |
-| **POST** | `/api/usuarios` | Alta de nuevo usuario (Web) | `{"mensaje": "Usuario creado con éxito", "id_usuario": 2}` |
-| **PUT** | `/api/usuarios/:id/estado` | Cambia estado a suspendido/habilitado | `{"mensaje": "Estado actualizado correctamente"}` |
-
----
-
-📌 *Guía de Inicio Grupo 5 — E.E.S.T. N° 5 (2026)*
+📌 *Guía de Flujo Funcional Grupo 5 — E.E.S.T. N° 5 (2026)*
