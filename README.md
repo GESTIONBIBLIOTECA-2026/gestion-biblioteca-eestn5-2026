@@ -15,7 +15,22 @@ El desarrollo se realiza de forma colaborativa entre los **Grupos 4, 5 y 6** del
 
 ---
 
+## 📂 Documentación del Proyecto (`docs/`)
+
+Toda la documentación técnica, guías de instalación y paso a paso por grupo se encuentran organizadas en la carpeta [`docs/`](docs/):
+
+* 📐 **[Alcance Web vs. Móvil PWA](docs/alcance-web-vs-movil.md):** Delimitación de funciones para Escritorio (Web) y Celular (PWA).
+* 🗄️ **[Guía de Base de Datos MySQL Cloud](docs/guia-base-de-datos.md):** Conexión paso a paso desde VS Code (Database Client) a Aiven.io.
+* 🌿 **[Guía de Flujo Git & Gobernanza](docs/guia-git-flujo-trabajo.md):** Instrucciones de ramas y Pull Requests para Devs, Líderes y Admin.
+* 🚀 **Guías de Inicio a la Programación e Hilo Conductor por Sub-Equipo:**
+  - 🟢 **[Guía Grupo 5 — Usuarios, DB y Admin](docs/guia-inicio-grupo-5.md)**
+  - 🔵 **[Guía Grupo 6 — Inventario y Catálogo](docs/guia-inicio-grupo-6.md)**
+  - 🟠 **[Guía Grupo 4 — Pedidos y Coordinación](docs/guia-inicio-grupo-4.md)**
+
+---
+
 ## 👥 Estructura del Equipo y Módulos Funcionales
+
 
 ### 👑 Liderazgo y Coordinación
 * **Líder General / Org Admin:** Dylan Andrada (`@DylanXeneizee12`)
