@@ -26,25 +26,28 @@ El desarrollo se realiza de forma colaborativa entre los **Grupos 4, 5 y 6** del
 ### 📦 Módulos por Sub-Equipo
 
 #### 🟢 Grupo 5 — Gestión de Usuarios y Panel Admin
-**Integrantes:** Franco Barufaldi (Lead DB), Dylan Andrada (Líder General), Francisco Peña, Marcos Palacios, Thiago Gioia.
-* **Alta, modificación y baja (CRUD)** de usuarios.
-* **Búsqueda avanzada** por nombre completo, DNI y curso.
-* **Gestión de atributos:** Nombre, DNI, curso, correo, teléfono y dirección.
-* **Historial activo:** Registro de entregas, devoluciones y atrasos.
-* **Panel Administrador** para gestión bibliotecaria.
+**Integrantes y Ramas:**
+* Franco Barufaldi (`g5-barufaldi`) *(Lead DB & Backend)*
+* Dylan Andrada (`g5-andrada`) *(Líder General)*
+* Francisco Peña (`g5-pena`)
+* Marcos Palacios (`g5-palacios`)
+* Thiago Gioia (`g5-gioia`)
 
 #### 🔵 Grupo 6 — Gestión de Inventario y Catálogo
-**Integrantes:** Joaquín Trujillo, Melian Pizzorno, Leandro Vázquez, Enrique Smidt, Lautaro Garraza.
-* **Gestión del catálogo:** Registro, edición y baja de libros nuevos (CRUD de inventario).
-* **Buscador de libros:** Filtros combinados por categoría, título, autor y disponibilidad.
-* **Manejo de stock:** Actualización de cantidades de ejemplares.
-* **Indicador de estado:** Disponible / Prestado.
+**Integrantes y Ramas:**
+* Joaquín Trujillo (`g6-trujillo`)
+* Melian Pizzorno (`g6-pizzorno`)
+* Leandro Vázquez (`g6-vazquez`)
+* Enrique Smidt (`g6-smidt`)
+* Lautaro Garraza (`g6-garraza`)
 
 #### 🟠 Grupo 4 — Gestión de Pedidos y Coordinación
-**Integrantes:** Tiziano Latorre, Ivan Masalis, Leonel Mirez, Alex Gauto, Mateo Grajales.
-* **Creación de pedidos:** Solicitud con usuario, libro, cantidad, fecha de pedido y devolución.
-* **Validación de reglas de negocio:** Verificación de stock disponible (vía Grupo 6) y estado habilitado del usuario (vía Grupo 5).
-* **Control del estado del pedido** e historial general.
+**Integrantes y Ramas:**
+* Tiziano Latorre (`g4-latorre`)
+* Ivan Masalis (`g4-masalis`)
+* Leonel Mirez (`g4-mierez`)
+* Alex Gauto (`g4-gauto`)
+* Mateo Grajales (`g4-grajales`)
 
 ---
 
@@ -57,11 +60,41 @@ El desarrollo se realiza de forma colaborativa entre los **Grupos 4, 5 y 6** del
 
 ---
 
-## 🌿 Gobernanza de Git & Flujo de Trabajo
+## 🌿 Gobernanza de Git & Jerarquía de Ramas
 
-1. **Rama Principal (`main`):** Reservada para código probado e integrado.
-2. **Rama de Desarrollo (`develop`):** Integración continua de los 3 módulos.
-3. **Ramas de Funcionalidades (`feature/<modulo>-<nombre>`):** Cada integrante debe trabajar en su respectiva rama y enviar Pull Request para integración.
+Para garantizar la integridad del código, el repositorio cuenta con reglas de protección de ramas en GitHub (**Branch Protection Rules**):
+
+```text
+main  (Producción Estable) [Protegida - Solo PRs aprobados]
+ └── develop  (Rama de Integración Continua) [Protegida - Solo PRs aprobados]
+      │
+      ├── g5  (Rama del Grupo 5 - DB/Usuarios) [Protegida - Solo PRs a Líder G5]
+      │    ├── g5-barufaldi
+      │    ├── g5-andrada
+      │    ├── g5-pena
+      │    ├── g5-palacios
+      │    └── g5-gioia
+      │
+      ├── g6  (Rama del Grupo 6 - Inventario) [Protegida - Solo PRs a Líder G6]
+      │    ├── g6-trujillo
+      │    ├── g6-pizzorno
+      │    ├── g6-vazquez
+      │    ├── g6-smidt
+      │    └── g6-garraza
+      │
+      └── g4  (Rama del Grupo 4 - Pedidos) [Protegida - Solo PRs a Líder G4]
+           ├── g4-latorre
+           ├── g4-masalis
+           ├── g4-mierez
+           ├── g4-gauto
+           └── g4-grajales
+```
+
+### 📋 Reglas del Flujo de Trabajo
+1. **Pusheo directo bloqueado:** Nadie puede pushear directamente a `main`, `develop`, `g4`, `g5` ni `g6`.
+2. **Pull Requests Individuales:** Cada desarrollador trabaja en su rama individual (`gX-apellido`) y abre PR dirigida a la rama de su subgrupo (`gX`).
+3. **Revisión del Líder:** El líder de subgrupo revisa la PR, aprueba el código y hace el merge en `gX`.
+4. **Integración en `develop`:** Los líderes de subgrupo abren PR desde `gX` hacia `develop` para la revisión docente e integración de Sprint.
 
 ---
 
