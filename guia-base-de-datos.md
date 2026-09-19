@@ -44,16 +44,26 @@ Una vez que el servicio esté en estado **`Running`**, en la pantalla **Overview
 
 ## 🛠️ Cómo Conectarse para Comenzar a Trabajar
 
-### Conexión desde HeidiSQL (en las PCs de la Escuela / Casa):
-1. Abrir **HeidiSQL**.
-2. Crear una **Nueva Conexión**:
-   * **Tipo de red:** `MySQL (TCP/IP)`
-   * **Hostname / IP:** *(Copiar el Host de Aiven)*
-   * **Usuario:** `avnadmin`
-   * **Contraseña:** *(Copiar la contraseña de Aiven)*
-   * **Puerto:** *(Copiar el puerto de Aiven, ej. 27892)*
-3. En la pestaña **SSLs** (si lo requiere): Marcar habilitar SSL.
-4. Hacer clic en **Abrir**.
+### 1. Conexión recomendada desde VS Code (Extensión Database Client / MySQL):
+1. Abrir **Visual Studio Code**.
+2. Ir al panel izquierdo y hacer clic en el ícono de la extensión de Base de Datos (**Database Client** / **MySQL**).
+3. Hacer clic en **"Create Connection"** (o en el botón **`+`**).
+4. Seleccionar el tipo de base de datos: **`MySQL`**.
+5. Completar los campos con los datos de Aiven:
+   * **Host / Server:** *(Copiar el Host de Aiven)*
+   * **Port:** *(Copiar el puerto de Aiven, ej. 27892)*
+   * **User:** `avnadmin`
+   * **Password:** *(Copiar la contraseña de Aiven)*
+   * **Database:** `defaultdb`
+   * **Use SSL / SSL Mode:** `Require` / Habilitado
+6. Hacer clic en **"Test Connection"** y luego en **"Save and Connect"**.
+7. ¡Listo! Ya podés ver la base de datos, escribir consultas SQL y ejecutar scripts `.sql` directamente dentro de VS Code sin salir del editor.
+
+---
+
+### 2. Opciones alternativas (HeidiSQL o phpMyAdmin):
+* Si prefieren usar un cliente externo como **HeidiSQL**: Abrir HeidiSQL $\rightarrow$ Nueva Conexión $\rightarrow$ Tipo: `MySQL (TCP/IP)` $\rightarrow$ Cargar Host, Puerto (27892), Usuario (`avnadmin`) y Contraseña de Aiven $\rightarrow$ Habilitar SSL $\rightarrow$ Abrir.
+
 
 ---
 
