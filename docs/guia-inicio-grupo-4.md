@@ -1,7 +1,7 @@
 # 🚀 Guía de Inicio y Flujo Funcional — GRUPO 4
 ## Módulo: Gestión de Pedidos, Reservas y Coordinación
 
-> **Integrantes:** Tiziano Latorre, Ivan Masalis, Leonel Mirez, Alex Gauto, Mateo Grajales.  
+> **Integrantes:** Tiziano Latorre, Ivan Masalis, Leonel Mierez, Alex Gauto, Mateo Grajales.  
 > **Proyecto:** Sistema de Gestión de Biblioteca (E.E.S.T. N° 5 - 2026)  
 > **Repositorio:** [gestion-biblioteca-eestn5-2026](https://github.com/GESTIONBIBLIOTECA-2026/gestion-biblioteca-eestn5-2026)  
 > **Documento Oficial de Origen:** PDF Requerimientos Grupo B (Punto 3: Grupo 4)  

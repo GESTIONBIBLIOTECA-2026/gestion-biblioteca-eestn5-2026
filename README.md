@@ -66,7 +66,7 @@ Toda la documentación técnica, guías de instalación y paso a paso por grupo 
 **Integrantes y Ramas:**
 * Tiziano Latorre (`g4-latorre`)
 * Ivan Masalis (`g4-masalis`)
-* Leonel Mirez (`g4-mierez`)
+* Leonel Mierez (`g4-mierez`)
 * Alex Gauto (`g4-gauto`)
 * Mateo Grajales (`g4-grajales`)
 
