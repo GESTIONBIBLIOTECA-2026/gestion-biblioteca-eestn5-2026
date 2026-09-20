@@ -22,6 +22,7 @@ Toda la documentación técnica, guías de instalación y paso a paso por grupo 
 * 🎬 **[Hilo Conductor e Integración End-to-End](docs/hilo-conductor-integrado.md):** La historia completa paso a paso que conecta el trabajo de los 3 grupos.
 * 📄 **[PDF Oficial de Requerimientos](docs/requerimientos-oficiales-grupo-b.pdf):** Documento original de especificación de la biblioteca.
 * 📐 **[Alcance Web vs. Móvil PWA](docs/alcance-web-vs-movil.md):** Delimitación de funciones para Escritorio (Web) y Celular (PWA).
+* 🎨 **[Guía de Estilos Interactiva HTML](docs/eesT5-biblioteca-style-guide.html):** Sistema de diseño visual, paleta de colores, componentes UI, tipografía y maquetas interactivas Web Desktop & PWA Móvil.
 
 
 * 🗄️ **[Guía de Base de Datos MySQL Cloud](docs/guia-base-de-datos.md):** Conexión paso a paso desde VS Code (Database Client) a Aiven.io.
