@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Biblioteca Invaluable - Panel de Administración</title>
+
+
+    <!-- Estilos generales -->
+    <link rel="stylesheet" href="/styles/estilo-general.css">
+
+    <!-- Estilos exclusivos del index -->
+    <link rel="stylesheet" href="/styles/index.css">
+
+
+<!-- Fuente Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<!-- Iconos Lucide -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     ENCABEZADO
+====================================================== -->
+
+<header class="encabezado">
+
+    <!-- Logo y nombre -->
+    <div class="zona-logo">
+
+        <i data-lucide="book-open" class="icono-logo"></i>
+
+        <span class="texto-logo">
+            Biblioteca Invaluable
+        </span>
+
+        <span class="separador"></span>
+
+        <span class="texto-panel">
+            Panel de Administración
+        </span>
+
+    </div>
+
+
+    <!-- Administrador -->
+    <div class="zona-administrador">
+
+        <div class="icono-administrador">
+            <i data-lucide="user-round"></i>
+        </div>
+
+        <span>Admin</span>
+
+        <i
+            data-lucide="chevron-down"
+            class="flecha-desplegable">
+        </i>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+====================================================== -->
+
+<main class="contenedor">
+
+
+    <!-- =================================================
+         BIENVENIDA
+    ================================================== -->
+
+    <section class="bienvenida">
+
+        <div>
+
+            <h1>
+                ¡Bienvenido, Admin!
+            </h1>
+
+            <p>
+                Gestioná la biblioteca de forma simple y rápida.
+            </p>
+
+        </div>
+
+
+        <!-- Fecha actual -->
+
+        <div class="fecha">
+
+            <i data-lucide="calendar"></i>
+
+            <span>
+                Lunes, 22 de septiembre de 2026
+            </span>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ACCIONES RÁPIDAS
+    ================================================== -->
+
+    <section class="tarjeta tarjeta-acciones">
+
+
+        <!-- Título -->
+
+        <div class="titulo-seccion">
+
+            <i data-lucide="zap"></i>
+
+            <div>
+
+                <h2>
+                    Acciones rápidas
+                </h2>
+
+                <p>
+                    Accedé rápidamente a las funciones principales de la biblioteca.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             REJILLA DE ACCIONES
+        ================================================== -->
+
+        <div class="rejilla-acciones">
+
+
+            <!-- NUEVO PRÉSTAMO -->
+
+            <a href="nuevo-prestamo.html" class="accion azul">
+
+    <div class="icono-accion">
+        <i data-lucide="book-open"></i>
+    </div>
+
+    <div class="informacion-accion">
+        <h3>Nuevo préstamo</h3>
+        <p>Registrar un nuevo préstamo</p>
+    </div>
+
+    <i data-lucide="chevron-right" class="flecha"></i>
+
+</a>
+
+
+
+            <!-- DEVOLUCIÓN -->
+      <a href="">
+            <div class="accion azul">
+
+                <div class="icono-accion">
+                    <i data-lucide="undo-2"></i>
+                </div>
+
+                <div class="informacion-accion">
+
+                    <h3>
+                        Registrar devolución
+                    </h3>
+
+                    <p>
+                        Finalizar un préstamo
+                    </p>
+
+                </div>
+
+                <i
+                    data-lucide="chevron-right"
+                    class="flecha">
+                </i>
+
+            </div>
+       </a>
+
+
+            <!-- ATRASOS -->
+
+            <div class="accion roja">
+
+                <div class="icono-accion">
+                    <i data-lucide="clock-3"></i>
+                </div>
+
+                <div class="informacion-accion">
+
+                    <h3>
+                        Ver atrasos
+                    </h3>
+
+                    <p>
+                        Libros con demora en la entrega
+                    </p>
+
+                </div>
+
+                <i
+                    data-lucide="chevron-right"
+                    class="flecha">
+                </i>
+
+            </div>
+
+
+
+            <!-- USUARIOS -->
+
+            <div class="accion azul">
+
+                <div class="icono-accion">
+                    <i data-lucide="user-round-plus"></i>
+                </div>
+
+                <div class="informacion-accion">
+
+                    <h3>
+                        Registrar usuario
+                    </h3>
+
+                    <p>
+                        Agregar un nuevo usuario
+                    </p>
+
+                </div>
+
+                <i
+                    data-lucide="chevron-right"
+                    class="flecha">
+                </i>
+
+            </div>
+
+
+
+            <!-- LIBROS -->
+
+            <div class="accion azul">
+
+                <div class="icono-accion">
+                    <i data-lucide="book-open"></i>
+                </div>
+
+                <div class="informacion-accion">
+
+                    <h3>
+                        Libros
+                    </h3>
+
+                    <p>
+                        Gestionar catálogo
+                    </p>
+
+                </div>
+
+                <i
+                    data-lucide="chevron-right"
+                    class="flecha">
+                </i>
+
+            </div>
+
+
+
+            <!-- CONFIGURACIÓN -->
+
+            <div class="accion azul">
+
+                <div class="icono-accion">
+                    <i data-lucide="settings"></i>
+                </div>
+
+                <div class="informacion-accion">
+
+                    <h3>
+                        Configuración
+                    </h3>
+
+                    <p>
+                        Ajustes del sistema
+                    </p>
+
+                </div>
+
+                <i
+                    data-lucide="chevron-right"
+                    class="flecha">
+                </i>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         ÚLTIMOS PRÉSTAMOS
+    ================================================== -->
+
+    <section class="tarjeta tarjeta-prestamos">
+
+
+        <!-- Encabezado -->
+
+        <div class="encabezado-prestamos">
+
+            <div class="titulo-seccion">
+
+                <i data-lucide="clock-3"></i>
+
+                <div>
+
+                    <h2>
+                        Últimos préstamos
+                    </h2>
+
+                    <p>
+                        Los últimos libros registrados en la biblioteca.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <a href="#" class="ver-todos">
+
+                Ver todos
+
+                <i data-lucide="chevron-right"></i>
+
+            </a>
+
+        </div>
+
+
+
+        <!-- Tabla -->
+
+        <div class="contenedor-tabla">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Usuario
+                        </th>
+
+                        <th>
+                            Libro
+                        </th>
+
+                        <th>
+                            Fecha de préstamo
+                        </th>
+
+                        <th>
+                            Fecha de devolución
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <!-- PRÉSTAMO 1 -->
+
+                    <tr>
+
+                        <td>
+                            Sofia Ramírez
+                        </td>
+
+                        <td>
+                            El hobbit
+                        </td>
+
+                        <td>
+                            25 sep 2026
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                        <td>
+
+                            <span class="estado activo">
+                                En curso
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- PRÉSTAMO 2 -->
+
+                    <tr>
+
+                        <td>
+                            Matías Torres
+                        </td>
+
+                        <td>
+                            1984
+                        </td>
+
+                        <td>
+                            26 sep 2026
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                        <td>
+
+                            <span class="estado activo">
+                                En curso
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- PRÉSTAMO 3 -->
+
+                    <tr>
+
+                        <td>
+                            Valentina Castro
+                        </td>
+
+                        <td>
+                            Don Quijote de la Mancha
+                        </td>
+
+                        <td>
+                            27 sep 2026
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                        <td>
+
+                            <span class="estado activo">
+                                En curso
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- PRÉSTAMO 4 -->
+
+                    <tr>
+
+                        <td>
+                            Lucas Fernández
+                        </td>
+
+                        <td>
+                            Cien años de soledad
+                        </td>
+
+                        <td>
+                            28 sep 2026
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                        <td>
+
+                            <span class="estado activo">
+                                En curso
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+
+                    <!-- PRÉSTAMO 5 -->
+
+                    <tr>
+
+                        <td>
+                            Agustina Ríos
+                        </td>
+
+                        <td>
+                            Dune
+                        </td>
+
+                        <td>
+                            20 sep 2026
+                        </td>
+
+                        <td>
+                            -
+                        </td>
+
+                        <td>
+
+                            <span cl
