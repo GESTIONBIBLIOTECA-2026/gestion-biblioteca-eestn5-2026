@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nuevo préstamo - Biblioteca Invaluable</title>
+
+    <link rel="stylesheet" href="styles/styles.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <header class="encabezado">
+
+        <div class="zona-logo">
+
+            <i data-lucide="book-open" class="icono-logo"></i>
+
+            <span class="texto-logo">
+                Biblioteca Invaluable
+            </span>
+
+            <span class="separador"></span>
+
+            <span class="texto-panel">
+                Panel de Administración
+            </span>
+
+        </div>
+
+
+        <div class="zona-administrador">
+
+            <div class="icono-administrador">
+
+                <i data-lucide="user-round"></i>
+
+            </div>
+
+            <span>Admin</span>
+
+            <i
+                data-lucide="chevron-down"
+                class="flecha-desplegable"
+            ></i>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENIDO -->
+
+    <main class="contenedor">
+
+
+        <!-- PARTE SUPERIOR -->
+
+        <section class="encabezado-prestamo">
+
+
+            <a href="index.html" class="enlace-volver">
+
+                <i data-lucide="arrow-left"></i>
+
+                Volver al panel
+
+            </a>
+
+
+            <div class="fila-titulo-prestamo">
+
+
+                <div class="icono-principal-prestamo">
+
+                    <i data-lucide="book-open"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h1>
+                        Nuevo préstamo
+                    </h1>
+
+                    <p>
+                        Registrá un nuevo préstamo de libro en la biblioteca.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- FORMULARIO -->
+
+        <section class="tarjeta-prestamo">
+
+
+            <!-- DATOS DEL USUARIO -->
+
+            <div class="seccion-formulario">
+
+
+                <div class="titulo-seccion-formulario">
+
+
+                    <div class="icono-formulario">
+
+                        <i data-lucide="user-round-plus"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            Datos del usuario
+                        </h2>
+
+                        <p>
+                            Ingresá el nombre y DNI del usuario que se lleva el libro.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- NOMBRE DEL USUARIO -->
+
+                <div class="grupo-entrada">
+
+
+                    <label for="nombreUsuario">
+                        Nombre del usuario
+                    </label>
+
+
+                    <div class="contenedor-entrada">
+
+                        <i data-lucide="user-round"></i>
+
+
+                        <input
+                            type="text"
+                            id="nombreUsuario"
+                            name="nombreUsuario"
+                            placeholder="Ej: María López"
+                        >
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- DNI DEL USUARIO -->
+
+                <div class="grupo-entrada">
+
+
+                    <label for="dniUsuario">
+                        DNI del usuario
+                    </label>
+
+
+                    <div class="contenedor-entrada">
+
+                        <i data-lucide="contact"></i>
+
+
+                        <input
+                            type="text"
+                            id="dniUsuario"
+                            name="dniUsuario"
+                            placeholder="Ej: 42.345.678"
+                        >
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- DATOS DEL LIBRO -->
+
+            <div class="seccion-formulario seccion-libro">
+
+
+                <div class="titulo-seccion-formulario">
+
+
+                    <div class="icono-formulario">
+
+                        <i data-lucide="book-open"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h2>
+                            Datos del libro
+                        </h2>
+
+                        <p>
+                            Ingresá el nombre y el ID del libro que se lleva el usuario.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- NOMBRE DEL LIBRO -->
+
+                <div class="grupo-entrada">
+
+
+                    <label for="nombreLibro">
+                        Nombre del libro
+                    </label>
+
+
+                    <div class="contenedor-entrada">
+
+                        <i data-lucide="book-open"></i>
+
+
+                        <input
+                            type="text"
+                            id="nombreLibro"
+                            name="nombreLibro"
+                            placeholder="Ej: El hobbit"
+                        >
+
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ID DEL LIBRO -->
+
+                <div class="grupo-entrada">
+
+
+                    <label for="idLibro">
+                        ID del libro
+                    </label>
+
+
+                    <div class="contenedor-entrada">
+
+                        <i data-lucide="hash"></i>
+
+
+                        <input
+                            type="text"
+                            id="idLibro"
+                            name="idLibro"
+                            placeholder="Ej: 12345"
+                        >
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BOTÓN -->
+
+            <button
+                type="button"
+                class="boton-prestamo"
+            >
+
+                <i data-lucide="save"></i>
+
+                Registrar préstamo
+
+            </button>
+
+
+        </section>
+
+
+    </main>
+
+
+    <script>
+
+        lucide.createIcons();
+
+    </script>
+
+
+</body>
+
+</html>
+```
