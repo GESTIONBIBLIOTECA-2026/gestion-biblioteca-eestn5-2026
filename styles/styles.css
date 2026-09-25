@@ -818,3 +818,371 @@ table {
 
 
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++/
+
+
+/* =========================================================
+   NUEVO PRÉSTAMO
+========================================================= */
+
+.encabezado-prestamo {
+    margin-bottom: 28px;
+}
+
+.enlace-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--azul-600);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    margin-bottom: 25px;
+}
+
+.enlace-volver:hover {
+    color: var(--azul-800);
+}
+
+.enlace-volver svg {
+    width: 18px;
+}
+
+
+.fila-titulo-prestamo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.icono-principal-prestamo {
+    width: 78px;
+    height: 78px;
+
+    border-radius: 50%;
+
+    background: var(--azul-100);
+
+    color: var(--azul-600);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icono-principal-prestamo svg {
+    width: 42px;
+    height: 42px;
+
+    stroke-width: 2;
+}
+
+
+.fila-titulo-prestamo h1 {
+    font-size: 32px;
+    font-weight: 800;
+
+    color: var(--tinta-900);
+
+    letter-spacing: -1px;
+}
+
+.fila-titulo-prestamo p {
+    margin-top: 6px;
+
+    color: var(--azul-700);
+
+    font-size: 16px;
+}
+
+
+/* =========================
+   TARJETA DEL FORMULARIO
+========================= */
+
+.tarjeta-prestamo {
+    background: var(--blanco);
+
+    border: 1px solid var(--azul-100);
+
+    border-radius: 10px;
+
+    padding: 36px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    column-gap: 36px;
+
+    box-shadow: 0 2px 8px rgba(0, 46, 115, 0.03);
+}
+
+
+/* =========================
+   SECCIONES
+========================= */
+
+.seccion-formulario {
+    padding-right: 36px;
+
+    border-right: 1px solid var(--azul-100);
+}
+
+.seccion-libro {
+    padding-right: 0;
+    padding-left: 0;
+
+    border-right: none;
+}
+
+
+.titulo-seccion-formulario {
+    display: flex;
+    align-items: center;
+
+    gap: 17px;
+
+    margin-bottom: 30px;
+}
+
+.icono-formulario {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--azul-100);
+
+    color: var(--azul-600);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icono-formulario svg {
+    width: 27px;
+    height: 27px;
+}
+
+
+.titulo-seccion-formulario h2 {
+    font-size: 19px;
+
+    font-weight: 700;
+
+    color: var(--tinta-900);
+}
+
+.titulo-seccion-formulario p {
+    margin-top: 6px;
+
+    color: var(--azul-700);
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   CAMPOS DE ENTRADA
+========================= */
+
+.grupo-entrada {
+    margin-bottom: 25px;
+}
+
+.grupo-entrada:last-child {
+    margin-bottom: 0;
+}
+
+.grupo-entrada label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: var(--azul-700);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+.contenedor-entrada {
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 0 16px;
+
+    background: var(--blanco);
+
+    border: 1px solid var(--azul-200);
+
+    border-radius: 7px;
+
+    transition: 0.2s ease;
+}
+
+.contenedor-entrada svg {
+    width: 21px;
+    height: 21px;
+
+    flex-shrink: 0;
+
+    color: var(--azul-600);
+}
+
+.contenedor-entrada input {
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--tinta-900);
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+}
+
+.contenedor-entrada input::placeholder {
+    color: var(--tinta-400);
+}
+
+.contenedor-entrada:focus-within {
+    border-color: var(--azul-500);
+
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.08);
+}
+
+
+/* =========================
+   BOTÓN
+========================= */
+
+.boton-prestamo {
+    grid-column: 1 / -1;
+
+    width: 100%;
+
+    height: 46px;
+
+    margin-top: 18px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: var(--azul-500);
+
+    color: var(--blanco);
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    transition: 0.2s ease;
+}
+
+.boton-prestamo:hover {
+    background: var(--azul-600);
+
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+}
+
+.boton-prestamo svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 800px) {
+
+    .tarjeta-prestamo {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+
+        padding: 25px;
+    }
+
+    .seccion-formulario {
+        padding-right: 0;
+
+        padding-bottom: 30px;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--azul-100);
+    }
+
+    .seccion-libro {
+        padding-bottom: 0;
+
+        border-bottom: none;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .fila-titulo-prestamo {
+        align-items: flex-start;
+    }
+
+    .icono-principal-prestamo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .icono-principal-prestamo svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .fila-titulo-prestamo h1 {
+        font-size: 26px;
+    }
+
+    .fila-titulo-prestamo p {
+        font-size: 14px;
+    }
+
+    .tarjeta-prestamo {
+        padding: 20px;
+    }
+
+}
+
