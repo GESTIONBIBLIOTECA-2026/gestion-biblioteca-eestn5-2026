@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Usuarios - Biblioteca Invaluable</title>
+
+    <!-- Fuente -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="../styles/estilo-general.css">
+    <link rel="stylesheet" href="../styles/gestion-usuarios.css">
+
+    <!-- Iconos -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================================
+         ENCABEZADO
+    ========================================================== -->
+
+    <header class="encabezado">
+
+        <div class="zona-logo">
+
+            <i data-lucide="library" class="icono-logo"></i>
+
+            <span class="texto-logo">
+                Biblioteca Invaluable
+            </span>
+
+            <div class="separador"></div>
+
+            <span class="texto-panel">
+                Panel de administración
+            </span>
+
+        </div>
+
+
+        <div class="zona-administrador">
+
+            <div class="icono-administrador">
+
+                <i data-lucide="user"></i>
+
+            </div>
+
+            <span>
+                Administrador
+            </span>
+
+            <i
+                data-lucide="chevron-down"
+                class="flecha-desplegable">
+            </i>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================================================
+         CONTENIDO
+    ========================================================== -->
+
+    <main class="contenedor">
+
+
+        <!-- =====================================================
+             TÍTULO
+        ====================================================== -->
+
+        <section class="titulo-usuarios">
+
+            <a href="../index.html" class="volver">
+
+                <i data-lucide="arrow-left"></i>
+
+                Volver al inicio
+
+            </a>
+
+
+            <div class="titulo-seccion">
+
+                <i data-lucide="users"></i>
+
+                <div>
+
+                    <h2>
+                        Gestión de Usuarios
+                    </h2>
+
+                    <p>
+                        Alta, modificación y baja de usuarios.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             FORMULARIO
+        ====================================================== -->
+
+        <section class="tarjeta tarjeta-usuarios">
+
+
+            <div class="encabezado-tarjeta">
+
+                <div>
+
+                    <h3>
+                        Datos del usuario
+                    </h3>
+
+                    <p>
+                        Complete los datos para registrar un nuevo usuario.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <form>
+
+
+                <div class="campos-formulario">
+
+
+                    <!-- Nombre completo -->
+
+                    <div class="campo">
+
+                        <label for="nombre">
+                            Nombre completo
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nombre"
+                            placeholder="Ingrese el nombre completo"
+                        >
+
+                    </div>
+
+
+
+                    <!-- DNI -->
+
+                    <div class="campo">
+
+                        <label for="dni">
+                            DNI
+                        </label>
+
+                        <input
+                            type="text"
+                            id="dni"
+                            placeholder="Ingrese el DNI"
+                        >
+
+                    </div>
+
+
+
+                    <!-- Curso -->
+
+                    <div class="campo">
+
+                        <label for="curso">
+                            Curso
+                        </label>
+
+                        <input
+                            type="text"
+                            id="curso"
+                            placeholder="Ej: 7° 5ta"
+                        >
+
+                    </div>
+
+
+
+                    <!-- Correo -->
+
+                    <div class="campo">
+
+                        <label for="correo">
+                            Correo electrónico
+                        </label>
+
+                        <input
+                            type="email"
+                            id="correo"
+                            placeholder="Ingrese el correo electrónico"
+                        >
+
+                    </div>
+
+
+
+                    <!-- Teléfono -->
+
+                    <div class="campo">
+
+                        <label for="telefono">
+                            Teléfono
+                        </label>
+
+                        <input
+                            type="text"
+                            id="telefono"
+                            placeholder="Ingrese el teléfono"
+                        >
+
+                    </div>
+
+
+
+                    <!-- Dirección -->
+
+                    <div class="campo">
+
+                        <label for="direccion">
+                            Dirección
+                        </label>
+
+                        <input
+                            type="text"
+                            id="direccion"
+                            placeholder="Ingrese la dirección"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="acciones-formulario">
+
+                    <button
+                        type="button"
+                        class="boton boton-secundario"
+                    >
+                        Cancelar
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="boton boton-principal"
+                    >
+
+                        <i data-lucide="user-plus"></i>
+
+                        Registrar usuario
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             BÚSQUEDA
+        ====================================================== -->
+
+        <section class="tarjeta tarjeta-busqueda">
+
+
+            <div class="encabezado-tarjeta">
+
+                <div>
+
+                    <h3>
+                        Buscar usuarios
+                    </h3>
+
+                    <p>
+                        Busque usuarios por nombre, DNI o curso.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="campos-busqueda">
+
+
+                <div class="campo">
+
+                    <label for="buscar-nombre">
+                        Nombre
+                    </label>
+
+                    <div class="entrada-icono">
+
+                        <i data-lucide="search"></i>
+
+                        <input
+                            type="text"
+                            id="buscar-nombre"
+                            placeholder="Buscar por nombre"
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="campo">
+
+                    <label for="buscar-dni">
+                        DNI
+                    </label>
+
+                    <input
+                        type="text"
+                        id="buscar-dni"
+                        placeholder="Buscar por DNI"
+                    >
+
+                </div>
+
+
+
+                <div class="campo">
+
+                    <label for="buscar-curso">
+                        Curso
+                    </label>
+
+                    <input
+                        type="text"
+                        id="buscar-curso"
+                        placeholder="Buscar por curso"
+                    >
+
+                </div>
+
+
+
+                <button
+                    type="button"
+                    class="boton boton-principal"
+                >
+
+                    <i data-lucide="search"></i>
+
+                    Buscar
+
+                </button>
+
+
+                <button
+                    type="button"
+                    class="boton boton-secundario"
+                >
+                    Limpiar
+                </button>
+
+
+            </div>
+
+        </section>
+
+</body>
+
+</html>
