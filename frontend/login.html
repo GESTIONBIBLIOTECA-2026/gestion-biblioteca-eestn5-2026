@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión - Biblioteca Invaluable</title>
+
+    <!-- Estilos generales -->
+    <link rel="stylesheet" href="css/estilo-general.css">
+
+    <!-- Estilos exclusivos del login -->
+    <link rel="stylesheet" href="css/login.css">
+
+    <!-- Fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body class="pagina-login">
+
+
+<!-- =====================================================
+     ENCABEZADO
+====================================================== -->
+
+<header class="encabezado">
+
+    <div class="zona-logo">
+
+        <i data-lucide="book-open" class="icono-logo"></i>
+
+        <span class="texto-logo">
+            Biblioteca Invaluable
+        </span>
+
+        <span class="separador"></span>
+
+        <span class="texto-panel">
+            Panel de Administración
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+====================================================== -->
+
+<main class="contenedor-login">
+
+    <section class="tarjeta-login">
+
+
+        <!-- =================================================
+             TÍTULO
+        ================================================== -->
+
+        <div class="cabecera-login">
+
+            <div class="icono-login">
+                <i data-lucide="lock-keyhole"></i>
+            </div>
+
+            <h1>
+                Iniciar sesión
+            </h1>
+
+            <p>
+                Ingresá con tu DNI y contraseña para acceder al panel.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             MENSAJE DE ERROR
+        ================================================== -->
+
+        <div class="alerta-login" id="alertaLogin" role="alert" hidden>
+
+            <i data-lucide="circle-alert"></i>
+
+            <span id="textoAlerta"></span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             FORMULARIO
+        ================================================== -->
+
+        <form id="formularioLogin" novalidate>
+
+
+            <!-- DNI -->
+
+            <div class="grupo-entrada">
+
+                <label for="dni">
+                    DNI
+                </label>
+
+                <div class="contenedor-entrada">
+
+                    <i data-lucide="contact"></i>
+
+                    <input
+                        type="text"
+                        id="dni"
+                        name="dni"
+                        placeholder="Ej: 30111222"
+                        autocomplete="username"
+                        inputmode="numeric"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTRASEÑA -->
+
+            <div class="grupo-entrada">
+
+                <label for="clave">
+                    Contraseña
+                </label>
+
+                <div class="contenedor-entrada">
+
+                    <i data-lucide="key-round"></i>
+
+                    <input
+                        type="password"
+                        id="clave"
+                        name="clave"
+                        placeholder="Tu contraseña"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <!-- Mostrar / ocultar contraseña -->
+                    <button
+                        type="button"
+                        class="boton-ver-clave"
+                        id="botonVerClave"
+                        aria-label="Mostrar contraseña"
+                    >
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÓN -->
+
+            <button type="submit" class="boton-login" id="botonLogin">
+
+                <i data-lucide="log-in"></i>
+
+                <span>Ingresar</span>
+
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <p class="pie-login">
+        E.E.S.T. N° 5 · Sistema de Gestión de Biblioteca
+    </p>
+
+</main>
+
+
+
+<!-- =====================================================
+     SCRIPTS
+====================================================== -->
+
+<script>
+    lucide.createIcons();
+</script>
+
+<!-- Lógica del login (ES Module) -->
+<script type="module" src="js/login.js"></script>
+
+
+</body>
+
+</html>

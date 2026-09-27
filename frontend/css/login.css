@@ -1,0 +1,271 @@
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.pagina-login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.contenedor-login {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 16px;
+}
+
+
+/* =========================================================
+   TARJETA
+========================================================= */
+
+.tarjeta-login {
+    width: 100%;
+    max-width: 440px;
+    background: var(--blanco);
+    border: 1px solid var(--azul-100);
+    border-radius: 10px;
+    padding: 38px 36px 36px;
+    box-shadow: 0 8px 24px rgba(0, 46, 115, 0.06);
+}
+
+
+/* =========================================================
+   CABECERA DE LA TARJETA
+========================================================= */
+
+.cabecera-login {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.icono-login {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--azul-100);
+    color: var(--azul-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icono-login svg {
+    width: 36px;
+    height: 36px;
+    stroke-width: 2;
+}
+
+.cabecera-login h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--tinta-900);
+}
+
+.cabecera-login p {
+    margin-top: 8px;
+    color: var(--azul-700);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   ALERTA DE ERROR
+========================================================= */
+
+.alerta-login {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+    padding: 12px 14px;
+    background: #fff3f3;
+    border: 1px solid #ffcaca;
+    border-radius: 7px;
+    color: var(--rojo-700);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.alerta-login[hidden] {
+    display: none;
+}
+
+.alerta-login svg {
+    width: 19px;
+    height: 19px;
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   CAMPOS DE ENTRADA
+   (mismo estilo que el formulario de nuevo préstamo)
+========================================================= */
+
+.grupo-entrada {
+    margin-bottom: 22px;
+}
+
+.grupo-entrada label {
+    display: block;
+    margin-bottom: 9px;
+    color: var(--azul-700);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.contenedor-entrada {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 0 16px;
+    background: var(--blanco);
+    border: 1px solid var(--azul-200);
+    border-radius: 7px;
+    transition: 0.2s ease;
+}
+
+.contenedor-entrada > svg {
+    width: 21px;
+    height: 21px;
+    flex-shrink: 0;
+    color: var(--azul-600);
+}
+
+.contenedor-entrada input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--tinta-900);
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+}
+
+.contenedor-entrada input::placeholder {
+    color: var(--tinta-400);
+}
+
+.contenedor-entrada:focus-within {
+    border-color: var(--azul-500);
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.08);
+}
+
+
+/* --- Botón para ver la contraseña --- */
+
+.boton-ver-clave {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--tinta-500);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+}
+
+.boton-ver-clave:hover {
+    background: var(--azul-50);
+    color: var(--azul-600);
+}
+
+.boton-ver-clave svg {
+    width: 19px;
+    height: 19px;
+}
+
+
+/* =========================================================
+   BOTÓN INGRESAR
+========================================================= */
+
+.boton-login {
+    width: 100%;
+    height: 48px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 6px;
+    background: var(--azul-500);
+    color: var(--blanco);
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    transition: 0.2s ease;
+}
+
+.boton-login:hover {
+    background: var(--azul-600);
+    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+}
+
+.boton-login:disabled {
+    cursor: wait;
+    opacity: 0.75;
+}
+
+.boton-login svg {
+    width: 18px;
+    height: 18px;
+}
+
+.boton-login.cargando svg {
+    animation: girar 0.9s linear infinite;
+}
+
+@keyframes girar {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   PIE
+========================================================= */
+
+.pie-login {
+    margin-top: 22px;
+    color: var(--tinta-500);
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 500px) {
+
+    .tarjeta-login {
+        padding: 30px 20px 26px;
+    }
+
+    .cabecera-login h1 {
+        font-size: 24px;
+    }
+
+}

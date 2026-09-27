@@ -1,86 +1,129 @@
-# 📚 Sistema de Gestión de Biblioteca — E.E.S.T. N° 5 (2026)
+# 📚 Biblioteca Invaluable · Panel de Administración (Grupo 5)
 
-> **Materia:** Desarrollo de Software para Plataformas Móviles (7° 5ta)  
-> **Institución:** Escuela de Educación Secundaria Técnica N° 5  
-> **Profesor:** Axel Castellano Gutiérrez  
-> **Organización GitHub:** [GESTIONBIBLIOTECA-2026](https://github.com/GESTIONBIBLIOTECA-2026)  
+Login del panel con arquitectura **MVC**:
 
----
+- **Frontend:** HTML + CSS (carpeta `css/`) + JS con ES Modules.
+- **Backend:** Node.js + Express, como en la clase 06.
+- **Base de datos:** la consultan archivos **PHP** con PDO, conectados a MySQL en Aiven.
 
-## 🎯 Descripción del Proyecto
-
-El **Sistema de Gestión de Biblioteca** es una aplicación móvil progresiva (PWA Full-Stack) para modernizar la gestión de préstamos, catálogo de libros, solicitudes y administración de usuarios de la biblioteca de la E.E.S.T. N° 5.
-
-El desarrollo se realiza de forma colaborativa entre los **Grupos 4, 5 y 6** del Jueves (Grupo B), integrando un frontend móvil responsivo, consumo de APIs RESTful MVC y una base de datos MySQL relacional.
-
----
-
-## 👥 Estructura del Equipo y Módulos Funcionales
-
-### 👑 Liderazgo y Coordinación
-* **Líder General / Org Admin:** Dylan Andrada (`@DylanXeneizee12`)
-* **Líder de Base de Datos & Backend:** Franco Barufaldi (`@francobaru-hub`)
-
----
-
-### 📦 Módulos por Sub-Equipo
-
-#### 🟢 Grupo 5 — Gestión de Usuarios y Panel Admin
-**Integrantes:** Franco Barufaldi (Lead DB), Dylan Andrada (Líder General), Francisco Peña, Marcos Palacios, Thiago Gioia.
-* **Alta, modificación y baja (CRUD)** de usuarios.
-* **Búsqueda avanzada** por nombre completo, DNI y curso.
-* **Gestión de atributos:** Nombre, DNI, curso, correo, teléfono y dirección.
-* **Historial activo:** Registro de entregas, devoluciones y atrasos.
-* **Panel Administrador** para gestión bibliotecaria.
-
-#### 🔵 Grupo 6 — Gestión de Inventario y Catálogo
-**Integrantes:** Joaquín Trujillo, Melian Pizzorno, Leandro Vázquez, Enrique Smidt, Lautaro Garraza.
-* **Gestión del catálogo:** Registro, edición y baja de libros nuevos (CRUD de inventario).
-* **Buscador de libros:** Filtros combinados por categoría, título, autor y disponibilidad.
-* **Manejo de stock:** Actualización de cantidades de ejemplares.
-* **Indicador de estado:** Disponible / Prestado.
-
-#### 🟠 Grupo 4 — Gestión de Pedidos y Coordinación
-**Integrantes:** Tiziano Latorre, Ivan Masalis, Leonel Mirez, Alex Gauto, Mateo Grajales.
-* **Creación de pedidos:** Solicitud con usuario, libro, cantidad, fecha de pedido y devolución.
-* **Validación de reglas de negocio:** Verificación de stock disponible (vía Grupo 6) y estado habilitado del usuario (vía Grupo 5).
-* **Control del estado del pedido** e historial general.
-
----
-
-## 🛠️ Tecnología y Arquitectura
-
-* **Frontend:** HTML5, CSS3 Mobile-First, JavaScript ES6+ (Async/Await, Fetch API), PWA (Service Workers & Manifest).
-* **Backend:** Node.js + Express (Patrón MVC).
-* **Base de Datos:** MySQL Relacional (diseñada y administrada por Franco Barufaldi).
-* **Control de Versiones:** Git & GitHub Flow (Pull Requests y Protección de Ramas).
-
----
-
-## 🌿 Gobernanza de Git & Flujo de Trabajo
-
-1. **Rama Principal (`main`):** Reservada para código probado e integrado.
-2. **Rama de Desarrollo (`develop`):** Integración continua de los 3 módulos.
-3. **Ramas de Funcionalidades (`feature/<modulo>-<nombre>`):** Cada integrante debe trabajar en su respectiva rama y enviar Pull Request para integración.
-
----
-
-## 🚀 Instalación y Uso Local
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/GESTIONBIBLIOTECA-2026/gestion-biblioteca-eestn5-2026.git
-
-# 2. Entrar a la carpeta del proyecto
-cd gestion-biblioteca-eestn5-2026
-
-# 3. Instalar dependencias
-npm install
-
-# 4. Iniciar el servidor en modo desarrollo
-npm run dev
+```text
+[ Frontend ]  fetch()  ─►  [ Express: Router ➔ Controller ➔ Model ]  ─►  [ PHP (PDO) ]  ─►  [ MySQL Aiven ]
+ localhost:3000 / Live Server        backend/ (puerto 3000)              backend/php (puerto 8000)
 ```
 
 ---
 
-📌 *Proyecto Integrador 2026 — E.E.S.T. N° 5*
+## 📂 Estructura
+
+```text
+Andrada/
+├── frontend/
+│   ├── login.html, index.html, nuevo-prestamo.html
+│   ├── css/                  estilo-general.css, index.css, login.css, nuevo-prestamo.css
+│   └── js/
+│       ├── config.js         URL del backend
+│       ├── api.js            fetch al backend (login, perfil)
+│       ├── storage.js        guarda la sesión en localStorage
+│       ├── login.js          lógica de login.html
+│       └── sesion.js         protege las páginas, muestra el nombre y "Salir"
+│
+└── backend/
+    ├── index.js              servidor Express (cors, express.json, rutas)
+    ├── package.json          "type": "module"
+    ├── .env.example          plantilla (el .env real NO se sube)
+    ├── src/
+    │   ├── config/config.js                  variables del .env
+    │   ├── database/php.js                   "conexión": le habla a PHP con fetch
+    │   ├── models/usuario.models.js          MODEL: pide los datos del usuario
+    │   ├── controllers/auth.controllers.js   CONTROLLER: login y perfil
+    │   ├── routes/auth.routes.js             ROUTER: /api/auth/login y /api/auth/perfil
+    │   └── middlewares/                      token, validaciones, límite de intentos
+    ├── php/
+    │   ├── conexion.php      PDO → MySQL Aiven (con SSL)
+    │   ├── usuarios.php      consultas SQL de la tabla usuarios
+    │   ├── estado.php        chequeo de que PHP y la base respondan
+    │   ├── api.php, env.php  funciones comunes (JSON, clave, leer .env)
+    └── scripts/generar-hash.js
+```
+
+### Endpoints
+
+| Método | Ruta | Qué hace |
+|---|---|---|
+| `POST` | `/api/auth/login` | Body `{ "dni", "clave" }` → `{ payload: { token, usuario } }` |
+| `GET` | `/api/auth/perfil` | Header `Authorization: Bearer <token>` → `{ payload: { id, nombre, rol } }` |
+
+Solo pueden entrar usuarios con rol **administrador** y estado **habilitado**.
+
+---
+
+## 🚀 Cómo levantarlo
+
+> En PowerShell usá `npm.cmd` en vez de `npm` (o cambiá la terminal a **Command Prompt**).
+
+### 1. Instalar dependencias (una sola vez)
+```
+cd backend
+npm.cmd install
+```
+
+### 2. Crear `backend/.env`
+```
+copy .env.example .env
+```
+Completá los datos de Aiven y guardá el `ca.pem` de Aiven dentro de `backend/`. Inventá un texto largo para `PHP_API_KEY` y otro para `JWT_SECRET`.
+
+### 3. Terminal 1 — PHP (base de datos)
+```
+cd backend
+npm.cmd run php
+```
+Deja PHP escuchando en `http://localhost:8000`.
+
+### 4. Terminal 2 — Node (API)
+```
+cd backend
+npm.cmd run dev
+```
+Tiene que decir:
+```
+🚀 Servidor activo en http://localhost:3000
+✅ PHP 8.x conectado a la base "defaultdb"
+```
+
+### 5. Abrir el panel
+**http://localhost:3000**. También funciona con **Live Server** abriendo `frontend/login.html`.
+
+Usuario de ejemplo del SQL: DNI `30111222`, contraseña `gaby1234`.
+
+---
+
+## 🐘 PHP en Windows
+
+`npm run php` busca PHP solo: primero en el PATH, después en `C:\xampp\php\php.exe` y en `C:\php\php.exe`. Si lo tenés en otro lado, agregá `PHP_PATH=C:\ruta\php.exe` en `backend/.env`.
+
+- **Con XAMPP (recomendado):** instalalo desde https://www.apachefriends.org con las opciones por defecto. Ya trae `pdo_mysql` y `openssl` activados, y no hace falta prender Apache ni MySQL desde el panel de XAMPP.
+- **PHP suelto (zip de windows.php.net):** copiá `php.ini-development` como `php.ini` y sacale el `;` a `extension_dir = "ext"`, `extension=openssl` y `extension=pdo_mysql`.
+
+---
+
+## 👤 Crear otro administrador
+```
+npm.cmd run hash -- claveNueva123
+```
+```sql
+INSERT INTO usuarios (dni, nombre_completo, curso_id, correo, telefono, direccion, password_hash, rol_id)
+VALUES ('12345678', 'Nombre Apellido', NULL, 'mail@eest5.edu.ar', '11 0000-0000', 'Dirección', '<hash>', 3);
+```
+
+---
+
+## 🧯 Problemas comunes
+
+| Mensaje | Solución |
+|---|---|
+| `⚠️ PHP / base de datos: no responde en http://localhost:8000` | Falta la terminal con `npm.cmd run php`. |
+| `PHP no tiene activada la extensión pdo_mysql` | Activá `extension=pdo_mysql` en `php.ini` (ver arriba). |
+| `Access denied for user` | Revisá `DB_USER` / `DB_PASSWORD` en `backend/.env`. |
+| `Faltan JWT_SECRET o PHP_API_KEY` | Agregalas en `backend/.env`. |
+| En la página: "No hay conexión con el servidor" | Falta la terminal con `npm.cmd run dev`. |
