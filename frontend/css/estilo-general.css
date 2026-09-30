@@ -37,6 +37,11 @@
     --tinta-800: #1e293b;
     --tinta-900: #071a3d;
 
+    /* --- Verdes (éxito / devuelto) --- */
+
+    --verde-100: #dcfce7;
+    --verde-600: #16a34a;
+
     /* --- Blanco --- */
 
     --blanco: #ffffff;

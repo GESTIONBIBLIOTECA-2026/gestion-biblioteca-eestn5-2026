@@ -237,6 +237,77 @@
 
 
 /* =========================================================
+   CONEXIÓN CON LA BASE (js/nuevo-prestamo.js)
+========================================================= */
+
+/* --- Campo que se completa solo (nombre del usuario / libro) --- */
+
+.contenedor-entrada.solo-lectura {
+    background: var(--tinta-50);
+    border-style: dashed;
+}
+
+.contenedor-entrada.solo-lectura input {
+    color: var(--tinta-700);
+    font-weight: 600;
+    cursor: default;
+}
+
+
+/* --- Texto de ayuda debajo de un campo --- */
+
+.ayuda-campo {
+    display: block;
+    min-height: 16px;
+    margin-top: 7px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--tinta-500);
+}
+
+.ayuda-campo.ok {
+    color: var(--verde-600);
+}
+
+.ayuda-campo.error {
+    color: var(--rojo-600);
+}
+
+
+/* --- Mensaje arriba del formulario --- */
+
+.aviso-prestamo {
+    grid-column: 1 / -1;
+    margin-bottom: 28px;
+    padding: 12px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #fff3f3;
+    border: 1px solid #ffcaca;
+    color: var(--rojo-700);
+}
+
+.aviso-prestamo.exito {
+    background: var(--verde-100);
+    border-color: #a7e3bb;
+    color: var(--verde-600);
+}
+
+.aviso-prestamo[hidden] {
+    display: none;
+}
+
+
+/* --- Botón mientras se guarda --- */
+
+.boton-prestamo:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 

@@ -120,9 +120,18 @@
         </section>
 
 
-        <!-- FORMULARIO -->
+        <!-- FORMULARIO (lo maneja js/nuevo-prestamo.js → POST /api/prestamos) -->
 
-        <section class="tarjeta-prestamo">
+        <form class="tarjeta-prestamo" id="formularioPrestamo" novalidate>
+
+
+            <!-- MENSAJE (error o préstamo registrado) -->
+
+            <div class="aviso-prestamo" id="avisoPrestamo" role="status" hidden>
+
+                <span id="textoAviso"></span>
+
+            </div>
 
 
             <!-- DATOS DEL USUARIO -->
@@ -147,37 +156,8 @@
                         </h2>
 
                         <p>
-                            Ingresá el nombre y DNI del usuario que se lleva el libro.
+                            Ingresá el DNI del usuario que se lleva el libro. El nombre se completa solo.
                         </p>
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- NOMBRE DEL USUARIO -->
-
-                <div class="grupo-entrada">
-
-
-                    <label for="nombreUsuario">
-                        Nombre del usuario
-                    </label>
-
-
-                    <div class="contenedor-entrada">
-
-                        <i data-lucide="user-round"></i>
-
-
-                        <input
-                            type="text"
-                            id="nombreUsuario"
-                            name="nombreUsuario"
-                            placeholder="Ej: María López"
-                        >
-
 
                     </div>
 
@@ -205,6 +185,43 @@
                             id="dniUsuario"
                             name="dniUsuario"
                             placeholder="Ej: 42.345.678"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            required
+                        >
+
+
+                    </div>
+
+
+                    <small class="ayuda-campo" id="ayudaUsuario"></small>
+
+
+                </div>
+
+
+                <!-- NOMBRE DEL USUARIO (se completa con el DNI) -->
+
+                <div class="grupo-entrada">
+
+
+                    <label for="nombreUsuario">
+                        Nombre del usuario
+                    </label>
+
+
+                    <div class="contenedor-entrada solo-lectura">
+
+                        <i data-lucide="user-round"></i>
+
+
+                        <input
+                            type="text"
+                            id="nombreUsuario"
+                            name="nombreUsuario"
+                            placeholder="Se completa con el DNI"
+                            readonly
+                            tabindex="-1"
                         >
 
 
@@ -239,37 +256,8 @@
                         </h2>
 
                         <p>
-                            Ingresá el nombre y el ID del libro que se lleva el usuario.
+                            Ingresá el ID del libro que se lleva el usuario. El nombre se completa solo.
                         </p>
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- NOMBRE DEL LIBRO -->
-
-                <div class="grupo-entrada">
-
-
-                    <label for="nombreLibro">
-                        Nombre del libro
-                    </label>
-
-
-                    <div class="contenedor-entrada">
-
-                        <i data-lucide="book-open"></i>
-
-
-                        <input
-                            type="text"
-                            id="nombreLibro"
-                            name="nombreLibro"
-                            placeholder="Ej: El hobbit"
-                        >
-
 
                     </div>
 
@@ -297,6 +285,43 @@
                             id="idLibro"
                             name="idLibro"
                             placeholder="Ej: 12345"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            required
+                        >
+
+
+                    </div>
+
+
+                    <small class="ayuda-campo" id="ayudaLibro"></small>
+
+
+                </div>
+
+
+                <!-- NOMBRE DEL LIBRO (se completa con el ID) -->
+
+                <div class="grupo-entrada">
+
+
+                    <label for="nombreLibro">
+                        Nombre del libro
+                    </label>
+
+
+                    <div class="contenedor-entrada solo-lectura">
+
+                        <i data-lucide="book-open"></i>
+
+
+                        <input
+                            type="text"
+                            id="nombreLibro"
+                            name="nombreLibro"
+                            placeholder="Se completa con el ID"
+                            readonly
+                            tabindex="-1"
                         >
 
 
@@ -312,8 +337,9 @@
             <!-- BOTÓN -->
 
             <button
-                type="button"
+                type="submit"
                 class="boton-prestamo"
+                id="botonPrestamo"
             >
 
                 <i data-lucide="save"></i>
@@ -323,7 +349,7 @@
             </button>
 
 
-        </section>
+        </form>
 
 
     </main>
@@ -331,6 +357,9 @@
 
     <!-- Sesión del administrador: protege la página, muestra el nombre y "Salir" -->
 <script type="module" src="js/sesion.js"></script>
+
+    <!-- Formulario de préstamo conectado a la base -->
+    <script type="module" src="js/nuevo-prestamo.js"></script>
 
     <script>
 

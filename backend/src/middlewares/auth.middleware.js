@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config/config.js";
+import { JWT_SECRET, ROLES_PANEL } from "../config/config.js";
 
 
 export const verificarToken = (req, res, next) => {
@@ -27,4 +27,15 @@ export const verificarToken = (req, res, next) => {
     } catch (error) {
         return res.status(401).json({ error: "La sesión venció. Iniciá sesión de nuevo." });
     }
+};
+
+
+/* --- Solo deja pasar a los roles del panel (se usa después de verificarToken) --- */
+export const soloAdministrador = (req, res, next) => {
+
+    if (!ROLES_PANEL.includes(req.usuario?.rol)) {
+        return res.status(403).json({ error: "No tenés permiso para hacer esto." });
+    }
+
+    next();
 };

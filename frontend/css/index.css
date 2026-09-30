@@ -325,6 +325,23 @@ tbody td:first-child {
 }
 
 
+/* --- Estado devuelto --- */
+
+.estado.devuelto {
+    background: var(--verde-100);
+    color: var(--verde-600);
+}
+
+
+/* --- Fila de mensaje (cargando, sin préstamos, error) --- */
+
+.celda-mensaje {
+    text-align: center;
+    color: var(--tinta-500);
+    font-style: italic;
+}
+
+
 /* =========================================================
    RESPONSIVE DEL INDEX
 ========================================================= */

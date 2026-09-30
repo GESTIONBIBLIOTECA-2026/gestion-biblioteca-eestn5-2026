@@ -53,3 +53,30 @@ export async function iniciarSesion(dni, clave) {
 export async function obtenerPerfil() {
     return pedirAlBackend("/auth/perfil");
 }
+
+
+/* --- GET /api/prestamos?limite=5 → [ { nombre_completo, titulo, fecha_prestamo, ... } ] --- */
+export async function obtenerUltimosPrestamos(limite = 5) {
+    return pedirAlBackend(`/prestamos?limite=${limite}`);
+}
+
+
+/* --- GET /api/usuarios/dni/:dni → { nombre_completo, curso, estado, puede_pedir, ... } --- */
+export async function buscarUsuarioPorDni(dni) {
+    return pedirAlBackend(`/usuarios/dni/${encodeURIComponent(dni)}`);
+}
+
+
+/* --- GET /api/libros/:id → { titulo, autores, ejemplares_disponibles, stock_reservable, ... } --- */
+export async function buscarLibroPorId(id) {
+    return pedirAlBackend(`/libros/${encodeURIComponent(id)}`);
+}
+
+
+/* --- POST /api/prestamos → préstamo creado --- */
+export async function registrarPrestamo(dni, libroId) {
+    return pedirAlBackend("/prestamos", {
+        method: "POST",
+        body: JSON.stringify({ dni, libroId })
+    });
+}

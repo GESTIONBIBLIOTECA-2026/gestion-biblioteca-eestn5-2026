@@ -2,7 +2,7 @@
    index.js - Punto de entrada del servidor Express
    Biblioteca Invaluable · Panel de Administración (Grupo 5)
 
-   Circuito:  index.js ➔ Router ➔ Controller ➔ Model ➔ PHP ➔ MySQL (Aiven)
+   Circuito:  index.js ➔ Router ➔ Controller ➔ Model ➔ mysql2 ➔ MySQL (Aiven)
    ========================================================================== */
 
 // 1. Importar frameworks y librerías
@@ -10,14 +10,17 @@ import express from "express";
 import cors from "cors";
 import { fileURLToPath } from "url";
 
-// 2. Configuración (lee el .env) y routers
-import { PORT, JWT_SECRET, PHP_API_KEY } from "./src/config/config.js";
-import { comprobarConexionPHP } from "./src/database/php.js";
+// 2. Configuración (lee el .env), base de datos y routers
+import { PORT, JWT_SECRET } from "./src/config/config.js";
+import { comprobarConexion } from "./src/database/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import usuariosRoutes from "./src/routes/usuarios.routes.js";
+import librosRoutes from "./src/routes/libros.routes.js";
+import prestamosRoutes from "./src/routes/prestamos.routes.js";
 
 // 3. Chequear que el .env tenga lo obligatorio
-if (!JWT_SECRET || !PHP_API_KEY) {
-    console.error("❌ Faltan JWT_SECRET o PHP_API_KEY en backend/.env (mirá .env.example)");
+if (!JWT_SECRET) {
+    console.error("❌ Falta JWT_SECRET en backend/.env (mirá .env.example)");
     process.exit(1);
 }
 
@@ -38,6 +41,9 @@ app.get("/api", (req, res) => {
 
 // 8. Montaje de rutas
 app.use("/api/auth", authRoutes);
+app.use("/api/usuarios", usuariosRoutes);
+app.use("/api/libros", librosRoutes);
+app.use("/api/prestamos", prestamosRoutes);
 
 // 9. Ruta de API inexistente → 404
 app.use("/api", (req, res) => {
@@ -58,5 +64,5 @@ app.use((err, req, res, next) => {
 // 11. Encender el servidor
 app.listen(PORT, () => {
     console.log(`🚀 Servidor activo en http://localhost:${PORT}`);
-    comprobarConexionPHP();
+    comprobarConexion();
 });
