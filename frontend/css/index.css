@@ -74,6 +74,11 @@ Ya no está dentro de una rejilla dividida con
     margin-right: auto;
 }
 
+/* Las acciones que son links no se subrayan */
+.rejilla-acciones a {
+    text-decoration: none;
+}
+
 
 /* =========================================================
    ACCION INDIVIDUAL

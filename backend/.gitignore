@@ -1,6 +1,10 @@
-# Dependencias descargadas
-node_modules/
-
-# Variables de entorno y certificado (secretos)
+# Variables de entorno
 .env
+backend/.env
+
+# Certificados
 ca.pem
+backend/ca.pem
+
+# Dependencias
+node_modules/
