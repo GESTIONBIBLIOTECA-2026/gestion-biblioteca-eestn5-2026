@@ -15,9 +15,10 @@ import { obtenerOCrearCurso } from "./curso.models.js";
  * "campos" marca qué campo del formulario está mal: { dni: "Ya existe..." }
  */
 export class ErrorUsuario extends Error {
-    constructor(status, mensaje, campos = null) {
+    constructor(codigoOStatus, mensaje, campos = null) {
         super(mensaje);
-        this.status = status;
+        this.codigo = typeof codigoOStatus === "string" ? codigoOStatus : null;
+        this.status = typeof codigoOStatus === "number" ? codigoOStatus : (codigoOStatus === "NOT_FOUND" ? 404 : codigoOStatus === "CONFLICT" ? 409 : 400);
         this.campos = campos;
     }
 }
@@ -121,8 +122,18 @@ export const getUsuarioPorDni = async (dni) => {
                  LIMIT 1`;
 
     const [filas] = await connection.query(sql, [dni]);
+    const user = filas[0];
 
-    return filas[0] ?? null;
+    if (!user) return null;
+
+    // Payload del usuario retornado explícitamente
+    return {
+        id: user.id,
+        nombre_completo: user.nombre_completo,
+        password_hash: user.password_hash,
+        estado: user.estado,
+        rol: user.rol
+    };
 };
 
 
@@ -166,7 +177,46 @@ export const getFichaUsuarioPorDni = async (dni) => {
 
     const [filas] = await connection.query(sql, [dni]);
 
-    return filas[0] ?? null;
+    return conCondicion(filas[0]);
+};
+
+
+/**
+ * Valida y obtiene un usuario para registrar un préstamo (dentro de una transacción).
+ * Bloquea la fila con FOR SHARE y reutiliza las reglas de sanciones y deudas.
+ */
+export const obtenerUsuarioParaPrestamo = async (conexion, dni) => {
+    const [usuarios] = await conexion.query(
+        `SELECT u.id, u.nombre_completo, u.estado,
+                (SELECT COUNT(*) FROM sanciones s
+                  WHERE s.usuario_id = u.id AND ${SQL_SANCION_EN_VIGOR}) AS sanciones_activas,
+                (SELECT COUNT(*) FROM pedidos p
+                  WHERE p.usuario_id = u.id AND ${SQL_PRESTAMO_ATRASADO}) AS prestamos_atrasados
+         FROM usuarios u
+         WHERE u.dni = ?
+         LIMIT 1
+         FOR SHARE`,
+        [dni]
+    );
+
+    const usuario = usuarios[0];
+
+    if (!usuario) {
+        throw new ErrorUsuario("NOT_FOUND", "No hay ningún usuario con ese DNI.");
+    }
+    if (usuario.estado !== "habilitado") {
+        throw new ErrorUsuario("CONFLICT", usuario.estado === "baja"
+            ? "El usuario está dado de baja."
+            : "El usuario está suspendido y no puede llevarse libros.");
+    }
+    if (usuario.sanciones_activas > 0) {
+        throw new ErrorUsuario("CONFLICT", "El usuario tiene una sanción activa.");
+    }
+    if (usuario.prestamos_atrasados > 0) {
+        throw new ErrorUsuario("CONFLICT", "El usuario tiene un préstamo atrasado sin devolver.");
+    }
+
+    return usuario;
 };
 
 

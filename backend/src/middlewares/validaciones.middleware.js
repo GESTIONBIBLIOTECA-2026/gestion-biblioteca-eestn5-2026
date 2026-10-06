@@ -4,10 +4,15 @@
    ========================================================================== */
 
 
+import { ROLES_USUARIOS, ESTADOS_USUARIOS, FILTROS_USUARIOS, USUARIOS_POR_PAGINA } from "../config/config.js";
+
 // El DNI se guarda sin puntos ni espacios: "30.111.222" → "30111222"
-const limpiarDni = (dni) => String(dni ?? "").replace(/[.\s]/g, "");
-const DNI_VALIDO = /^\d{6,10}$/;
-const ID_VALIDO = /^[1-9]\d{0,9}$/;
+// Funciones predicado (helpers de validación semántica)
+const esDniValido = (dni) => /^\d{7,8}$/.test(String(dni ?? ""));
+const esIdValido = (id) => /^[1-9]\d{0,9}$/.test(String(id ?? ""));
+const esNombreValido = (nombre) => /^\p{L}[\p{L} .'-]*$/u.test(String(nombre ?? ""));
+const esCorreoValido = (correo) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(correo ?? ""));
+const esTelefonoValido = (telefono) => /^[\d\s()+-]+$/.test(String(telefono ?? ""));
 
 
 /* --- Valida el body del login: { dni, clave } --- */
@@ -20,8 +25,8 @@ export const validarLogin = (req, res, next) => {
         return res.status(400).json({ error: "Completá el DNI y la contraseña." });
     }
 
-    if (!DNI_VALIDO.test(dniLimpio)) {
-        return res.status(400).json({ error: "El DNI solo puede tener números." });
+    if (!esDniValido(dniLimpio)) {
+        return res.status(400).json({ error: "El DNI tiene que tener entre 7 y 8 números." });
     }
 
     // Datos limpios para el controlador
@@ -35,8 +40,8 @@ export const validarDniParam = (req, res, next) => {
 
     const dniLimpio = limpiarDni(req.params.dni);
 
-    if (!DNI_VALIDO.test(dniLimpio)) {
-        return res.status(400).json({ error: "El DNI tiene que tener entre 6 y 10 números." });
+    if (!esDniValido(dniLimpio)) {
+        return res.status(400).json({ error: "El DNI tiene que tener entre 7 y 8 números." });
     }
 
     req.params.dni = dniLimpio;
@@ -47,7 +52,7 @@ export const validarDniParam = (req, res, next) => {
 /* --- Valida el ID de la URL: /api/libros/:id, /api/usuarios/:id --- */
 export const validarIdParam = (req, res, next) => {
 
-    if (!ID_VALIDO.test(String(req.params.id))) {
+    if (!esIdValido(req.params.id)) {
         return res.status(400).json({ error: "El ID tiene que ser un número entero positivo." });
     }
 
@@ -66,11 +71,11 @@ export const validarPrestamo = (req, res, next) => {
         return res.status(400).json({ error: "Completá el DNI del usuario y el ID del libro." });
     }
 
-    if (!DNI_VALIDO.test(dniLimpio)) {
-        return res.status(400).json({ error: "El DNI tiene que tener entre 6 y 10 números." });
+    if (!esDniValido(dniLimpio)) {
+        return res.status(400).json({ error: "El DNI tiene que tener entre 7 y 8 números." });
     }
 
-    if (!ID_VALIDO.test(idLimpio)) {
+    if (!esIdValido(idLimpio)) {
         return res.status(400).json({ error: "El ID del libro tiene que ser un número." });
     }
 
@@ -100,15 +105,6 @@ export const validarLimite = (req, res, next) => {
 // Texto prolijo: sin espacios al principio/final ni espacios dobles
 const limpiarTexto = (valor) => String(valor ?? "").trim().replace(/\s+/g, " ");
 
-const ROLES = ["alumno", "docente", "administrador"];
-const ESTADOS = ["habilitado", "suspendido", "baja"];
-const FILTROS = ["todos", "alumnos", "docentes", "administradores", "morosos", "suspendidos", "bajas"];
-const USUARIOS_POR_PAGINA = 10;
-
-const NOMBRE_VALIDO = /^\p{L}[\p{L} .'-]*$/u;            // letras (con tildes y ñ), espacios, . ' -
-const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const TELEFONO_VALIDO = /^[\d\s()+-]+$/;
-
 
 /* --- Valida los 6 atributos del usuario + tipo y contraseña (alta y modificación) ---
    Body: { nombre_completo, dni, rol, curso, correo, telefono, direccion, clave }
@@ -120,13 +116,13 @@ export const validarUsuario = (req, res, next) => {
 
     const datos = {
         nombre_completo: limpiarTexto(body.nombre_completo),
-        dni:             limpiarDni(body.dni),
-        rol:             limpiarTexto(body.rol).toLowerCase(),
-        curso:           limpiarTexto(body.curso),
-        correo:          limpiarTexto(body.correo).toLowerCase(),
-        telefono:        limpiarTexto(body.telefono),
-        direccion:       limpiarTexto(body.direccion),
-        clave:           String(body.clave ?? "")
+        dni: limpiarDni(body.dni),
+        rol: limpiarTexto(body.rol).toLowerCase(),
+        curso: limpiarTexto(body.curso),
+        correo: limpiarTexto(body.correo).toLowerCase(),
+        telefono: limpiarTexto(body.telefono),
+        direccion: limpiarTexto(body.direccion),
+        clave: String(body.clave ?? "")
     };
 
     const campos = {};
@@ -136,17 +132,17 @@ export const validarUsuario = (req, res, next) => {
         campos.nombre_completo = "Escribí el nombre y apellido.";
     } else if (datos.nombre_completo.length > 120) {
         campos.nombre_completo = "El nombre puede tener hasta 120 caracteres.";
-    } else if (!NOMBRE_VALIDO.test(datos.nombre_completo)) {
+    } else if (!esNombreValido(datos.nombre_completo)) {
         campos.nombre_completo = "El nombre solo puede tener letras y espacios.";
     }
 
     // DNI
-    if (!DNI_VALIDO.test(datos.dni)) {
-        campos.dni = "El DNI tiene que tener entre 6 y 10 números.";
+    if (!esDniValido(datos.dni)) {
+        campos.dni = "El DNI tiene que tener entre 7 y 8 números.";
     }
 
     // Tipo de usuario
-    if (!ROLES.includes(datos.rol)) {
+    if (!ROLES_USUARIOS.includes(datos.rol)) {
         campos.rol = "Elegí el tipo de usuario.";
     }
 
@@ -162,14 +158,14 @@ export const validarUsuario = (req, res, next) => {
     }
 
     // Correo
-    if (!CORREO_VALIDO.test(datos.correo) || datos.correo.length > 120) {
+    if (!esCorreoValido(datos.correo) || datos.correo.length > 120) {
         campos.correo = "El correo electrónico no es válido.";
     }
 
     // Teléfono: números, espacios, paréntesis, + y -. Al menos 6 números.
     const numerosTelefono = datos.telefono.replace(/\D/g, "").length;
 
-    if (!TELEFONO_VALIDO.test(datos.telefono) || numerosTelefono < 6 || datos.telefono.length > 30) {
+    if (!esTelefonoValido(datos.telefono) || numerosTelefono < 6 || datos.telefono.length > 30) {
         campos.telefono = "Escribí un teléfono válido (ej: 11 4444-5678).";
     }
 
@@ -208,8 +204,8 @@ export const validarUsuario = (req, res, next) => {
 export const validarFiltrosUsuarios = (req, res, next) => {
 
     const nombre = limpiarTexto(req.query.nombre).slice(0, 120);
-    const dni    = limpiarDni(req.query.dni);
-    const curso  = limpiarTexto(req.query.curso).slice(0, 30);
+    const dni = limpiarDni(req.query.dni);
+    const curso = limpiarTexto(req.query.curso).slice(0, 30);
     const filtro = String(req.query.filtro || "todos");
     const pagina = Number(req.query.pagina || 1);
 
@@ -217,8 +213,8 @@ export const validarFiltrosUsuarios = (req, res, next) => {
         return res.status(400).json({ error: "En el DNI escribí solo números." });
     }
 
-    if (!FILTROS.includes(filtro)) {
-        return res.status(400).json({ error: `El filtro tiene que ser uno de estos: ${FILTROS.join(", ")}.` });
+    if (!FILTROS_USUARIOS.includes(filtro)) {
+        return res.status(400).json({ error: `El filtro tiene que ser uno de estos: ${FILTROS_USUARIOS.join(", ")}.` });
     }
 
     if (!Number.isInteger(pagina) || pagina < 1 || pagina > 100000) {
@@ -236,7 +232,7 @@ export const validarCambioEstado = (req, res, next) => {
     const estado = String(req.body?.estado ?? "");
     const motivo = limpiarTexto(req.body?.motivo);
 
-    if (!ESTADOS.includes(estado)) {
+    if (!ESTADOS_USUARIOS.includes(estado)) {
         return res.status(400).json({ error: "El estado tiene que ser habilitado, suspendido o baja." });
     }
 

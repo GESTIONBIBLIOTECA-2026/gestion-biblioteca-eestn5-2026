@@ -45,11 +45,7 @@ export const getUsuarioPorDni = async (req, res) => {
             return res.status(404).json({ error: "No hay ningún usuario con ese DNI." });
         }
 
-        const puedePedir = usuario.estado === "habilitado"
-            && usuario.sanciones_activas === 0
-            && usuario.prestamos_atrasados === 0;
-
-        return res.json({ payload: { ...usuario, puede_pedir: puedePedir } });
+        return res.json({ payload: usuario });
 
     } catch (error) {
         console.error("Error al buscar usuario:", error.message);
@@ -192,8 +188,8 @@ export const patchEstado = async (req, res) => {
         });
 
         return res.json({
-            mensaje: mensajeCambioEstado(usuario, estado, reservas_canceladas),
-            payload: usuario
+            mensaje: `Se actualizó el estado de ${usuario.nombre_completo} a ${estado}.`,
+            payload: { usuario, reservas_canceladas }
         });
 
     } catch (error) {
@@ -206,35 +202,27 @@ export const patchEstado = async (req, res) => {
    DELETE /api/usuarios/:id
    Baja del ABM. Es una baja lógica (estado = 'baja'): el historial no se pierde.
    -------------------------------------------------------------------------- */
-export const deleteUsuario = (req, res) => {
-    req.cambioEstado = { estado: "baja", motivo: null };
-    return patchEstado(req, res);
+export const deleteUsuario = async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+
+        if (id === req.usuario.id) {
+            return res.status(409).json({ error: "No podés dar de baja tu propio usuario." });
+        }
+
+        const { usuario, reservas_canceladas } = await cambiarEstadoUsuario({
+            id,
+            estado: "baja",
+            motivo: null,
+            adminId: req.usuario.id
+        });
+
+        return res.json({
+            mensaje: `Se dio de baja a ${usuario.nombre_completo}.`,
+            payload: { usuario, reservas_canceladas }
+        });
+
+    } catch (error) {
+        return responderError(res, error, "No se pudo dar de baja al usuario.");
+    }
 };
-
-
-// Mensaje para el bibliotecario después de cambiar el estado
-function mensajeCambioEstado(usuario, estado, reservasCanceladas) {
-
-    const nombre = usuario.nombre_completo;
-
-    if (estado === "suspendido") {
-        return `Se suspendió a ${nombre}: no puede pedir libros hasta que lo habilites.`;
-    }
-
-    if (estado === "baja") {
-        let reservas = "";
-
-        if (reservasCanceladas === 1) reservas = " Se canceló su reserva pendiente.";
-        if (reservasCanceladas > 1) reservas = ` Se cancelaron sus ${reservasCanceladas} reservas pendientes.`;
-
-        return `Se dio de baja a ${nombre}.${reservas}`;
-    }
-
-    if (usuario.prestamos_atrasados > 0) {
-        const atrasos = plural(usuario.prestamos_atrasados, "préstamo atrasado", "préstamos atrasados");
-        const devolver = usuario.prestamos_atrasados === 1 ? "devolverlo" : "devolverlos";
-        return `Se habilitó a ${nombre}, pero sigue con ${atrasos}: no va a poder pedir libros hasta ${devolver}.`;
-    }
-
-    return `Se habilitó a ${nombre}: ya puede pedir libros.`;
-}
