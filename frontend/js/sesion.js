@@ -32,6 +32,9 @@ function mostrarUsuario({ nombre }) {
 
     // Recién ahora se muestra la página
     document.documentElement.classList.remove("verificando-sesion");
+
+    // Aviso para las páginas que necesitan hacer algo cuando ya se ven (ej: poner el cursor en un campo)
+    document.dispatchEvent(new CustomEvent("sesion-verificada"));
 }
 
 

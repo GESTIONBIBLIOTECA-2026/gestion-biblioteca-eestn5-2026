@@ -55,6 +55,8 @@ export const crearPrestamo = async ({ dni, libroId, adminId, dias }) => {
         await conexion.beginTransaction();
 
         // --- 1. Usuario ---
+        // FOR SHARE: si al mismo tiempo lo están suspendiendo o dando de baja,
+        // se espera a que eso termine y se lee el estado nuevo
         const [usuarios] = await conexion.query(
             `SELECT u.id, u.nombre_completo, u.estado,
                     (SELECT COUNT(*) FROM sanciones s
@@ -66,7 +68,8 @@ export const crearPrestamo = async ({ dni, libroId, adminId, dias }) => {
                              OR (p.estado = 'prestado' AND p.fecha_devolucion_estimada < CURRENT_DATE))) AS prestamos_atrasados
              FROM usuarios u
              WHERE u.dni = ?
-             LIMIT 1`,
+             LIMIT 1
+             FOR SHARE`,
             [dni]
         );
 
@@ -159,8 +162,9 @@ export const crearPrestamo = async ({ dni, libroId, adminId, dias }) => {
 
         await conexion.commit();
 
-        // Devolver el préstamo tal como lo muestra el panel
-        const [filas] = await connection.query(
+        // Devolver el préstamo tal como lo muestra el panel.
+        // Con la MISMA conexión: pedir otra al pool mientras se tiene esta puede trabar el servidor.
+        const [filas] = await conexion.query(
             `SELECT pedido_id, nombre_completo, titulo,
                     COALESCE(fecha_entrega, fecha_pedido) AS fecha_prestamo,
                     fecha_devolucion_estimada, estado

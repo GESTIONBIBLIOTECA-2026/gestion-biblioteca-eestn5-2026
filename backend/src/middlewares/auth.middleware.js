@@ -5,6 +5,7 @@
 
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, ROLES_PANEL } from "../config/config.js";
+import { getSesionUsuario } from "../models/usuario.models.js";
 
 
 export const verificarToken = (req, res, next) => {
@@ -30,12 +31,25 @@ export const verificarToken = (req, res, next) => {
 };
 
 
-/* --- Solo deja pasar a los roles del panel (se usa después de verificarToken) --- */
-export const soloAdministrador = (req, res, next) => {
+/* --- Solo deja pasar a los roles del panel (se usa después de verificarToken) ---
+   El token dice QUIÉN es, pero el rol y el estado se leen de la base en cada petición:
+   si a un administrador lo suspenden, lo dan de baja o le sacan el rol,
+   pierde el acceso al instante (aunque su token todavía no haya vencido). */
+export const soloAdministrador = async (req, res, next) => {
 
-    if (!ROLES_PANEL.includes(req.usuario?.rol)) {
-        return res.status(403).json({ error: "No tenés permiso para hacer esto." });
+    try {
+        const actual = await getSesionUsuario(req.usuario?.id);
+
+        if (!actual || actual.estado !== "habilitado" || !ROLES_PANEL.includes(actual.rol)) {
+            return res.status(401).json({ error: "Tu usuario ya no tiene acceso al panel. Iniciá sesión de nuevo." });
+        }
+
+        // Datos frescos (si le cambiaron el nombre, se ve el nuevo)
+        req.usuario = { id: actual.id, nombre: actual.nombre_completo, rol: actual.rol };
+        next();
+
+    } catch (error) {
+        console.error("Error al verificar el usuario:", error.message);
+        return res.status(500).json({ error: "No se pudo conectar con la base de datos." });
     }
-
-    next();
 };

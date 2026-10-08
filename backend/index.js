@@ -15,6 +15,7 @@ import { PORT, JWT_SECRET } from "./src/config/config.js";
 import { comprobarConexion } from "./src/database/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import usuariosRoutes from "./src/routes/usuarios.routes.js";
+import cursosRoutes from "./src/routes/cursos.routes.js";
 import librosRoutes from "./src/routes/libros.routes.js";
 import prestamosRoutes from "./src/routes/prestamos.routes.js";
 
@@ -42,6 +43,7 @@ app.get("/api", (req, res) => {
 // 8. Montaje de rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/usuarios", usuariosRoutes);
+app.use("/api/cursos", cursosRoutes);
 app.use("/api/libros", librosRoutes);
 app.use("/api/prestamos", prestamosRoutes);
 
