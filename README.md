@@ -83,6 +83,20 @@ Si un dato está mal, la API responde `400` con `{ error, campos: { dni: "..." }
 Todas menos el login piden el header `Authorization: Bearer <token>`.
 Solo pueden entrar usuarios con rol **administrador** y estado **habilitado**.
 
+### Preparar la base de datos por primera vez
+
+Configurá `backend/.env` y el certificado de Aiven según `backend/.env.example`. Desde la carpeta
+`backend/`, ejecutá `npm.cmd run db:init` en PowerShell (o `npm run db:init` en otra terminal) para crear el esquema y los datos de referencia (roles y
+categorías). El comando es idempotente y no borra filas existentes.
+
+En una instalación sin administradores, ejecutá `npm.cmd run db:admin` desde una terminal interactiva de PowerShell
+(o `npm run db:admin` en otra terminal).
+Solicita los datos del primer administrador y una contraseña que no se muestra al escribir; no hay
+credenciales predeterminadas. Las cuentas posteriores se gestionan desde la plataforma.
+
+Para iniciar el backend, ejecutá `npm.cmd start` en PowerShell (o `npm start` en otra terminal) desde `backend/`
+y abrí `http://localhost:3000`.
+
 ### Qué controla un préstamo nuevo
 
 `POST /api/prestamos` hace todo en una **transacción** (o se guarda todo, o nada):

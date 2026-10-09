@@ -7,6 +7,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "db:init": "node scripts/inicializar-bd.js",
+    "db:admin": "node scripts/crear-admin-inicial.js",
     "hash": "node scripts/generar-hash.js"
   },
   "dependencies": {
