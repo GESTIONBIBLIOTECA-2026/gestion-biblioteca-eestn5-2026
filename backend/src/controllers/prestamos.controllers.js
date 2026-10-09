@@ -3,6 +3,8 @@
    ========================================================================== */
 
 import { getUltimosPrestamos, crearPrestamo, ErrorPrestamo } from "../models/prestamo.models.js";
+import { ErrorUsuario } from "../models/usuario.models.js";
+import { ErrorLibro } from "../models/libro.models.js";
 import { DIAS_PRESTAMO } from "../config/config.js";
 
 
@@ -41,12 +43,14 @@ export const postPrestamo = async (req, res) => {
 
     } catch (error) {
 
-        // Reglas de negocio (usuario suspendido, sin stock...): el mensaje va tal cual
-        if (error instanceof ErrorPrestamo) {
-            return res.status(error.status).json({ error: error.message });
+        // Reglas de negocio (usuario suspendido, sin stock...): el controlador traduce el error a HTTP
+        if (error instanceof ErrorPrestamo || error instanceof ErrorUsuario || error instanceof ErrorLibro) {
+            const status = error.status ?? 400;
+            return res.status(status).json({ error: error.message });
         }
 
         console.error("Error al registrar préstamo:", error.message);
         return res.status(500).json({ error: "No se pudo registrar el préstamo en la base de datos." });
     }
 };
+
