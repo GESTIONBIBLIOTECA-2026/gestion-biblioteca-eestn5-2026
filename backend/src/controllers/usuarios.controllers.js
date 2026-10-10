@@ -188,13 +188,8 @@ export const patchEstado = async (req, res) => {
         });
 
         return res.json({
-<<<<<<< HEAD
             mensaje: mensajeCambioEstado(usuario, estado, reservas_canceladas),
             payload: usuario
-=======
-            mensaje: `Se actualizó el estado de ${usuario.nombre_completo} a ${estado}.`,
-            payload: { usuario, reservas_canceladas }
->>>>>>> 005a4073036d3e3ff288278e2d2c8430f8c5ef16
         });
 
     } catch (error) {
@@ -207,7 +202,6 @@ export const patchEstado = async (req, res) => {
    DELETE /api/usuarios/:id
    Baja del ABM. Es una baja lógica (estado = 'baja'): el historial no se pierde.
    -------------------------------------------------------------------------- */
-<<<<<<< HEAD
 export const deleteUsuario = (req, res) => {
     req.cambioEstado = { estado: "baja", motivo: null };
     return patchEstado(req, res);
@@ -240,29 +234,3 @@ function mensajeCambioEstado(usuario, estado, reservasCanceladas) {
 
     return `Se habilitó a ${nombre}: ya puede pedir libros.`;
 }
-=======
-export const deleteUsuario = async (req, res) => {
-    try {
-        const id = Number(req.params.id);
-
-        if (id === req.usuario.id) {
-            return res.status(409).json({ error: "No podés dar de baja tu propio usuario." });
-        }
-
-        const { usuario, reservas_canceladas } = await cambiarEstadoUsuario({
-            id,
-            estado: "baja",
-            motivo: null,
-            adminId: req.usuario.id
-        });
-
-        return res.json({
-            mensaje: `Se dio de baja a ${usuario.nombre_completo}.`,
-            payload: { usuario, reservas_canceladas }
-        });
-
-    } catch (error) {
-        return responderError(res, error, "No se pudo dar de baja al usuario.");
-    }
-};
->>>>>>> 005a4073036d3e3ff288278e2d2c8430f8c5ef16

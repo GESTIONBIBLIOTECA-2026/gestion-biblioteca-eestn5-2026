@@ -102,29 +102,8 @@ export const crearPrestamo = async ({ dni, libroId, adminId, dias }) => {
     try {
         await conexion.beginTransaction();
 
-<<<<<<< HEAD
-        // --- 1. Usuario ---
-        // FOR SHARE: si al mismo tiempo lo están suspendiendo o dando de baja,
-        // se espera a que eso termine y se lee el estado nuevo
-        const [usuarios] = await conexion.query(
-            `SELECT u.id, u.nombre_completo, u.estado,
-                    (SELECT COUNT(*) FROM sanciones s
-                      WHERE s.usuario_id = u.id AND s.activa = TRUE
-                        AND (s.fecha_fin IS NULL OR s.fecha_fin >= CURRENT_DATE)) AS sanciones_activas,
-                    (SELECT COUNT(*) FROM pedidos p
-                      WHERE p.usuario_id = u.id
-                        AND (p.estado = 'vencido'
-                             OR (p.estado = 'prestado' AND p.fecha_devolucion_estimada < CURRENT_DATE))) AS prestamos_atrasados
-             FROM usuarios u
-             WHERE u.dni = ?
-             LIMIT 1
-             FOR SHARE`,
-            [dni]
-        );
-=======
         const usuario = await obtenerUsuarioParaPrestamo(conexion, dni);
         const { libro, ejemplar } = await obtenerEjemplarParaPrestamo(conexion, libroId);
->>>>>>> 005a4073036d3e3ff288278e2d2c8430f8c5ef16
 
         const pedidoId = await registrarPedido(conexion, {
             usuario,
@@ -136,22 +115,7 @@ export const crearPrestamo = async ({ dni, libroId, adminId, dias }) => {
 
         await conexion.commit();
 
-<<<<<<< HEAD
-        // Devolver el préstamo tal como lo muestra el panel.
-        // Con la MISMA conexión: pedir otra al pool mientras se tiene esta puede trabar el servidor.
-        const [filas] = await conexion.query(
-            `SELECT pedido_id, nombre_completo, titulo,
-                    COALESCE(fecha_entrega, fecha_pedido) AS fecha_prestamo,
-                    fecha_devolucion_estimada, estado
-             FROM vista_historial_usuario
-             WHERE pedido_id = ?`,
-            [pedidoId]
-        );
-
-        return { ...filas[0], codigo_inventario: ejemplar.codigo_inventario };
-=======
         return await consultarPrestamoCreado(conexion, pedidoId, ejemplar.codigo_inventario);
->>>>>>> 005a4073036d3e3ff288278e2d2c8430f8c5ef16
 
     } catch (error) {
         await conexion.rollback();
