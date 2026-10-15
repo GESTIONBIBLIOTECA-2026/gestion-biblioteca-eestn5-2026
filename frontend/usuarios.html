@@ -182,161 +182,77 @@
                 <section class="encabezado-pagina-usuarios">
                     <div>
                         <h1>Gestión de usuarios</h1>
-                        <p>
-                            Administrá los lectores, consultá sus datos y mantené
-                            actualizado el registro de la biblioteca.
-                        </p>
+                        <p>Administrá los lectores, consultá sus datos y mantené actualizado el registro de la biblioteca.</p>
                     </div>
 
-                    <button
-                        type="button"
-                        class="boton-principal"
-                        id="boton-nuevo-usuario">
-
+                    <button type="button" class="boton-principal" id="botonNuevoUsuario">
                         <i data-lucide="user-plus"></i>
                         Nuevo usuario
                     </button>
                 </section>
 
-                <!-- AVISO GENERAL -->
-                <div
-                    id="aviso-usuarios"
-                    class="aviso-usuarios"
-                    role="status"
-                    aria-live="polite">
-                </div>
-
                 <!-- RESUMEN -->
                 <section class="resumen-usuarios" aria-label="Resumen de usuarios">
-
                     <article class="resumen-usuario">
-                        <div class="resumen-usuario-icono">
-                            <i data-lucide="users"></i>
-                        </div>
-
+                        <div class="resumen-usuario-icono"><i data-lucide="users"></i></div>
                         <div class="resumen-usuario-texto">
                             <span>Usuarios registrados</span>
-                            <strong id="total-usuarios">—</strong>
+                            <strong id="totalUsuarios">—</strong>
                         </div>
                     </article>
 
                     <article class="resumen-usuario">
-                        <div class="resumen-usuario-icono verde">
-                            <i data-lucide="user-check"></i>
-                        </div>
-
+                        <div class="resumen-usuario-icono verde"><i data-lucide="user-check"></i></div>
                         <div class="resumen-usuario-texto">
                             <span>Usuarios habilitados</span>
-                            <strong id="total-activos">—</strong>
+                            <strong id="totalHabilitados">—</strong>
                         </div>
                     </article>
 
                     <article class="resumen-usuario">
-                        <div class="resumen-usuario-icono bordo">
-                            <i data-lucide="user-round-x"></i>
-                        </div>
-
+                        <div class="resumen-usuario-icono bordo"><i data-lucide="user-round-x"></i></div>
                         <div class="resumen-usuario-texto">
                             <span>Suspendidos y dados de baja</span>
-                            <strong id="total-inactivos">—</strong>
+                            <strong id="totalInactivos">—</strong>
                         </div>
                     </article>
-
                 </section>
 
                 <!-- LISTADO -->
-                <section class="panel-usuarios" aria-labelledby="titulo-listado-usuarios">
+                <section class="panel-usuarios" aria-labelledby="tituloListado">
 
                     <div class="panel-usuarios-cabecera">
                         <div>
-                            <h2 id="titulo-listado-usuarios">Listado de usuarios</h2>
-                            <p id="descripcionListado">
-                                Consultá y administrá los usuarios registrados.
-                            </p>
+                            <h2 id="tituloListado">Listado de usuarios</h2>
+                            <p>Consultá y administrá los usuarios registrados.</p>
                         </div>
                     </div>
 
-                    <!-- BÚSQUEDA -->
+                    <!-- BÚSQUEDA AVANZADA -->
                     <form id="formularioBusqueda" class="barra-filtros-usuarios">
-
                         <label class="campo-busqueda-usuarios">
                             <i data-lucide="search"></i>
-
-                            <input
-                                type="search"
-                                id="buscarNombre"
-                                name="nombre"
-                                placeholder="Buscar por nombre..."
-                                aria-label="Buscar por nombre">
+                            <input type="search" name="nombre" placeholder="Buscar por nombre..." aria-label="Buscar por nombre">
                         </label>
 
-                        <input
-                            type="search"
-                            id="buscarDni"
-                            name="dni"
-                            class="filtro-usuarios"
-                            placeholder="Buscar por DNI"
-                            aria-label="Buscar por DNI">
-
-                        <input
-                            type="search"
-                            id="buscarCurso"
-                            name="curso"
-                            class="filtro-usuarios filtro-rol-usuario"
-                            list="listaCursos"
-                            placeholder="Buscar por curso"
-                            aria-label="Buscar por curso">
-
+                        <input type="search" name="dni" class="filtro-usuarios" placeholder="Buscar por DNI" aria-label="Buscar por DNI">
+                        <input type="search" name="curso" class="filtro-usuarios" list="listaCursos" placeholder="Buscar por curso" aria-label="Buscar por curso">
                         <datalist id="listaCursos"></datalist>
 
-                        <button type="submit" class="boton-principal">
-                            <i data-lucide="search"></i>
-                            Buscar
-                        </button>
-
-                        <button type="button" id="botonLimpiar" class="boton-secundario">
-                            <i data-lucide="rotate-ccw"></i>
-                            Limpiar
-                        </button>
-
+                        <button type="submit" class="boton-principal"><i data-lucide="search"></i> Buscar</button>
+                        <button type="reset" class="boton-secundario"><i data-lucide="rotate-ccw"></i> Limpiar</button>
                     </form>
 
-                    <!-- FILTROS POR CONDICIÓN -->
+                    <!-- FILTROS RÁPIDOS (chips) -->
                     <div class="filtros-rapidos-usuarios">
-                        <div
-                            id="chipsFiltro"
-                            class="chips-filtro"
-                            role="group"
-                            aria-label="Filtrar usuarios por condición">
-
-                            <button type="button" class="chip activo" data-filtro="todos" aria-pressed="true">
-                                Todos <span data-cantidad="todos">0</span>
-                            </button>
-
-                            <button type="button" class="chip" data-filtro="alumnos" aria-pressed="false">
-                                Alumnos <span data-cantidad="alumnos">0</span>
-                            </button>
-
-                            <button type="button" class="chip" data-filtro="docentes" aria-pressed="false">
-                                Docentes <span data-cantidad="docentes">0</span>
-                            </button>
-
-                            <button type="button" class="chip" data-filtro="administradores" aria-pressed="false">
-                                Administradores <span data-cantidad="administradores">0</span>
-                            </button>
-
-                            <button type="button" class="chip" data-filtro="morosos" aria-pressed="false">
-                                Morosos <span data-cantidad="morosos">0</span>
-                            </button>
-
-                            <button type="button" class="chip" data-filtro="suspendidos" aria-pressed="false">
-                                Suspendidos <span data-cantidad="suspendidos">0</span>
-                            </button>
-
-                            <button type="button" class="chip" data-filtro="bajas" aria-pressed="false">
-                                Dados de baja <span data-cantidad="bajas">0</span>
-                            </button>
-
+                        <div id="chipsFiltro" class="chips-filtro" role="group" aria-label="Filtrar usuarios por condición">
+                            <button type="button" class="chip activo" data-filtro="todos">Todos <span data-cantidad="todos">0</span></button>
+                            <button type="button" class="chip" data-filtro="alumnos">Alumnos <span data-cantidad="alumnos">0</span></button>
+                            <button type="button" class="chip" data-filtro="docentes">Docentes <span data-cantidad="docentes">0</span></button>
+                            <button type="button" class="chip" data-filtro="administradores">Administradores <span data-cantidad="administradores">0</span></button>
+                            <button type="button" class="chip" data-filtro="morosos">Morosos <span data-cantidad="morosos">0</span></button>
+                            <button type="button" class="chip" data-filtro="suspendidos">Suspendidos <span data-cantidad="suspendidos">0</span></button>
+                            <button type="button" class="chip" data-filtro="bajas">Dados de baja <span data-cantidad="bajas">0</span></button>
                         </div>
                     </div>
 
@@ -348,32 +264,22 @@
                                     <th scope="col">Usuario</th>
                                     <th scope="col">DNI</th>
                                     <th scope="col">Curso</th>
-                                    <th scope="col">Contacto</th>
+                                    <th scope="col">Teléfono</th>
                                     <th scope="col">Rol</th>
                                     <th scope="col">Condición</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
-
-                            <tbody id="cuerpoUsuarios">
-                                <tr>
-                                    <td colspan="7" class="celda-mensaje">
-                                        Cargando usuarios...
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody id="cuerpoUsuarios"></tbody>
                         </table>
                     </div>
 
                     <!-- PIE Y PAGINACIÓN -->
                     <div class="pie-tabla-usuarios">
-                        <span id="cantidadUsuarios">Cargando usuarios...</span>
                         <span id="textoPaginacion"></span>
-
-                        <div
-                            class="paginacion-usuarios"
-                            id="paginacion"
-                            aria-label="Paginación">
+                        <div class="paginacion-usuarios">
+                            <button type="button" id="paginaAnterior">Anterior</button>
+                            <button type="button" id="paginaSiguiente">Siguiente</button>
                         </div>
                     </div>
 
@@ -382,357 +288,162 @@
         </div>
     </div>
 
+
     <!-- =========================================================
-         MODAL DE ALTA Y EDICIÓN
+         MENÚ "ACCIONES" DE UNA FILA (uno solo para toda la tabla)
          ========================================================= -->
-    <div
-        class="modal-usuario"
-        id="modal-usuario"
-        aria-hidden="true">
+    <div id="menuAcciones" class="menu-acciones" role="menu" aria-label="Acciones del usuario" hidden></div>
 
-        <div class="modal-usuario-contenido">
 
-            <div class="modal-usuario-cabecera">
+    <!-- =========================================================
+         ALTA Y MODIFICACIÓN
+         ========================================================= -->
+    <dialog id="dialogoUsuario" class="dialogo-usuario" aria-labelledby="tituloFormulario">
+        <form id="formularioUsuario" class="dialogo-usuario-contenido" novalidate>
+
+            <div class="dialogo-usuario-cabecera">
                 <div>
                     <h2 id="tituloFormulario">Registrar usuario</h2>
-                    <p id="subtituloFormulario">
-                        Completá los datos para dar de alta un usuario nuevo.
-                    </p>
-                    <span id="marcaEdicion" hidden>Modo edición</span>
+                    <p>Los campos con * son obligatorios.</p>
                 </div>
-
-                <button
-                    type="button"
-                    class="boton-icono"
-                    id="cerrar-modal-usuario"
-                    data-cerrar-dialogo
-                    aria-label="Cerrar formulario"
-                    title="Cerrar">
-
-                    <i data-lucide="x"></i>
-                </button>
+                <button type="button" class="boton-icono" data-cerrar-dialogo aria-label="Cerrar"><i data-lucide="x"></i></button>
             </div>
 
-            <form class="formulario-usuario" id="formularioUsuario">
-
-                <div id="alertaFormulario" class="aviso-usuarios error" hidden>
-                    <span id="textoAlertaFormulario"></span>
-                </div>
-
+            <div class="formulario-usuario">
                 <div class="campos-formulario-usuario">
 
-                    <div class="campo campo-formulario-usuario completo">
+                    <div class="campo-formulario-usuario completo">
                         <label for="campoNombre">Nombre y apellido *</label>
-
-                        <input
-                            id="campoNombre"
-                            name="nombre_completo"
-                            type="text"
-                            maxlength="100"
-                            autocomplete="name"
-                            required
-                            placeholder="Ej.: Martina González">
-
+                        <input id="campoNombre" name="nombre_completo" type="text" maxlength="120" autocomplete="off" placeholder="Ej.: Martina González">
                         <small class="pista" data-pista="nombre_completo"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario">
+                    <div class="campo-formulario-usuario">
                         <label for="campoDni">DNI *</label>
-
-                        <input
-                            id="campoDni"
-                            name="dni"
-                            type="text"
-                            inputmode="numeric"
-                            maxlength="15"
-                            required
-                            placeholder="Número de documento">
-
+                        <input id="campoDni" name="dni" type="text" inputmode="numeric" maxlength="10" placeholder="Sin puntos">
                         <small class="pista" data-pista="dni"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario">
+                    <div class="campo-formulario-usuario">
                         <label for="campoRol">Rol *</label>
-
-                        <select id="campoRol" name="rol" required>
+                        <select id="campoRol" name="rol">
                             <option value="alumno">Alumno</option>
                             <option value="docente">Docente</option>
                             <option value="administrador">Administrador</option>
                         </select>
-
                         <small class="pista" data-pista="rol"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario completo">
-                        <label for="campoCurso">Curso</label>
-
-                        <input
-                            id="campoCurso"
-                            name="curso"
-                            type="text"
-                            maxlength="60"
-                            list="listaCursos"
-                            placeholder="Ej.: 7mo 5ta">
-
+                    <div class="campo-formulario-usuario completo">
+                        <label for="campoCurso">Curso (solo alumnos)</label>
+                        <input id="campoCurso" name="curso" type="text" maxlength="30" list="listaCursos" placeholder="Ej.: 7mo 5ta">
                         <small class="pista" data-pista="curso"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario completo">
-                        <label for="campoCorreo">Correo electrónico</label>
-
-                        <input
-                            id="campoCorreo"
-                            name="correo"
-                            type="email"
-                            maxlength="150"
-                            autocomplete="email"
-                            placeholder="nombre@correo.com">
-
+                    <div class="campo-formulario-usuario completo">
+                        <label for="campoCorreo">Correo electrónico *</label>
+                        <input id="campoCorreo" name="correo" type="email" maxlength="120" autocomplete="off" placeholder="nombre@correo.com">
                         <small class="pista" data-pista="correo"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario">
-                        <label for="campoTelefono">Teléfono</label>
-
-                        <input
-                            id="campoTelefono"
-                            name="telefono"
-                            type="tel"
-                            maxlength="35"
-                            autocomplete="tel"
-                            placeholder="Número de contacto">
-
+                    <div class="campo-formulario-usuario">
+                        <label for="campoTelefono">Teléfono *</label>
+                        <input id="campoTelefono" name="telefono" type="tel" maxlength="30" placeholder="11 4444-5678">
                         <small class="pista" data-pista="telefono"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario">
+                    <div class="campo-formulario-usuario">
                         <label for="campoClave" id="etiquetaClave">Contraseña inicial *</label>
-
-                        <div class="campo-clave-usuario">
-                            <input
-                                id="campoClave"
-                                name="clave"
-                                type="password"
-                                autocomplete="new-password"
-                                required
-                                placeholder="Contraseña inicial">
-
-                            <button
-                                type="button"
-                                class="boton-icono"
-                                id="botonVerClave"
-                                aria-label="Mostrar contraseña"
-                                title="Mostrar contraseña">
-
-                                <i data-lucide="eye"></i>
-                            </button>
-                        </div>
-
+                        <input id="campoClave" name="clave" type="password" maxlength="72" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
                         <small class="pista" data-pista="clave"></small>
                     </div>
 
-                    <div class="campo campo-formulario-usuario completo">
-                        <label for="campoDireccion">Dirección</label>
-
-                        <input
-                            id="campoDireccion"
-                            name="direccion"
-                            type="text"
-                            maxlength="200"
-                            autocomplete="street-address"
-                            placeholder="Domicilio del usuario">
-
+                    <div class="campo-formulario-usuario completo">
+                        <label for="campoDireccion">Dirección *</label>
+                        <input id="campoDireccion" name="direccion" type="text" maxlength="150" placeholder="Calle y número">
                         <small class="pista" data-pista="direccion"></small>
                     </div>
 
                 </div>
 
-                <p class="ayuda-formulario-usuario">
-                    Los campos marcados con * son obligatorios. Al modificar un usuario,
-                    podés dejar la contraseña vacía para conservar la actual.
-                </p>
-
                 <div class="acciones-formulario-usuario">
-                    <button type="button" class="boton-secundario" id="botonCancelar">
-                        Cancelar
-                    </button>
-
-                    <button type="submit" class="boton-principal" id="botonGuardar">
-                        <i data-lucide="user-plus"></i>
-                        Registrar usuario
-                    </button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
-    <!-- =========================================================
-         FICHA E HISTORIAL DEL USUARIO
-         ========================================================= -->
-    <dialog id="dialogoFicha" class="dialogo-usuario" aria-labelledby="fichaNombre">
-
-        <div class="dialogo-usuario-contenido">
-
-            <div class="ficha-usuario-cabecera">
-                <div class="ficha-avatar" id="fichaIniciales"></div>
-
-                <div class="ficha-identidad">
-                    <h2 id="fichaNombre">Ficha del usuario</h2>
-                    <div id="fichaSubtitulo"></div>
-                </div>
-
-                <button
-                    type="button"
-                    class="boton-icono"
-                    data-cerrar-dialogo
-                    aria-label="Cerrar ficha">
-
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-
-            <div class="ficha-usuario-cuerpo" id="fichaCuerpo">
-                <p class="historial-vacio">Seleccioná un usuario para consultar su ficha.</p>
-            </div>
-
-            <div class="ficha-usuario-acciones" id="fichaAcciones"></div>
-
-            <div
-                id="anuncioFicha"
-                class="solo-lectores-pantalla"
-                aria-live="polite"
-                aria-atomic="true">
-            </div>
-
-        </div>
-    </dialog>
-
-    <!-- =========================================================
-         CONFIRMACIÓN DE SUSPENSIÓN
-         ========================================================= -->
-    <dialog id="dialogoSuspender" class="dialogo-usuario" aria-labelledby="tituloSuspender">
-
-        <form id="formularioSuspender" class="dialogo-usuario-contenido">
-
-            <div class="dialogo-usuario-cabecera">
-                <div>
-                    <h2 id="tituloSuspender">Suspender usuario</h2>
-                    <p>Indicá el motivo de la suspensión.</p>
-                </div>
-
-                <button
-                    type="button"
-                    class="boton-icono"
-                    data-cerrar-dialogo
-                    aria-label="Cerrar ventana">
-
-                    <i data-lucide="x"></i>
-                </button>
-            </div>
-
-            <div class="formulario-usuario">
-                <div class="campo campo-formulario-usuario">
-                    <label for="campoMotivo">Motivo *</label>
-
-                    <textarea
-                        id="campoMotivo"
-                        name="motivo"
-                        rows="4"
-                        maxlength="500"
-                        required
-                        placeholder="Explicá el motivo de la suspensión"></textarea>
-
-                    <small class="pista" data-pista="motivo"></small>
-                </div>
-
-                <div class="acciones-formulario-usuario">
-                    <button type="button" class="boton-secundario" data-cerrar-dialogo>
-                        Cancelar
-                    </button>
-
-                    <button type="submit" class="boton-peligro" id="botonSuspender">
-                        <i data-lucide="ban"></i>
-                        Confirmar suspensión
-                    </button>
+                    <button type="button" class="boton-secundario" data-cerrar-dialogo>Cancelar</button>
+                    <button type="submit" class="boton-principal" id="botonGuardar">Registrar usuario</button>
                 </div>
             </div>
 
         </form>
     </dialog>
 
-    <!-- =========================================================
-         CONFIRMACIÓN DE BAJA LÓGICA
-         ========================================================= -->
-    <dialog id="dialogoBaja" class="dialogo-usuario" aria-labelledby="tituloBaja">
 
+    <!-- =========================================================
+         FICHA E HISTORIAL ACTIVO
+         ========================================================= -->
+    <dialog id="dialogoFicha" class="dialogo-usuario" aria-labelledby="fichaNombre">
         <div class="dialogo-usuario-contenido">
 
-            <div class="dialogo-usuario-cabecera">
-                <div>
-                    <h2 id="tituloBaja">Dar de baja al usuario</h2>
-                    <p id="textoBaja">
-                        El historial del usuario se conservará.
-                    </p>
+            <div class="ficha-usuario-cabecera">
+                <div class="ficha-avatar" id="fichaIniciales"></div>
+                <div class="ficha-identidad">
+                    <h2 id="fichaNombre"></h2>
+                    <div id="fichaSubtitulo"></div>
                 </div>
-
-                <button
-                    type="button"
-                    class="boton-icono"
-                    data-cerrar-dialogo
-                    aria-label="Cerrar ventana">
-
-                    <i data-lucide="x"></i>
-                </button>
+                <button type="button" class="boton-icono" data-cerrar-dialogo aria-label="Cerrar ficha"><i data-lucide="x"></i></button>
             </div>
 
-            <div class="formulario-usuario">
-                <div class="acciones-formulario-usuario">
-                    <button type="button" class="boton-secundario" data-cerrar-dialogo>
-                        Cancelar
-                    </button>
+            <div class="ficha-usuario-cuerpo" id="fichaCuerpo"></div>
 
-                    <button type="button" class="boton-peligro" id="botonConfirmarBaja">
-                        <i data-lucide="user-round-x"></i>
-                        Confirmar baja
-                    </button>
-                </div>
+            <div class="ficha-usuario-acciones">
+                <button type="button" class="boton-secundario" id="botonEditarFicha">Editar usuario</button>
             </div>
 
         </div>
     </dialog>
 
-    <!-- MENÚ DE ACCIONES DE UNA FILA (uno solo para toda la tabla: js/usuarios.js) -->
-    <div id="menuAccionesUsuario" class="menu-acciones" role="menu" aria-label="Acciones del usuario" hidden></div>
+
+    <!-- =========================================================
+         CONFIRMAR SUSPENSIÓN O BAJA (el mismo diálogo para las dos)
+         ========================================================= -->
+    <dialog id="dialogoConfirmar" class="dialogo-usuario" aria-labelledby="tituloConfirmar">
+        <form id="formularioConfirmar" class="dialogo-usuario-contenido" novalidate>
+
+            <div class="dialogo-usuario-cabecera">
+                <div>
+                    <h2 id="tituloConfirmar"></h2>
+                    <p id="textoConfirmar"></p>
+                </div>
+                <button type="button" class="boton-icono" data-cerrar-dialogo aria-label="Cerrar"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="formulario-usuario">
+                <div class="campo-formulario-usuario" id="grupoMotivo">
+                    <label for="campoMotivo">Motivo *</label>
+                    <textarea id="campoMotivo" name="motivo" rows="3" maxlength="255" placeholder="Explicá el motivo de la suspensión"></textarea>
+                    <small class="pista" data-pista="motivo"></small>
+                </div>
+
+                <div class="acciones-formulario-usuario">
+                    <button type="button" class="boton-secundario" data-cerrar-dialogo>Cancelar</button>
+                    <button type="submit" class="boton-peligro" id="botonConfirmar">Confirmar</button>
+                </div>
+            </div>
+
+        </form>
+    </dialog>
+
 
     <!-- AVISO FLOTANTE -->
-    <div
-        id="avisoFlotante"
-        class="aviso-flotante"
-        role="status"
-        aria-live="polite"
-        hidden>
+    <div id="avisoFlotante" class="aviso-flotante" role="status" aria-live="polite" hidden></div>
 
-        <span id="avisoIcono"></span>
-        <span id="avisoTexto"></span>
-    </div>
 
-    <!-- ANUNCIO PARA LECTORES DE PANTALLA -->
-    <div
-        id="anuncio"
-        class="solo-lectores-pantalla"
-        aria-live="polite"
-        aria-atomic="true">
-    </div>
-
-    <!-- Sesión, encabezado y gestión de usuarios -->
+    <!-- Sesión y encabezado + gestión de usuarios -->
     <script type="module" src="js/sesion.js"></script>
     <script type="module" src="js/usuarios.js"></script>
 
-    <!-- Iconos de la interfaz -->
     <script>
         window.lucide?.createIcons();
     </script>
+
 </body>
 
 </html>

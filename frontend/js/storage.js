@@ -1,34 +1,24 @@
 /* ==========================================================================
-   MÓDULO: storage.js - Persistencia Local de la Sesión (LocalStorage & JSON)
-   Guarda el token que devuelve el backend para no perderlo al recargar.
+   MÓDULO: storage.js - Persistencia Local de la Sesión (localStorage & JSON)
    ========================================================================== */
 
 const SESION_KEY = "biblioteca_sesion_v1";
 
-
-/* --- Guarda { token, usuario } --- */
+// Guarda { token, usuario } como texto JSON
 export function guardarSesion(sesion) {
     localStorage.setItem(SESION_KEY, JSON.stringify(sesion));
 }
 
-
-/* --- Devuelve { token, usuario } o null --- */
-export function obtenerSesion() {
+// Devuelve solo el token (o null si no hay sesión)
+export function obtenerToken() {
     try {
-        return JSON.parse(localStorage.getItem(SESION_KEY)) ?? null;
+        return JSON.parse(localStorage.getItem(SESION_KEY))?.token ?? null;
     } catch (error) {
         return null;
     }
 }
 
-
-/* --- Devuelve solo el token o null --- */
-export function obtenerToken() {
-    return obtenerSesion()?.token ?? null;
-}
-
-
-/* --- Cierra la sesión en este navegador --- */
+// Cierra la sesión en este navegador
 export function borrarSesion() {
     localStorage.removeItem(SESION_KEY);
 }

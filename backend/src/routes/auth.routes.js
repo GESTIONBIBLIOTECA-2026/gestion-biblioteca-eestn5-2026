@@ -1,20 +1,16 @@
 /* ==========================================================================
-   auth.routes.js - Rutas de autenticación
-   Montadas en index.js bajo el prefijo /api/auth
+   auth.routes.js - Rutas de autenticación  (/api/auth)
    ========================================================================== */
 
 import express from "express";
 import { postLogin, getPerfil } from "../controllers/auth.controllers.js";
-import { verificarToken, soloAdministrador } from "../middlewares/auth.middleware.js";
+import { verificarAdmin } from "../middlewares/auth.middleware.js";
 import { validarLogin } from "../middlewares/validaciones.middleware.js";
 import { limitarIntentos } from "../middlewares/limiteIntentos.middleware.js";
 
 const router = express.Router();
 
-// POST /api/auth/login  → límite de intentos → validar body → controlador
-router.post("/login", limitarIntentos, validarLogin, postLogin);
-
-// GET /api/auth/perfil  → verificar token → sigue siendo administrador habilitado → controlador
-router.get("/perfil", verificarToken, soloAdministrador, getPerfil);
+router.post("/login", limitarIntentos, validarLogin, postLogin);   // POST /api/auth/login
+router.get("/perfil", verificarAdmin, getPerfil);                   // GET  /api/auth/perfil
 
 export default router;

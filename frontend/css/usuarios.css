@@ -412,53 +412,6 @@
     color: var(--texto-principal);
 }
 
-.modal-usuario {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: var(--overlay);
-    backdrop-filter: blur(5px);
-}
-
-.modal-usuario.abierto {
-    display: flex;
-}
-
-.modal-usuario-contenido {
-    width: min(100%, 560px);
-    max-height: min(90vh, 760px);
-    overflow-y: auto;
-    background: var(--fondo-sidebar);
-    border: 1px solid var(--borde-tarjeta);
-    border-radius: 14px;
-    box-shadow: var(--sombra-modal);
-}
-
-.modal-usuario-cabecera {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 23px 24px;
-    border-bottom: 1px solid var(--borde-tarjeta);
-}
-
-.modal-usuario-cabecera h2 {
-    color: var(--texto-principal);
-    font-size: 19px;
-    margin-bottom: 6px;
-}
-
-.modal-usuario-cabecera p {
-    color: var(--texto-secundario);
-    font-size: 12px;
-    line-height: 1.5;
-}
-
 .formulario-usuario {
     padding: 24px;
 }
@@ -498,13 +451,6 @@
     resize: vertical;
 }
 
-.ayuda-formulario-usuario {
-    margin-top: 16px;
-    color: var(--texto-mutado);
-    font-size: 11px;
-    line-height: 1.5;
-}
-
 .acciones-formulario-usuario {
     display: flex;
     justify-content: flex-end;
@@ -515,38 +461,9 @@
     border-top: 1px solid var(--borde-tarjeta);
 }
 
-.aviso-usuarios {
-    display: none;
-    padding: 12px 15px;
-    border: 1px solid var(--borde-tarjeta);
-    border-radius: 8px;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.aviso-usuarios.visible {
-    display: block;
-}
-
-.aviso-usuarios.exito {
-    color: var(--verde-600);
-    background: var(--verde-fondo);
-    border-color: var(--verde-borde);
-}
-
-.aviso-usuarios.error {
-    color: var(--bordo-texto);
-    background: var(--bordo-fondo);
-    border-color: var(--bordo-borde);
-}
-
 @media (max-width: 1100px) {
     .barra-filtros-usuarios {
         grid-template-columns: minmax(180px, 1fr) 180px;
-    }
-
-    .barra-filtros-usuarios .filtro-rol-usuario {
-        grid-column: 1 / -1;
     }
 }
 
@@ -573,10 +490,6 @@
         padding: 16px 18px;
     }
 
-    .barra-filtros-usuarios .filtro-rol-usuario {
-        grid-column: auto;
-    }
-
     .pie-tabla-usuarios {
         align-items: flex-start;
         flex-direction: column;
@@ -589,10 +502,6 @@
 
     .campo-formulario-usuario.completo {
         grid-column: auto;
-    }
-
-    .modal-usuario {
-        padding: 10px;
     }
 
     .formulario-usuario {
@@ -689,24 +598,6 @@
 
 /* --- CAMPO DE CONTRASEÑA Y BOTÓN PARA MOSTRARLA --- */
 
-.campo-clave-usuario {
-    display: flex;
-    align-items: stretch;
-    gap: 8px;
-    width: 100%;
-}
-
-.campo-clave-usuario input {
-    flex: 1;
-    width: 0;
-    min-width: 0;
-}
-
-.campo-clave-usuario .boton-icono {
-    flex: 0 0 42px;
-    width: 42px;
-    height: 42px;
-}
 
 /* --- AYUDAS Y ERRORES DE VALIDACIÓN --- */
 
@@ -964,8 +855,8 @@
     white-space: nowrap;
 }
 
-.etiqueta-movimiento.ok     { color: var(--verde-600); background: var(--verde-fondo); }
-.etiqueta-movimiento.curso  { color: var(--azul-500);  background: var(--azul-suave); }
+.etiqueta-movimiento.ok { color: var(--verde-600); background: var(--verde-fondo); }
+.etiqueta-movimiento.curso { color: var(--azul-500);  background: var(--azul-suave); }
 .etiqueta-movimiento.atraso { color: var(--bordo-texto); background: var(--bordo-fondo); }
 .etiqueta-movimiento.neutro { color: var(--texto-secundario); background: var(--superficie-activa); }
 

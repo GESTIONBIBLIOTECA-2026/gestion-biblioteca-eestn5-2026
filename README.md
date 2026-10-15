@@ -18,46 +18,40 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 ```text
 .
 ├── frontend/
-│   ├── login.html, index.html
-│   ├── usuarios.html             Grupo 5: ABM, búsqueda avanzada, sanciones e historial activo
-│   ├── configuracion.html        Mis datos, cambiar contraseña y tema claro/oscuro
+│   ├── login.html, index.html, usuarios.html, configuracion.html
 │   ├── css/                      estilo-general.css (temas, menú lateral, encabezado, botones),
 │   │                             index.css, login.css, usuarios.css, configuracion.css
-│   └── js/
-│       ├── tema.js               tema claro / oscuro (script común en el <head>, sin parpadeo)
+│   └── js/                       ES Modules (import / export), cada archivo ~100 líneas o menos
 │       ├── config.js             URL del backend
-│       ├── api.js                fetch al backend (login, perfil, últimos préstamos, usuarios, cursos)
-│       ├── storage.js            guarda la sesión en localStorage
-│       ├── fechas.js             formato de fechas ("30 sep 2026")
-│       ├── fecha-hora.js         fecha y reloj del encabezado
-│       ├── menu-perfil.js        menú del nombre/foto: ajustes, modo claro y cerrar sesión
-│       ├── login.js              lógica de login.html
-│       ├── sesion.js             protege las páginas, muestra el nombre y carga el encabezado
-│       ├── panel.js              index.html: atrasos pendientes y "Últimos préstamos"
-│       ├── usuarios.js           usuarios.html: formulario, búsqueda, filtros y acciones
-│       └── configuracion.js      configuracion.html: datos del perfil, contraseña y tema
+│       ├── api.js                fetch al backend (async/await, response.ok, AbortSignal)
+│       ├── storage.js            sesión en localStorage (JSON)
+│       ├── ui.js                 fechas, aviso flotante, errores de formularios y plantillas generales
+│       ├── tema.js               modo claro / oscuro con classList (script común en el <head>)
+│       ├── sesion.js             protege las páginas + encabezado (nombre, reloj, menú del perfil)
+│       ├── login.js              login.html
+│       ├── inicio.js             index.html: atrasos pendientes y últimos préstamos
+│       ├── usuarios.js           usuarios.html: búsqueda, chips y paginación
+│       ├── usuarios-ui.js        plantillas HTML de usuarios (fila, opciones, ficha)
+│       ├── usuarios-dialogos.js  alta / modificación y ficha con historial activo
+│       ├── usuarios-estado.js    suspender, dar de baja y reactivar
+│       ├── menu-acciones.js      menú desplegable "Acciones" de la tabla
+│       └── configuracion.js      configuracion.html: mis datos y contraseña
 │
-└── backend/
-    ├── index.js              servidor Express (cors, express.json, rutas)
-    ├── package.json          "type": "module"
-    ├── .env.example          plantilla (el .env real NO se sube)
-    ├── ca.pem                certificado de Aiven (NO se sube)
+└── backend/                      MVC: index.js ➔ Router ➔ Controller ➔ Model ➔ MySQL
+    ├── index.js                  servidor Express (cors, express.json, rutas)
+    ├── .env.example              plantilla (el .env real NO se sube)
     ├── src/
-    │   ├── config/config.js                     variables del .env
-    │   ├── database/db.js                       CONEXIÓN: pool de mysql2 → MySQL Aiven (SSL)
-    │   ├── models/                              MODEL: consultas SQL con comodines "?"
-    │   │   ├── usuario.models.js                (usuarios, sanciones e historial activo)
-    │   │   ├── curso.models.js
-    │   │   ├── libro.models.js
-    │   │   └── prestamo.models.js               (solo lectura: últimos préstamos del Inicio)
-    │   ├── controllers/                         CONTROLLER: arma la respuesta
-    │   │   ├── auth.controllers.js, usuarios.controllers.js, cursos.controllers.js,
-    │   │   └── libros.controllers.js, prestamos.controllers.js
-    │   ├── routes/                              ROUTER: URLs de la API
-    │   │   ├── auth.routes.js, usuarios.routes.js, cursos.routes.js,
-    │   │   └── libros.routes.js, prestamos.routes.js
-    │   └── middlewares/                         token, validaciones, límite de intentos
-    └── scripts/              generar-hash.js, datos-prueba-grupo5.sql (opcional)
+    │   ├── config/config.js      variables del .env y reglas del negocio
+    │   ├── database/db.js        pool de mysql2 → MySQL Aiven (SSL)
+    │   ├── models/               MODEL: solo SQL con comodines "?", devuelve datos
+    │   │   ├── usuario.models.js, busqueda.models.js, sancion.models.js, perfil.models.js
+    │   │   └── curso.models.js, prestamo.models.js, libro.models.js
+    │   ├── controllers/          CONTROLLER: reglas de negocio y respuesta HTTP
+    │   │   ├── auth, perfil, usuarios, sanciones
+    │   │   └── cursos, prestamos, libros
+    │   ├── routes/               ROUTER: URL + verbo HTTP → controlador
+    │   └── middlewares/          auth (token), validaciones (URL), formularios (body), límite de intentos
+    └── scripts/                  schema.sql, datos-prueba-grupo5.sql, crear-admin-inicial.js
 ```
 
 ### Endpoints
@@ -79,7 +73,6 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 | `POST` | `/api/usuarios` | Alta. Body `{ nombre_completo, dni, rol, curso, correo, telefono, direccion, clave }` |
 | `PUT` | `/api/usuarios/:id` | Modificación (mismo body; `clave` vacía = no se cambia) |
 | `PATCH` | `/api/usuarios/:id/estado` | Body `{ "estado": "suspendido" \| "habilitado" \| "baja", "motivo" }` |
-| `DELETE` | `/api/usuarios/:id` | Baja lógica (no se borra: queda el historial) |
 | `GET` | `/api/cursos` | Cursos para autocompletar |
 
 `filtro` puede ser `todos`, `alumnos`, `docentes`, `administradores`, `morosos`, `suspendidos` o `bajas`.

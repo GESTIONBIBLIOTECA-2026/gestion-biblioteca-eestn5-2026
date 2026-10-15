@@ -1,16 +1,14 @@
 /* ==========================================================================
-   libros.routes.js - Rutas de libros
-   Montadas en index.js bajo el prefijo /api/libros
+   libros.routes.js - Rutas de libros  (/api/libros)
    ========================================================================== */
 
 import express from "express";
 import { getLibro } from "../controllers/libros.controllers.js";
-import { verificarToken, soloAdministrador } from "../middlewares/auth.middleware.js";
-import { validarIdParam } from "../middlewares/validaciones.middleware.js";
+import { verificarAdmin } from "../middlewares/auth.middleware.js";
+import { validarID } from "../middlewares/validaciones.middleware.js";
 
 const router = express.Router();
 
-// GET /api/libros/:id  → token → admin → validar ID → controlador
-router.get("/:id", verificarToken, soloAdministrador, validarIdParam, getLibro);
+router.get("/:id", verificarAdmin, validarID, getLibro);   // GET /api/libros/:id
 
 export default router;

@@ -1,96 +1,85 @@
 /* ==========================================================================
-   MÓDULO: sesion.js - Protección de las páginas del panel
-   - Sin sesión válida → vuelve a login.html
-   - Muestra el nombre del administrador en el encabezado
-   - "Cerrar sesión" del menú del perfil
-   - Carga lo común del encabezado: fecha/hora y menú del perfil
-   Se incluye en cada página protegida:
-     <script type="module" src="js/sesion.js"></script>
+   MÓDULO: sesion.js - Protege las páginas del panel y maneja el encabezado
+   - Sin sesión válida → login.html
+   - Nombre y rol del administrador, fecha y hora
+   - Menú del perfil (Ajustes, Apariencia y Cerrar sesión)
+   Se incluye en cada página protegida: <script type="module" src="js/sesion.js">
    ========================================================================== */
 
-import { obtenerPerfil } from "./api.js";
+import { obtenerSesionActual } from "./api.js";
 import { obtenerToken, borrarSesion } from "./storage.js";
-import "./fecha-hora.js";
-import "./menu-perfil.js";
+import { fechaDeHoy } from "./ui.js";
 
 
-// ==========================================================================
-// 🎨 1. Funciones
-// ==========================================================================
-function irAlLogin() {
-    window.location.replace("login.html");
+// 🎯 1. Nodos del DOM
+const textoFecha  = document.querySelector("[data-fecha-hoy]");
+const textoReloj  = document.querySelector("#reloj-actual");
+const botonPerfil = document.querySelector("[data-abrir-menu-perfil]");
+const menuPerfil  = document.querySelector("#menuPerfil");
+
+
+// 🎨 2. Funciones de UI
+const irAlLogin = () => window.location.replace("login.html");
+
+// Nombre (y rol) en todos los lugares del encabezado. También la usa Configuración.
+export function mostrarNombre(nombre, rol = "administrador") {
+    document.querySelectorAll("[data-nombre-admin]").forEach((elemento) => { elemento.textContent = nombre; });
+    document.querySelectorAll("[data-rol-admin]").forEach((elemento) => { elemento.textContent = rol.charAt(0).toUpperCase() + rol.slice(1); });
 }
 
-// "administrador" → "Administrador"
-const conMayuscula = (texto = "") => texto.charAt(0).toUpperCase() + texto.slice(1);
-
-/* --- Nombre y rol en el encabezado (también lo usa Configuración al guardar) --- */
-export function mostrarNombre(nombre, rol) {
-
-    document.querySelectorAll("[data-nombre-admin]").forEach((elemento) => {
-        elemento.textContent = nombre;
-    });
-
-    if (rol) {
-        document.querySelectorAll("[data-rol-admin]").forEach((elemento) => {
-            elemento.textContent = conMayuscula(rol);
-        });
-    }
+function actualizarReloj() {
+    textoFecha.textContent = fechaDeHoy();
+    textoReloj.textContent = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
 }
 
-function mostrarUsuario({ nombre, rol }) {
-
-    mostrarNombre(nombre, rol);
-
-    // Recién ahora se muestra la página
-    document.documentElement.classList.remove("verificando-sesion");
-
-    // Aviso para las páginas que necesitan hacer algo cuando ya se ven (ej: poner el cursor en un campo)
-    document.dispatchEvent(new CustomEvent("sesion-verificada"));
+function alternarMenu(abrir) {
+    menuPerfil.hidden = !abrir;
+    botonPerfil.setAttribute("aria-expanded", abrir);
 }
 
 
-// ==========================================================================
-// 🌐 2. Verificar la sesión con el backend (GET /api/auth/perfil)
-// ==========================================================================
+// 🌐 3. Verificar la sesión con el backend (GET /api/auth/perfil)
 async function verificarSesion() {
-
-    if (!obtenerToken()) {
-        irAlLogin();
-        return;
-    }
+    if (!obtenerToken()) return irAlLogin();
 
     try {
-        const usuario = await obtenerPerfil();
-        mostrarUsuario(usuario);
+        const { payload } = await obtenerSesionActual();
+        mostrarNombre(payload.nombre, payload.rol);
+
+        // Recién ahora se muestra la página
+        document.documentElement.classList.remove("verificando-sesion");
+        document.dispatchEvent(new CustomEvent("sesion-verificada"));
 
     } catch (error) {
-
-        // 401 = token vencido o inválido → se borra
-        if (error.status === 401) {
-            borrarSesion();
-        }
-
+        if (error.status === 401) borrarSesion();   // token vencido o inválido
         irAlLogin();
     }
 }
 
 
-// ==========================================================================
-// 🖱️ 3. Cerrar sesión (delegación de eventos)
-// ==========================================================================
+// 🖱️ 4. Eventos (delegación en el documento)
 document.addEventListener("click", (evento) => {
 
-    const boton = evento.target.closest("[data-cerrar-sesion]");
+    // Cerrar sesión
+    if (evento.target.closest("[data-cerrar-sesion]")) {
+        borrarSesion();
+        return irAlLogin();
+    }
 
-    if (!boton) return;
+    // Abrir / cerrar el menú del perfil (clic afuera lo cierra)
+    if (evento.target.closest("[data-abrir-menu-perfil]")) return alternarMenu(menuPerfil.hidden);
+    if (!evento.target.closest("[data-menu-perfil]")) alternarMenu(false);
+});
 
-    borrarSesion();
-    irAlLogin();
+document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape" && !menuPerfil.hidden) {
+        alternarMenu(false);
+        botonPerfil.focus();
+    }
 });
 
 
-// ==========================================================================
-// 🚀 4. Inicialización
-// ==========================================================================
+// 🚀 5. Inicialización
+actualizarReloj();
+setInterval(actualizarReloj, 30000);
 verificarSesion();

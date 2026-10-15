@@ -5,8 +5,8 @@
 
    Temas:
      - Oscuro (por defecto)        → :root
-     - Claro                        → [data-tema="claro"]
-   El tema lo pone js/tema.js en <html data-tema="...">
+     - Claro                        → .modo-claro
+   El tema lo pone js/tema.js con classList en <html class="modo-claro">
 ========================================================= */
 
 
@@ -88,7 +88,7 @@
    (colores de docs/eesT5-biblioteca-style-guide.html)
 ========================================================= */
 
-[data-tema="claro"] {
+.modo-claro {
     color-scheme: light;
 
     --fondo-principal: #f5f7fa;
@@ -172,11 +172,7 @@ body {
 }
 
 /* Al cambiar de tema, que los colores pasen suave */
-.cambiando-tema *,
-.cambiando-tema *::before,
-.cambiando-tema *::after {
-    transition: background-color .25s ease, border-color .25s ease, color .25s ease !important;
-}
+
 
 [hidden] {
     display: none !important;
@@ -578,13 +574,13 @@ body {
 
 /* Íconos sol / luna según el tema */
 [data-icono-tema="claro"] { display: none; }
-[data-tema="claro"] [data-icono-tema="claro"] { display: block; }
-[data-tema="claro"] [data-icono-tema="oscuro"] { display: none; }
+.modo-claro [data-icono-tema="claro"] { display: block; }
+.modo-claro [data-icono-tema="oscuro"] { display: none; }
 
 /* =========================================================
    SWITCH DE APARIENCIA (luna = oscuro · sol = claro)
    Se usa en el menú del perfil, en el login y en Configuración.
-   El estado sale de <html data-tema>, así todos los switches
+   El estado sale de la clase modo-claro de <html>, así todos los switches
    de la página quedan siempre iguales.
 ========================================================= */
 
@@ -619,7 +615,7 @@ button.switch-tema:focus-visible {
 }
 
 .switch-tema .fondo-luna { left: 8px; }
-.switch-tema .fondo-sol  { right: 8px; }
+.switch-tema .fondo-sol { right: 8px; }
 
 /* Perilla: muestra el ícono del tema actual y se desliza */
 .switch-tema-perilla {
@@ -642,7 +638,7 @@ button.switch-tema:focus-visible {
     height: 14px;
 }
 
-[data-tema="claro"] .switch-tema-perilla {
+.modo-claro .switch-tema-perilla {
     transform: translateX(26px);
     background: #f59e0b;
 }

@@ -1,236 +1,107 @@
 /* ==========================================================================
    usuarios.controllers.js - Controlador de Usuarios · Grupo 5
-   Recibe la petición (req), usa el Modelo y arma la respuesta (res).
+   Recibe la petición (req), llama al Modelo, aplica las reglas de negocio
+   y arma la respuesta (res) con su código HTTP.
    ========================================================================== */
 
 import bcrypt from "bcryptjs";
 import {
-    getFichaUsuarioPorDni, buscarUsuarios, getUsuarioPorId, getHistorialUsuario,
-    crearUsuario, actualizarUsuario, cambiarEstadoUsuario, ErrorUsuario
+    getUsuarioPorId, getUsuarioPorDni, buscarRepetidos, crearUsuario, actualizarUsuario
 } from "../models/usuario.models.js";
+import { buscarUsuarios } from "../models/busqueda.models.js";
 
-
-// "1 préstamo atrasado" / "2 préstamos atrasados"
-const plural = (cantidad, singular, varios) => `${cantidad} ${cantidad === 1 ? singular : varios}`;
-
-
-/* --------------------------------------------------------------------------
-   Respuesta de error común:
-   - Regla de negocio (ErrorUsuario) → su código (400, 404, 409) y el mensaje tal cual
-   - Cualquier otra cosa (la base no responde, etc.) → 500
-   -------------------------------------------------------------------------- */
-function responderError(res, error, mensaje500) {
-
-    if (error instanceof ErrorUsuario) {
-        return res.status(error.status).json({
-            error: error.message,
-            ...(error.campos && { campos: error.campos })
-        });
-    }
-
-    console.error(`${mensaje500}:`, error.message);
-    return res.status(500).json({ error: mensaje500 });
-}
-
-
-/* --------------------------------------------------------------------------
-   GET /api/usuarios/dni/:dni   (requiere token)
-   Lo usa "Nuevo préstamo" para completar el nombre y avisar si puede llevarse libros.
-   -------------------------------------------------------------------------- */
-export const getUsuarioPorDni = async (req, res) => {
-    try {
-        const usuario = await getFichaUsuarioPorDni(req.params.dni);
-
-        if (!usuario) {
-            return res.status(404).json({ error: "No hay ningún usuario con ese DNI." });
-        }
-
-        return res.json({ payload: usuario });
-
-    } catch (error) {
-        console.error("Error al buscar usuario:", error.message);
-        return res.status(500).json({ error: "No se pudo consultar la base de datos." });
-    }
+// Error inesperado (la base no responde, etc.) → 500. Lo usan también los otros controladores.
+export const error500 = (res, error, mensaje) => {
+    console.error(`${mensaje}:`, error.message);
+    return res.status(500).json({ error: mensaje });
 };
 
+// Si el DNI o el correo ya son de otro usuario → { dni: "...", correo: "..." }
+const camposRepetidos = async ({ dni, correo }, idPropio) => {
+    const campos = {};
+    (await buscarRepetidos(dni, correo, idPropio)).forEach((otro) => {
+        if (otro.dni === dni) campos.dni = `Ese DNI ya es de ${otro.nombre_completo}.`;
+        if (otro.correo === correo) campos.correo = `Ese correo ya es de ${otro.nombre_completo}.`;
+    });
+    return campos;
+};
 
-/* --------------------------------------------------------------------------
-   GET /api/usuarios?nombre=&dni=&curso=&filtro=todos&pagina=1
-   Búsqueda avanzada (filtros combinados) + listado paginado.
-   req.filtros lo arma el middleware validarFiltrosUsuarios.
-   -------------------------------------------------------------------------- */
+/* --- GET /api/usuarios?nombre=&dni=&curso=&filtro=&pagina= --- */
 export const getUsuarios = async (req, res) => {
     try {
-        const resultado = await buscarUsuarios(req.filtros);
-        return res.json({ payload: resultado });
-
+        return res.json({ payload: await buscarUsuarios(req.filtros) });
     } catch (error) {
-        return responderError(res, error, "No se pudo consultar la base de datos.");
+        return error500(res, error, "No se pudieron buscar los usuarios");
     }
 };
 
-
-/* --------------------------------------------------------------------------
-   GET /api/usuarios/:id
-   Datos completos de un usuario (para cargarlo en el formulario y editarlo).
-   -------------------------------------------------------------------------- */
+/* --- GET /api/usuarios/:id --- */
 export const getUsuario = async (req, res) => {
     try {
-        const usuario = await getUsuarioPorId(Number(req.params.id));
-
-        if (!usuario) {
-            return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
-        }
-
+        const usuario = await getUsuarioPorId(req.id);
+        if (!usuario) return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
         return res.json({ payload: usuario });
-
     } catch (error) {
-        return responderError(res, error, "No se pudo consultar la base de datos.");
+        return error500(res, error, "No se pudo leer el usuario");
     }
 };
 
-
-/* --------------------------------------------------------------------------
-   GET /api/usuarios/:id/historial
-   Historial activo: entregas, devoluciones, atrasos y sanciones.
-   -------------------------------------------------------------------------- */
-export const getHistorial = async (req, res) => {
+/* --- GET /api/usuarios/dni/:dni   (para que el Grupo 4 valide al usuario antes de un préstamo) --- */
+export const getUsuarioDni = async (req, res) => {
     try {
-        const historial = await getHistorialUsuario(Number(req.params.id));
-
-        if (!historial) {
-            return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
-        }
-
-        return res.json({ payload: historial });
-
+        const usuario = await getUsuarioPorDni(req.dni);
+        if (!usuario) return res.status(404).json({ error: "No hay ningún usuario con ese DNI." });
+        return res.json({ payload: { ...usuario, puede_pedir: usuario.condicion === "habilitado" } });
     } catch (error) {
-        return responderError(res, error, "No se pudo cargar el historial.");
+        return error500(res, error, "No se pudo leer el usuario");
     }
 };
 
-
-/* --------------------------------------------------------------------------
-   POST /api/usuarios
-   Body: { nombre_completo, dni, rol, curso, correo, telefono, direccion, clave }
-   -------------------------------------------------------------------------- */
+/* --- POST /api/usuarios   Body: { nombre_completo, dni, rol, curso, correo, telefono, direccion, clave } --- */
 export const postUsuario = async (req, res) => {
     try {
-        // Datos ya validados y limpios (middleware validarUsuario)
-        const { clave, ...datos } = req.datosUsuario;
+        const { clave, ...datos } = req.body;
 
-        // La contraseña se guarda como hash bcrypt, nunca en texto
-        const usuario = await crearUsuario({ ...datos, password_hash: await bcrypt.hash(clave, 10) });
+        // 1. El DNI y el correo no pueden estar repetidos
+        const campos = await camposRepetidos(datos);
+        if (Object.keys(campos).length > 0) {
+            return res.status(409).json({ error: Object.values(campos)[0], campos });
+        }
 
-        return res.status(201).json({
-            mensaje: `Se registró a ${usuario.nombre_completo}.`,
-            payload: usuario
-        });
+        // 2. Se guarda con la contraseña como hash bcrypt
+        const id = await crearUsuario({ ...datos, password_hash: await bcrypt.hash(clave, 10) });
 
+        return res.status(201).json({ mensaje: `Se registró a ${datos.nombre_completo}.`, payload: { id } });
     } catch (error) {
-        return responderError(res, error, "No se pudo guardar el usuario en la base de datos.");
+        return error500(res, error, "No se pudo guardar el usuario");
     }
 };
 
-
-/* --------------------------------------------------------------------------
-   PUT /api/usuarios/:id
-   Body: igual que el alta. "clave" es opcional: si viene vacía no se cambia.
-   -------------------------------------------------------------------------- */
+/* --- PUT /api/usuarios/:id   (la clave es opcional: vacía = no se cambia) --- */
 export const putUsuario = async (req, res) => {
     try {
-        const id = Number(req.params.id);
-        const { clave, ...datos } = req.datosUsuario;
+        const { clave, ...datos } = req.body;
 
-        // Un administrador no puede sacarse el rol a sí mismo (se quedaría afuera del panel)
-        if (id === req.usuario.id && datos.rol !== "administrador") {
-            return res.status(409).json({
-                error: "No podés quitarte el rol de administrador a vos mismo.",
-                campos: { rol: "Tu usuario tiene que seguir siendo administrador." }
-            });
+        // 1. Un administrador no puede sacarse el rol a sí mismo (se quedaría afuera del panel)
+        if (req.id === req.usuario.id && datos.rol !== "administrador") {
+            const mensaje = "No podés quitarte el rol de administrador a vos mismo.";
+            return res.status(409).json({ error: mensaje, campos: { rol: mensaje } });
         }
 
-        const usuario = await actualizarUsuario(id, {
-            ...datos,
-            ...(clave && { password_hash: await bcrypt.hash(clave, 10) })
-        });
-
-        return res.json({
-            mensaje: `Se guardaron los cambios de ${usuario.nombre_completo}.`,
-            payload: usuario
-        });
-
-    } catch (error) {
-        return responderError(res, error, "No se pudieron guardar los cambios en la base de datos.");
-    }
-};
-
-
-/* --------------------------------------------------------------------------
-   PATCH /api/usuarios/:id/estado
-   Body: { "estado": "suspendido" | "habilitado" | "baja", "motivo": "..." }
-   Suspender (con motivo), habilitar / reactivar, o dar de baja.
-   -------------------------------------------------------------------------- */
-export const patchEstado = async (req, res) => {
-    try {
-        const id = Number(req.params.id);
-        const { estado, motivo } = req.cambioEstado;
-
-        if (id === req.usuario.id && estado !== "habilitado") {
-            return res.status(409).json({ error: "No podés suspender ni dar de baja tu propio usuario." });
+        // 2. DNI y correo repetidos
+        const campos = await camposRepetidos(datos, req.id);
+        if (Object.keys(campos).length > 0) {
+            return res.status(409).json({ error: Object.values(campos)[0], campos });
         }
 
-        const { usuario, reservas_canceladas } = await cambiarEstadoUsuario({
-            id,
-            estado,
-            motivo,
-            adminId: req.usuario.id      // queda guardado quién aplicó la sanción
-        });
+        // 3. Guardar (si no existe, no se modificó ninguna fila)
+        const hash = clave ? await bcrypt.hash(clave, 10) : null;
+        const modificados = await actualizarUsuario(req.id, { ...datos, password_hash: hash });
 
-        return res.json({
-            mensaje: mensajeCambioEstado(usuario, estado, reservas_canceladas),
-            payload: usuario
-        });
+        if (modificados === 0) return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
 
+        return res.json({ mensaje: `Se guardaron los cambios de ${datos.nombre_completo}.` });
     } catch (error) {
-        return responderError(res, error, "No se pudo cambiar el estado del usuario.");
+        return error500(res, error, "No se pudieron guardar los cambios");
     }
 };
-
-
-/* --------------------------------------------------------------------------
-   DELETE /api/usuarios/:id
-   Baja del ABM. Es una baja lógica (estado = 'baja'): el historial no se pierde.
-   -------------------------------------------------------------------------- */
-export const deleteUsuario = (req, res) => {
-    req.cambioEstado = { estado: "baja", motivo: null };
-    return patchEstado(req, res);
-};
-
-
-// Mensaje para el bibliotecario después de cambiar el estado
-function mensajeCambioEstado(usuario, estado, reservasCanceladas) {
-
-    const nombre = usuario.nombre_completo;
-
-    if (estado === "suspendido") {
-        return `Se suspendió a ${nombre}: no puede pedir libros hasta que lo habilites.`;
-    }
-
-    if (estado === "baja") {
-        let reservas = "";
-
-        if (reservasCanceladas === 1) reservas = " Se canceló su reserva pendiente.";
-        if (reservasCanceladas > 1) reservas = ` Se cancelaron sus ${reservasCanceladas} reservas pendientes.`;
-
-        return `Se dio de baja a ${nombre}.${reservas}`;
-    }
-
-    if (usuario.prestamos_atrasados > 0) {
-        const atrasos = plural(usuario.prestamos_atrasados, "préstamo atrasado", "préstamos atrasados");
-        const devolver = usuario.prestamos_atrasados === 1 ? "devolverlo" : "devolverlos";
-        return `Se habilitó a ${nombre}, pero sigue con ${atrasos}: no va a poder pedir libros hasta ${devolver}.`;
-    }
-
-    return `Se habilitó a ${nombre}: ya puede pedir libros.`;
-}

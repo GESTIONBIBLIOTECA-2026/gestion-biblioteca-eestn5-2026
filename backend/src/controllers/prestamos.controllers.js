@@ -5,16 +5,10 @@
 
 import { getUltimosPrestamos } from "../models/prestamo.models.js";
 
-
-/* --------------------------------------------------------------------------
-   GET /api/prestamos?limite=5   (requiere token)
-   Últimos préstamos para la tabla del panel.
-   -------------------------------------------------------------------------- */
+/* --- GET /api/prestamos?limite=5 --- */
 export const getPrestamos = async (req, res) => {
     try {
-        const prestamos = await getUltimosPrestamos(req.limite);
-        return res.json({ payload: prestamos });
-
+        return res.json({ payload: await getUltimosPrestamos(req.limite) });
     } catch (error) {
         console.error("Error al listar préstamos:", error.message);
         return res.status(500).json({ error: "No se pudieron cargar los préstamos." });

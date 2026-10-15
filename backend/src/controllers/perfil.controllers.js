@@ -1,94 +1,69 @@
 /* ==========================================================================
-   perfil.controllers.js - Controlador de "Mi perfil" (pantalla Configuración)
-   El administrador logueado consulta y cambia SUS datos y su contraseña.
-   Siempre se usa req.usuario.id (sale del token): nunca un ID que mande el navegador.
+   perfil.controllers.js - "Mi perfil" (pantalla Configuración)
+   Siempre se usa req.usuario.id (sale del token), nunca un ID del navegador.
    ========================================================================== */
 
 import bcrypt from "bcryptjs";
-import {
-    getUsuarioPorId, getHashClavePorId, actualizarPerfil, actualizarClave, ErrorUsuario
-} from "../models/usuario.models.js";
+import { getUsuarioPorId, buscarRepetidos } from "../models/usuario.models.js";
+import { actualizarPerfil, getHashClave, actualizarClave } from "../models/perfil.models.js";
 
 
-// Regla de negocio → su código y mensaje. Cualquier otra cosa → 500.
-function responderError(res, error, mensaje500) {
-
-    if (error instanceof ErrorUsuario) {
-        return res.status(error.status).json({
-            error: error.message,
-            ...(error.campos && { campos: error.campos })
-        });
-    }
-
-    console.error(`${mensaje500}:`, error.message);
-    return res.status(500).json({ error: mensaje500 });
-}
-
-
-/* --------------------------------------------------------------------------
-   GET /api/perfil   (requiere token)
-   Datos completos del usuario logueado (sin la contraseña).
-   -------------------------------------------------------------------------- */
+/* --- GET /api/perfil --- */
 export const getMiPerfil = async (req, res) => {
     try {
         const usuario = await getUsuarioPorId(req.usuario.id);
-
-        if (!usuario) {
-            return res.status(404).json({ error: "No se encontró tu usuario." });
-        }
-
         return res.json({ payload: usuario });
-
     } catch (error) {
-        return responderError(res, error, "No se pudieron leer tus datos de la base de datos.");
+        console.error("Error al leer el perfil:", error.message);
+        return res.status(500).json({ error: "No se pudieron leer tus datos." });
     }
 };
 
 
-/* --------------------------------------------------------------------------
-   PUT /api/perfil
-   Body: { nombre_completo, correo, telefono, direccion }
-   -------------------------------------------------------------------------- */
+/* --- PUT /api/perfil   Body: { nombre_completo, correo, telefono, direccion } --- */
 export const putMiPerfil = async (req, res) => {
     try {
-        const usuario = await actualizarPerfil(req.usuario.id, req.datosPerfil);
+        const { id } = req.usuario;
 
-        return res.json({
-            mensaje: "Se guardaron los cambios de tu perfil.",
-            payload: usuario
-        });
+        // 1. El correo no puede ser de otro usuario
+        const [repetido] = await buscarRepetidos("", req.body.correo, id);
+        if (repetido) {
+            const mensaje = `Ese correo ya es de ${repetido.nombre_completo}.`;
+            return res.status(409).json({ error: mensaje, campos: { correo: mensaje } });
+        }
+
+        // 2. Guardar y devolver los datos actualizados
+        await actualizarPerfil(id, req.body);
+        const usuario = await getUsuarioPorId(id);
+
+        return res.json({ mensaje: "Se guardaron los cambios de tu perfil.", payload: usuario });
 
     } catch (error) {
-        return responderError(res, error, "No se pudieron guardar tus datos.");
+        console.error("Error al guardar el perfil:", error.message);
+        return res.status(500).json({ error: "No se pudieron guardar tus datos." });
     }
 };
 
 
-/* --------------------------------------------------------------------------
-   PUT /api/perfil/clave
-   Body: { clave_actual, clave_nueva, confirmacion }
-   -------------------------------------------------------------------------- */
+/* --- PUT /api/perfil/clave   Body: { clave_actual, clave_nueva, confirmacion } --- */
 export const putMiClave = async (req, res) => {
     try {
-        const { claveActual, claveNueva } = req.cambioClave;
+        const { clave_actual, clave_nueva } = req.body;
 
-        // 1. Comprobar la contraseña actual contra el hash guardado
-        const hashActual = await getHashClavePorId(req.usuario.id);
-        const claveOk = hashActual && await bcrypt.compare(claveActual, hashActual);
-
-        if (!claveOk) {
-            return res.status(400).json({
-                error: "La contraseña actual no es correcta.",
-                campos: { clave_actual: "La contraseña actual no es correcta." }
-            });
+        // 1. La contraseña actual tiene que coincidir con la guardada
+        const hash = await getHashClave(req.usuario.id);
+        if (!(await bcrypt.compare(clave_actual, hash))) {
+            const mensaje = "La contraseña actual no es correcta.";
+            return res.status(400).json({ error: mensaje, campos: { clave_actual: mensaje } });
         }
 
-        // 2. Guardar la nueva como hash bcrypt (nunca en texto)
-        await actualizarClave(req.usuario.id, await bcrypt.hash(claveNueva, 10));
+        // 2. Se guarda la nueva como hash bcrypt (nunca en texto)
+        await actualizarClave(req.usuario.id, await bcrypt.hash(clave_nueva, 10));
 
         return res.json({ mensaje: "Tu contraseña se cambió correctamente." });
 
     } catch (error) {
-        return responderError(res, error, "No se pudo cambiar la contraseña.");
+        console.error("Error al cambiar la contraseña:", error.message);
+        return res.status(500).json({ error: "No se pudo cambiar la contraseña." });
     }
 };

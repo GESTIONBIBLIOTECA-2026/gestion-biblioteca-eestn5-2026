@@ -206,8 +206,6 @@
 
                     <form id="formularioPerfil" class="formulario-config" novalidate>
 
-                        <div class="aviso-config" id="avisoPerfil" role="status" hidden></div>
-
                         <div class="campos-config">
 
                             <div class="campo-config completo">
@@ -218,13 +216,13 @@
 
                             <div class="campo-config">
                                 <label for="perfilDni">DNI</label>
-                                <input id="perfilDni" type="text" readonly tabindex="-1" placeholder="—">
+                                <input id="perfilDni" name="dni" type="text" readonly tabindex="-1" placeholder="—">
                                 <small class="pista-config">Es tu usuario para entrar. Lo cambia otro administrador desde Usuarios.</small>
                             </div>
 
                             <div class="campo-config">
                                 <label for="perfilRol">Rol</label>
-                                <input id="perfilRol" type="text" readonly tabindex="-1" placeholder="—">
+                                <input id="perfilRol" name="rol" type="text" readonly tabindex="-1" placeholder="—">
                             </div>
 
                             <div class="campo-config">
@@ -248,7 +246,7 @@
                         </div>
 
                         <div class="acciones-config">
-                            <button type="button" class="boton-secundario" id="botonDeshacerPerfil">
+                            <button type="reset" class="boton-secundario">
                                 Deshacer cambios
                             </button>
 
@@ -282,9 +280,9 @@
                     <form id="formularioClave" class="formulario-config" novalidate>
 
                         <!-- Para que el navegador sepa de qué usuario es la contraseña -->
-                        <input type="text" name="usuario" autocomplete="username" data-dni-oculto hidden>
+                        <input type="text" autocomplete="username" hidden>
 
-                        <div class="aviso-config" id="avisoClave" role="status" hidden></div>
+                        <div class="aviso-config exito" id="avisoClave" role="status" hidden></div>
 
                         <div class="campos-config">
 
@@ -412,9 +410,7 @@
 
 
     <!-- AVISO FLOTANTE -->
-    <div id="avisoFlotante" class="aviso-flotante" role="status" aria-live="polite" hidden>
-        <span id="avisoTexto"></span>
-    </div>
+    <div id="avisoFlotante" class="aviso-flotante" role="status" aria-live="polite" hidden></div>
 
 
     <!-- Sesión, encabezado y menú del perfil -->

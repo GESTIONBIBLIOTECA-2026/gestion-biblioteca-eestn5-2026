@@ -266,41 +266,7 @@ tbody td {
 
 
 /* --- ACCIONES EN TABLA (Editar / Eliminar) --- */
-.acciones-tabla {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 
-.btn-accion-tabla {
-    background: transparent;
-    border: none;
-    color: var(--texto-secundario);
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
-    transition: 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-accion-tabla:hover {
-    background: var(--superficie-activa);
-}
-
-.btn-accion-tabla.editar:hover {
-    color: var(--azul-400);
-}
-
-.btn-accion-tabla.eliminar:hover {
-    color: var(--rojo-500);
-}
-
-.btn-accion-tabla svg {
-    width: 16px;
-    height: 16px;
-}
 
 .celda-mensaje {
     text-align: center;

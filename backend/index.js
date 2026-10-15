@@ -1,72 +1,58 @@
 /* ==========================================================================
-   index.js - Punto de entrada del servidor Express
-   Biblioteca Invaluable · Panel de Administración (Grupo 5)
-
-   Circuito:  index.js ➔ Router ➔ Controller ➔ Model ➔ mysql2 ➔ MySQL (Aiven)
+   index.js - Servidor Express · Biblioteca Invaluable (Grupo 5)
+   Circuito:  index.js ➔ Router ➔ Controller ➔ Model ➔ MySQL
    ========================================================================== */
 
-// 1. Importar frameworks y librerías
+// 1. Frameworks, configuración y rutas
 import express from "express";
 import cors from "cors";
-import { fileURLToPath } from "url";
-
-// 2. Configuración (lee el .env), base de datos y routers
 import { PORT, JWT_SECRET } from "./src/config/config.js";
-import { comprobarConexion } from "./src/database/db.js";
+import connection from "./src/database/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import perfilRoutes from "./src/routes/perfil.routes.js";
 import usuariosRoutes from "./src/routes/usuarios.routes.js";
 import cursosRoutes from "./src/routes/cursos.routes.js";
-import librosRoutes from "./src/routes/libros.routes.js";
 import prestamosRoutes from "./src/routes/prestamos.routes.js";
-import perfilRoutes from "./src/routes/perfil.routes.js";
+import librosRoutes from "./src/routes/libros.routes.js";
 
-// 3. Chequear que el .env tenga lo obligatorio
 if (!JWT_SECRET) {
     console.error("❌ Falta JWT_SECRET en backend/.env (mirá .env.example)");
     process.exit(1);
 }
 
-// 4. Crear la aplicación
+// 2. Aplicación y middlewares globales
 const app = express();
+app.use(cors());
+app.use(express.json());
+app.use(express.static("../frontend"));   // el panel también se abre en http://localhost:3000
 
-// 5. Middlewares globales
-app.use(cors());           // permite que el frontend (ej: Live Server) consuma la API
-app.use(express.json());   // convierte el body JSON en req.body
-
-// 6. Servir el frontend (así también se puede abrir en http://localhost:3000)
-app.use(express.static(fileURLToPath(new URL("../frontend", import.meta.url))));
-
-// 7. Ruta de prueba (Health Check)
-app.get("/api", (req, res) => {
-    res.json({ status: "OK", mensaje: "Servidor Backend corriendo correctamente" });
-});
-
-// 8. Montaje de rutas
+// 3. Rutas de la API
 app.use("/api/auth", authRoutes);
+app.use("/api/perfil", perfilRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/cursos", cursosRoutes);
-app.use("/api/libros", librosRoutes);
 app.use("/api/prestamos", prestamosRoutes);
-app.use("/api/perfil", perfilRoutes);
+app.use("/api/libros", librosRoutes);
 
-// 9. Ruta de API inexistente → 404
-app.use("/api", (req, res) => {
-    res.status(404).json({ error: "Ruta no encontrada" });
-});
+// 4. Ruta de la API que no existe → 404
+app.use("/api", (req, res) => res.status(404).json({ error: "Ruta no encontrada" }));
 
-// 10. Middleware de manejo de errores (4 parámetros)
+// 5. Middleware de errores (4 parámetros): JSON mal armado u errores no previstos
 app.use((err, req, res, next) => {
-    // JSON mal formado en el body
     if (err.type === "entity.parse.failed") {
         return res.status(400).json({ error: "El cuerpo de la petición no es un JSON válido." });
     }
-
     console.error("Error no controlado:", err);
     res.status(500).json({ error: "Error interno del servidor" });
 });
 
-// 11. Encender el servidor
-app.listen(PORT, () => {
+// 6. Encender el servidor y probar la base de datos
+app.listen(PORT, async () => {
     console.log(`🚀 Servidor activo en http://localhost:${PORT}`);
-    comprobarConexion();
+    try {
+        await connection.query("SELECT 1");
+        console.log("✅ Base de datos conectada");
+    } catch (error) {
+        console.error("⚠️  No se pudo conectar a la base de datos:", error.message);
+    }
 });

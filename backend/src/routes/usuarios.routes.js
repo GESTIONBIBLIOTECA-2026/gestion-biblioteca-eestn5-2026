@@ -1,45 +1,24 @@
 /* ==========================================================================
-   usuarios.routes.js - Rutas de usuarios · Grupo 5
-   Montadas en index.js bajo el prefijo /api/usuarios
+   usuarios.routes.js - Rutas de usuarios  (/api/usuarios) · Grupo 5
    ========================================================================== */
 
 import express from "express";
-import {
-    getUsuarioPorDni, getUsuarios, getUsuario, getHistorial,
-    postUsuario, putUsuario, patchEstado, deleteUsuario
-} from "../controllers/usuarios.controllers.js";
-import { verificarToken, soloAdministrador } from "../middlewares/auth.middleware.js";
-import {
-    validarDniParam, validarIdParam, validarFiltrosUsuarios, validarUsuario, validarCambioEstado
-} from "../middlewares/validaciones.middleware.js";
+import { getUsuarios, getUsuario, getUsuarioDni, postUsuario, putUsuario } from "../controllers/usuarios.controllers.js";
+import { getHistorialUsuario, patchEstado } from "../controllers/sanciones.controllers.js";
+import { verificarAdmin } from "../middlewares/auth.middleware.js";
+import { validarID, validarDniParam, validarBusqueda, validarEstado } from "../middlewares/validaciones.middleware.js";
+import { validarUsuario } from "../middlewares/formularios.middleware.js";
 
 const router = express.Router();
 
-// Todas las rutas de usuarios piden sesión de administrador
-router.use(verificarToken, soloAdministrador);
+router.use(verificarAdmin);                                              // todas piden sesión de administrador
 
-// GET    /api/usuarios?nombre=&dni=&curso=&filtro=&pagina=  → búsqueda avanzada + listado
-router.get("/", validarFiltrosUsuarios, getUsuarios);
-
-// GET    /api/usuarios/dni/:dni  → ficha rápida (la usa "Nuevo préstamo")
-router.get("/dni/:dni", validarDniParam, getUsuarioPorDni);
-
-// POST   /api/usuarios  → alta
-router.post("/", validarUsuario, postUsuario);
-
-// GET    /api/usuarios/:id  → datos de un usuario
-router.get("/:id", validarIdParam, getUsuario);
-
-// GET    /api/usuarios/:id/historial  → historial activo (entregas, devoluciones, atrasos, sanciones)
-router.get("/:id/historial", validarIdParam, getHistorial);
-
-// PUT    /api/usuarios/:id  → modificación
-router.put("/:id", validarIdParam, validarUsuario, putUsuario);
-
-// PATCH  /api/usuarios/:id/estado  → suspender / habilitar / dar de baja
-router.patch("/:id/estado", validarIdParam, validarCambioEstado, patchEstado);
-
-// DELETE /api/usuarios/:id  → baja (lógica)
-router.delete("/:id", validarIdParam, deleteUsuario);
+router.get("/", validarBusqueda, getUsuarios);                           // búsqueda avanzada + listado
+router.get("/dni/:dni", validarDniParam, getUsuarioDni);                 // ficha por DNI (Grupo 4)
+router.get("/:id", validarID, getUsuario);                               // datos de un usuario
+router.get("/:id/historial", validarID, getHistorialUsuario);            // historial activo
+router.post("/", validarUsuario, postUsuario);                           // alta
+router.put("/:id", validarID, validarUsuario, putUsuario);               // modificación
+router.patch("/:id/estado", validarID, validarEstado, patchEstado);      // suspender / habilitar / baja
 
 export default router;
