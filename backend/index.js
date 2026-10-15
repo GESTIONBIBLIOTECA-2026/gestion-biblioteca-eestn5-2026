@@ -18,6 +18,7 @@ import usuariosRoutes from "./src/routes/usuarios.routes.js";
 import cursosRoutes from "./src/routes/cursos.routes.js";
 import librosRoutes from "./src/routes/libros.routes.js";
 import prestamosRoutes from "./src/routes/prestamos.routes.js";
+import perfilRoutes from "./src/routes/perfil.routes.js";
 
 // 3. Chequear que el .env tenga lo obligatorio
 if (!JWT_SECRET) {
@@ -46,6 +47,7 @@ app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/cursos", cursosRoutes);
 app.use("/api/libros", librosRoutes);
 app.use("/api/prestamos", prestamosRoutes);
+app.use("/api/perfil", perfilRoutes);
 
 // 9. Ruta de API inexistente → 404
 app.use("/api", (req, res) => {

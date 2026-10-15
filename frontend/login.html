@@ -8,6 +8,9 @@
 
     <title>Iniciar sesión - Biblioteca Invaluable</title>
 
+    <!-- Tema claro / oscuro (el que eligió el usuario) -->
+    <script src="js/tema.js"></script>
+
     <!-- Estilos generales -->
     <link rel="stylesheet" href="css/estilo-general.css">
 
@@ -34,22 +37,38 @@
      ENCABEZADO
 ====================================================== -->
 
-<header class="encabezado">
 
-    <div class="zona-logo">
+<header class="encabezado-login">
 
-        <i data-lucide="book-open" class="icono-logo"></i>
+    <div class="logo-login">
 
-        <span class="texto-logo">
+        <div class="icono-logo-login">
+            <i data-lucide="book-open"></i>
+        </div>
+
+        <span class="texto-logo-login">
             Biblioteca Invaluable
         </span>
 
-        <span class="separador"></span>
+        <span class="separador-login"></span>
 
-        <span class="texto-panel">
+        <span class="texto-panel-login">
             Panel de Administración
         </span>
 
+    </div>
+
+    <!-- Apariencia: luna = oscuro · sol = claro (js/tema.js) -->
+    <div class="control-apariencia">
+        <span class="texto-apariencia">Apariencia</span>
+        <button type="button" class="switch-tema" role="switch" aria-checked="false" aria-label="Modo claro" title="Cambiar entre modo oscuro y claro" data-cambiar-tema>
+            <i data-lucide="moon" class="switch-tema-fondo fondo-luna"></i>
+            <i data-lucide="sun" class="switch-tema-fondo fondo-sol"></i>
+            <span class="switch-tema-perilla">
+                <i data-lucide="moon" data-icono-tema="oscuro"></i>
+                <i data-lucide="sun" data-icono-tema="claro"></i>
+            </span>
+        </button>
     </div>
 
 </header>

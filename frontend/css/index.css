@@ -1,214 +1,169 @@
 /* =========================================================
-   INDEX
+   INDEX - PANEL DE INICIO
 ========================================================= */
 
-
-/* =========================================================
-   BIENVENIDA
-========================================================= */
-
-.bienvenida {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* --- SECCIÓN SUPERIOR: GRID DE ALERTA + ACCIONES --- */
+.grid-superior {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 24px;
     margin-bottom: 28px;
 }
 
-.bienvenida h1 {
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    color: var(--tinta-900);
+/* Tarjeta de Alerta (Atrasos pendientes) */
+.tarjeta-alerta {
+    box-shadow: var(--sombra-tarjeta);
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-left: 4px solid var(--rojo-500);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.bienvenida p {
-    color: var(--azul-700);
-    font-size: 16px;
-    margin-top: 5px;
-}
-
-
-/* --- Fecha --- */
-
-.fecha {
+.alerta-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: var(--azul-700);
-    font-size: 13px;
-    font-weight: 600;
+    gap: 12px;
 }
 
-.fecha svg {
-    width: 19px;
-}
-
-
-/* =========================================================
-   ACCIONES RAPIDAS
-========================================================= */
-
-/*
-La sección ahora ocupa todo el ancho disponible.
-
-Ya no está dentro de una rejilla dividida con
-"Actividad reciente".
-*/
-
-.tarjeta-acciones {
-    width: 100%;
-    padding: 30px 34px 36px;
-    margin-bottom: 24px;
-}
-
-
-/* --- Rejilla de acciones --- */
-
-.rejilla-acciones {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-top: 28px;
-    max-width: 1250px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Las acciones que son links no se subrayan */
-.rejilla-acciones a {
-    text-decoration: none;
-}
-
-
-/* =========================================================
-   ACCION INDIVIDUAL
-========================================================= */
-
-.accion {
-    min-height: 120px;
-    border: 1px solid var(--azul-100);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    cursor: pointer;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.accion:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 7px 18px rgba(0, 82, 204, 0.10);
-}
-
-
-/* --- Acción azul --- */
-
-.accion.azul {
-    background: var(--azul-50);
-    border-color: var(--azul-100);
-}
-
-
-/* --- Acción roja --- */
-
-.accion.roja {
-    background: #fff3f3;
-    border-color: #ffcaca;
-}
-
-
-/* =========================================================
-   ICONO DE ACCION
-========================================================= */
-
-.icono-accion {
-    width: 62px;
-    height: 62px;
+.alerta-icono {
+    width: 44px;
+    height: 44px;
+    background: var(--rojo-fondo);
+    border: 1px solid var(--rojo-borde);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    color: var(--rojo-500);
 }
 
-.accion.azul .icono-accion {
-    background: var(--azul-100);
-    color: var(--azul-600);
+.alerta-icono svg {
+    width: 22px;
+    height: 22px;
 }
 
-.accion.roja .icono-accion {
-    background: #ffd5d5;
+.alerta-info h3 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--texto-secundario);
+}
+
+.alerta-contador {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--texto-fuerte);
+    margin: 12px 0;
+}
+
+.enlace-detalles {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--rojo-500);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.enlace-detalles:hover {
     color: var(--rojo-600);
+    text-decoration: underline;
 }
 
-.icono-accion svg {
-    width: 30px;
-    height: 30px;
-    stroke-width: 2;
+.enlace-detalles svg {
+    width: 16px;
+    height: 16px;
 }
 
 
-/* =========================================================
-   INFORMACION DE ACCION
-========================================================= */
-
-.informacion-accion {
-    margin-left: 17px;
-    flex: 1;
+/* Tarjeta de Acciones Rápidas */
+.tarjeta-acciones-rapidas {
+    box-shadow: var(--sombra-tarjeta);
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.informacion-accion h3 {
+.acciones-header h3 {
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 600;
+    color: var(--texto-fuerte);
+    margin-bottom: 16px;
 }
 
-.accion.azul h3 {
-    color: var(--azul-600);
+.rejilla-acciones-mini {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
 }
 
-.accion.roja h3 {
-    color: var(--rojo-600);
+.accion-mini {
+    background: var(--superficie-sutil);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 10px;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: var(--texto-principal);
+    transition: 0.2s ease;
 }
 
-.informacion-accion p {
+.accion-mini:focus-visible {
+    outline: 2px solid var(--azul-500);
+    outline-offset: 3px;
+}
+
+.accion-mini:hover {
+    background: var(--fondo-tarjeta-hover);
+    border-color: var(--azul-400);
+    transform: translateY(-2px);
+}
+
+.accion-mini-icono {
+    width: 42px;
+    height: 42px;
+    background: var(--azul-suave);
+    color: var(--azul-400);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.accion-mini-icono svg {
+    width: 22px;
+    height: 22px;
+}
+
+.accion-mini span {
     font-size: 12px;
-    margin-top: 7px;
-    color: var(--azul-700);
-}
-
-.accion.roja .informacion-accion p {
-    color: var(--rojo-700);
+    font-weight: 500;
+    color: var(--texto-principal);
+    line-height: 1.3;
 }
 
 
-/* =========================================================
-   FLECHA DE ACCION
-========================================================= */
-
-.flecha {
-    width: 20px;
-    color: var(--azul-600);
-    flex-shrink: 0;
-}
-
-.accion.roja .flecha {
-    color: var(--rojo-600);
-}
-
-
-/* =========================================================
-   PRESTAMOS
-========================================================= */
-
+/* --- SECCIÓN ÚLTIMOS PRÉSTAMOS --- */
 .tarjeta-prestamos {
-    width: 100%;
-    padding: 24px 24px 26px;
+    box-shadow: var(--sombra-tarjeta);
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    padding: 24px;
 }
-
-
-/* --- Encabezado de préstamos --- */
 
 .encabezado-prestamos {
     display: flex;
@@ -217,14 +172,17 @@ Ya no está dentro de una rejilla dividida con
     margin-bottom: 20px;
 }
 
-
-/* --- Enlace "Ver todos" --- */
+.encabezado-prestamos h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--texto-fuerte);
+}
 
 .ver-todos {
     display: flex;
     align-items: center;
-    gap: 5px;
-    color: var(--azul-500);
+    gap: 6px;
+    color: var(--azul-400);
     font-size: 13px;
     font-weight: 600;
     text-decoration: none;
@@ -235,14 +193,12 @@ Ya no está dentro de una rejilla dividida con
 }
 
 .ver-todos svg {
-    width: 17px;
+    width: 16px;
+    height: 16px;
 }
 
 
-/* =========================================================
-   TABLA
-========================================================= */
-
+/* --- TABLA --- */
 .contenedor-tabla {
     width: 100%;
     overflow-x: auto;
@@ -251,168 +207,121 @@ Ya no está dentro de una rejilla dividida con
 table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12px;
-}
-
-
-/* --- Encabezado de tabla --- */
-
-thead {
-    background: var(--rojo-400);
-    color: white;
+    font-size: 13px;
+    text-align: left;
 }
 
 thead th {
-    padding: 12px 10px;
-    text-align: left;
-    font-size: 11px;
+    padding: 12px 16px;
+    color: var(--texto-secundario);
     font-weight: 600;
+    border-bottom: 1px solid var(--borde-tarjeta);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
-
-thead th:first-child {
-    border-radius: 7px 0 0 7px;
-}
-
-thead th:last-child {
-    border-radius: 0 7px 7px 0;
-}
-
-
-/* --- Filas --- */
 
 tbody tr {
-    border-bottom: 1px solid var(--azul-100);
+    border-bottom: 1px solid var(--linea-sutil);
     transition: background 0.2s ease;
 }
 
 tbody tr:hover {
-    background: var(--azul-50);
+    background: var(--superficie-sutil);
 }
 
 tbody td {
-    padding: 12px 10px;
-    color: var(--azul-700);
-}
-
-tbody td:first-child {
-    font-weight: 500;
+    padding: 16px;
+    color: var(--texto-principal);
 }
 
 
-/* =========================================================
-   ESTADOS
-========================================================= */
-
+/* --- ESTADOS --- */
 .estado {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    padding: 6px 13px;
+    padding: 4px 12px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 600;
 }
 
-
-/* --- Estado activo --- */
-
-.estado.activo {
-    background: var(--azul-100);
-    color: var(--azul-700);
+.estado.en-curso {
+    background: var(--verde-fondo);
+    color: var(--verde-600);
+    border: 1px solid var(--verde-borde);
 }
-
-
-/* --- Estado atrasado --- */
-
-.estado.atrasado {
-    background: #ffd2d2;
-    color: var(--rojo-600);
-}
-
-
-/* --- Estado devuelto --- */
 
 .estado.devuelto {
-    background: var(--verde-100);
-    color: var(--verde-600);
+    background: var(--superficie-activa);
+    color: var(--texto-secundario);
+    border: 1px solid var(--borde-tarjeta);
+}
+
+.estado.atrasado {
+    background: var(--rojo-fondo);
+    color: var(--rojo-500);
+    border: 1px solid var(--rojo-borde);
 }
 
 
-/* --- Fila de mensaje (cargando, sin préstamos, error) --- */
+/* --- ACCIONES EN TABLA (Editar / Eliminar) --- */
+.acciones-tabla {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-accion-tabla {
+    background: transparent;
+    border: none;
+    color: var(--texto-secundario);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-accion-tabla:hover {
+    background: var(--superficie-activa);
+}
+
+.btn-accion-tabla.editar:hover {
+    color: var(--azul-400);
+}
+
+.btn-accion-tabla.eliminar:hover {
+    color: var(--rojo-500);
+}
+
+.btn-accion-tabla svg {
+    width: 16px;
+    height: 16px;
+}
 
 .celda-mensaje {
     text-align: center;
-    color: var(--tinta-500);
+    color: var(--texto-mutado);
     font-style: italic;
+    padding: 24px;
 }
 
 
-/* =========================================================
-   RESPONSIVE DEL INDEX
-========================================================= */
-
+/* --- RESPONSIVE --- */
 @media (max-width: 1100px) {
-
-    .rejilla-acciones {
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 900px;
-    }
-
-}
-
-
-@media (max-width: 700px) {
-
-    .bienvenida {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .bienvenida h1 {
-        font-size: 26px;
-    }
-
-    .tarjeta-acciones {
-        padding: 24px 18px 28px;
-    }
-
-    .rejilla-acciones {
+    .grid-superior {
         grid-template-columns: 1fr;
-        gap: 14px;
-        margin-top: 22px;
     }
-
-    .accion {
-        min-height: 100px;
-        padding: 16px;
+    .rejilla-acciones-mini {
+        grid-template-columns: repeat(2, 1fr);
     }
-
-    .icono-accion {
-        width: 54px;
-        height: 54px;
-    }
-
-    .icono-accion svg {
-        width: 27px;
-        height: 27px;
-    }
-
-    .tarjeta-prestamos {
-        padding: 20px 16px 22px;
-    }
-
-    .encabezado-prestamos {
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .ver-todos {
-        white-space: nowrap;
-    }
-
-    table {
-        min-width: 700px;
-    }
-
 }
+
+@media (max-width: 600px) {
+    .rejilla-acciones-mini {
+        grid-template-columns: 1fr;
+    }
+}

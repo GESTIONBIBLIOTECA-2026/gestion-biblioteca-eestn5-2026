@@ -18,21 +18,24 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 ```text
 .
 ├── frontend/
-│   ├── login.html, index.html, nuevo-prestamo.html
-│   ├── gestion-usuarios.html     Grupo 5: ABM, búsqueda avanzada, sanciones e historial activo
-│   ├── css/                      estilo-general.css, index.css, login.css, nuevo-prestamo.css,
-│   │                             gestion-usuarios.css
+│   ├── login.html, index.html
+│   ├── usuarios.html             Grupo 5: ABM, búsqueda avanzada, sanciones e historial activo
+│   ├── configuracion.html        Mis datos, cambiar contraseña y tema claro/oscuro
+│   ├── css/                      estilo-general.css (temas, menú lateral, encabezado, botones),
+│   │                             index.css, login.css, usuarios.css, configuracion.css
 │   └── js/
+│       ├── tema.js               tema claro / oscuro (script común en el <head>, sin parpadeo)
 │       ├── config.js             URL del backend
-│       ├── api.js                fetch al backend (login, perfil, préstamos, usuarios, cursos, libros)
+│       ├── api.js                fetch al backend (login, perfil, últimos préstamos, usuarios, cursos)
 │       ├── storage.js            guarda la sesión en localStorage
 │       ├── fechas.js             formato de fechas ("30 sep 2026")
+│       ├── fecha-hora.js         fecha y reloj del encabezado
+│       ├── menu-perfil.js        menú del nombre/foto: ajustes, modo claro y cerrar sesión
 │       ├── login.js              lógica de login.html
-│       ├── sesion.js             protege las páginas, muestra el nombre y "Salir"
-│       ├── panel.js              index.html: fecha de hoy y "Últimos préstamos"
-│       ├── nuevo-prestamo.js     nuevo-prestamo.html: autocompleta y registra el préstamo
-│       ├── gestion-usuarios.js   gestion-usuarios.html: formulario, búsqueda, filtros y acciones
-│       └── usuarios-ui.js        dibuja la tabla de usuarios y la ficha con el historial activo
+│       ├── sesion.js             protege las páginas, muestra el nombre y carga el encabezado
+│       ├── panel.js              index.html: atrasos pendientes y "Últimos préstamos"
+│       ├── usuarios.js           usuarios.html: formulario, búsqueda, filtros y acciones
+│       └── configuracion.js      configuracion.html: datos del perfil, contraseña y tema
 │
 └── backend/
     ├── index.js              servidor Express (cors, express.json, rutas)
@@ -46,7 +49,7 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
     │   │   ├── usuario.models.js                (usuarios, sanciones e historial activo)
     │   │   ├── curso.models.js
     │   │   ├── libro.models.js
-    │   │   └── prestamo.models.js               (préstamo = transacción)
+    │   │   └── prestamo.models.js               (solo lectura: últimos préstamos del Inicio)
     │   ├── controllers/                         CONTROLLER: arma la respuesta
     │   │   ├── auth.controllers.js, usuarios.controllers.js, cursos.controllers.js,
     │   │   └── libros.controllers.js, prestamos.controllers.js
@@ -63,12 +66,14 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 |---|---|---|
 | `POST` | `/api/auth/login` | Body `{ "dni", "clave" }` → `{ payload: { token, usuario } }` |
 | `GET` | `/api/auth/perfil` | Quién está logueado → `{ payload: { id, nombre, rol } }` |
+| `GET` | `/api/perfil` | Mis datos completos (pantalla Configuración) |
+| `PUT` | `/api/perfil` | Body `{ nombre_completo, correo, telefono, direccion }` (el DNI y el rol no se cambian desde acá) |
+| `PUT` | `/api/perfil/clave` | Body `{ clave_actual, clave_nueva, confirmacion }` |
 | `GET` | `/api/prestamos?limite=5` | Últimos préstamos (en curso, atrasados y devueltos) |
-| `POST` | `/api/prestamos` | Body `{ "dni", "libroId" }` → registra el préstamo |
 | `GET` | `/api/libros/:id` | Título, autores y stock del libro |
 | **Grupo 5** | | |
 | `GET` | `/api/usuarios?nombre=&dni=&curso=&filtro=&pagina=` | Búsqueda avanzada + listado (10 por página) y cantidad por filtro |
-| `GET` | `/api/usuarios/dni/:dni` | Nombre, curso y si el usuario puede llevarse libros (lo usa "Nuevo préstamo") |
+| `GET` | `/api/usuarios/dni/:dni` | Nombre, curso y si el usuario puede llevarse libros (para validar al usuario antes de un préstamo — Grupo 4) |
 | `GET` | `/api/usuarios/:id` | Los 6 datos del usuario, tipo y estado |
 | `GET` | `/api/usuarios/:id/historial` | Historial activo: entregas, devoluciones, atrasos y sanciones |
 | `POST` | `/api/usuarios` | Alta. Body `{ nombre_completo, dni, rol, curso, correo, telefono, direccion, clave }` |
@@ -97,18 +102,17 @@ credenciales predeterminadas. Las cuentas posteriores se gestionan desde la plat
 Para iniciar el backend, ejecutá `npm.cmd start` en PowerShell (o `npm start` en otra terminal) desde `backend/`
 y abrí `http://localhost:3000`.
 
-### Qué controla un préstamo nuevo
+### Préstamos y devoluciones (Grupo 4)
 
-`POST /api/prestamos` hace todo en una **transacción** (o se guarda todo, o nada):
+Registrar préstamos y devoluciones **no es de este módulo** (es del Grupo 4). El panel solo:
 
-1. El usuario existe, está **habilitado**, no tiene **sanciones activas** ni **préstamos atrasados**.
-2. El libro existe y tiene un ejemplar **disponible** que no esté reservado por un pedido pendiente.
-3. Crea el pedido en estado `prestado` (devolución en 7 días), le asigna el ejemplar y lo marca `prestado`.
-4. Deja el registro en `pedido_historial` con el administrador que lo hizo.
+- Muestra los **últimos préstamos** en el Inicio (`GET /api/prestamos`, solo lectura).
+- Deja los accesos (menú *Préstamos* y *Registrar devolución*) apuntando a páginas que todavía no existen.
+- Ofrece `GET /api/usuarios/dni/:dni` para que el Grupo 4 sepa si el usuario puede llevarse libros.
 
 ### Gestión de usuarios (Grupo 5)
 
-Pantalla `gestion-usuarios.html` (desde el panel: **Registrar usuario** o **Ver atrasos**):
+Pantalla `usuarios.html` (desde el inicio: **Añadir usuario** abre `usuarios.html#nuevo-usuario` y **Ver detalles** de atrasos abre `usuarios.html?filtro=morosos`):
 
 - **Alta y modificación** con los 6 atributos obligatorios (nombre completo, DNI, curso, correo, teléfono y dirección)
   + tipo de usuario y contraseña. El curso es obligatorio para alumnos; si es nuevo, se crea solo en la tabla `cursos`.

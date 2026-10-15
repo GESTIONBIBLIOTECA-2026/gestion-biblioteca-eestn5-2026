@@ -181,45 +181,6 @@ export const getFichaUsuarioPorDni = async (dni) => {
 };
 
 
-/**
- * Valida y obtiene un usuario para registrar un préstamo (dentro de una transacción).
- * Bloquea la fila con FOR SHARE y reutiliza las reglas de sanciones y deudas.
- */
-export const obtenerUsuarioParaPrestamo = async (conexion, dni) => {
-    const [usuarios] = await conexion.query(
-        `SELECT u.id, u.nombre_completo, u.estado,
-                (SELECT COUNT(*) FROM sanciones s
-                  WHERE s.usuario_id = u.id AND ${SQL_SANCION_EN_VIGOR}) AS sanciones_activas,
-                (SELECT COUNT(*) FROM pedidos p
-                  WHERE p.usuario_id = u.id AND ${SQL_PRESTAMO_ATRASADO}) AS prestamos_atrasados
-         FROM usuarios u
-         WHERE u.dni = ?
-         LIMIT 1
-         FOR SHARE`,
-        [dni]
-    );
-
-    const usuario = usuarios[0];
-
-    if (!usuario) {
-        throw new ErrorUsuario("NOT_FOUND", "No hay ningún usuario con ese DNI.");
-    }
-    if (usuario.estado !== "habilitado") {
-        throw new ErrorUsuario("CONFLICT", usuario.estado === "baja"
-            ? "El usuario está dado de baja."
-            : "El usuario está suspendido y no puede llevarse libros.");
-    }
-    if (usuario.sanciones_activas > 0) {
-        throw new ErrorUsuario("CONFLICT", "El usuario tiene una sanción activa.");
-    }
-    if (usuario.prestamos_atrasados > 0) {
-        throw new ErrorUsuario("CONFLICT", "El usuario tiene un préstamo atrasado sin devolver.");
-    }
-
-    return usuario;
-};
-
-
 /* ==========================================================================
    BÚSQUEDA AVANZADA (nombre, DNI y curso combinados + filtro rápido)
    ========================================================================== */
@@ -531,6 +492,78 @@ export const actualizarUsuario = async (id, datos) => {
     } finally {
         conexion.release();
     }
+};
+
+
+/* ==========================================================================
+   MI PERFIL: el administrador cambia sus propios datos y su contraseña
+   ========================================================================== */
+
+/**
+ * Hash de la contraseña de un usuario (para comprobar la actual antes de cambiarla).
+ * Devuelve el hash o null si el usuario no existe.
+ */
+export const getHashClavePorId = async (id) => {
+
+    const [filas] = await connection.query(
+        "SELECT password_hash FROM usuarios WHERE id = ? LIMIT 1",
+        [id]
+    );
+
+    return filas[0]?.password_hash ?? null;
+};
+
+
+/**
+ * Actualiza los datos propios: nombre, correo, teléfono y dirección.
+ * El DNI, el rol y el curso no se tocan. Devuelve el usuario actualizado.
+ */
+export const actualizarPerfil = async (id, { nombre_completo, correo, telefono, direccion }) => {
+
+    const conexion = await connection.getConnection();
+
+    try {
+        await conexion.beginTransaction();
+
+        const [filas] = await conexion.query("SELECT id, dni FROM usuarios WHERE id = ? FOR UPDATE", [id]);
+
+        if (!filas[0]) {
+            throw new ErrorUsuario(404, "No se encontró tu usuario.");
+        }
+
+        // Mismo control que en la modificación: el correo no puede ser de otro usuario
+        await revisarRepetidos(conexion, { dni: filas[0].dni, correo }, id);
+
+        await conexion.query(
+            "UPDATE usuarios SET nombre_completo = ?, correo = ?, telefono = ?, direccion = ? WHERE id = ?",
+            [nombre_completo, correo, telefono, direccion, id]
+        );
+
+        await conexion.commit();
+
+        return await getUsuarioPorId(id, conexion);
+
+    } catch (error) {
+        await conexion.rollback();
+        throw traducirRepetido(error);
+
+    } finally {
+        conexion.release();
+    }
+};
+
+
+/**
+ * Guarda una contraseña nueva (ya viene como hash bcrypt). Devuelve true si se cambió.
+ */
+export const actualizarClave = async (id, passwordHash) => {
+
+    const [resultado] = await connection.query(
+        "UPDATE usuarios SET password_hash = ? WHERE id = ?",
+        [passwordHash, id]
+    );
+
+    return resultado.affectedRows === 1;
 };
 
 

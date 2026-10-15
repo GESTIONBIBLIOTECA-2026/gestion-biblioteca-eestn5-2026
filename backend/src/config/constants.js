@@ -8,9 +8,6 @@ import "./env.js";
 // Roles (tabla roles) que pueden entrar al panel de administración
 export const ROLES_PANEL = ["administrador"];
 
-// Días que dura un préstamo registrado en el mostrador
-export const DIAS_PRESTAMO = Number(process.env.DIAS_PRESTAMO) || 7;
-
 // --- Reglas de Dominio y Constantes de Usuarios ---
 export const ROLES_USUARIOS = ["alumno", "docente", "administrador"];
 export const ESTADOS_USUARIOS = ["habilitado", "suspendido", "baja"];

@@ -72,27 +72,6 @@ export async function obtenerUltimosPrestamos(limite = 5) {
 }
 
 
-/* --- GET /api/usuarios/dni/:dni → { nombre_completo, curso, estado, puede_pedir, ... } --- */
-export async function buscarUsuarioPorDni(dni) {
-    return pedirAlBackend(`/usuarios/dni/${encodeURIComponent(dni)}`);
-}
-
-
-/* --- GET /api/libros/:id → { titulo, autores, ejemplares_disponibles, stock_reservable, ... } --- */
-export async function buscarLibroPorId(id) {
-    return pedirAlBackend(`/libros/${encodeURIComponent(id)}`);
-}
-
-
-/* --- POST /api/prestamos → préstamo creado --- */
-export async function registrarPrestamo(dni, libroId) {
-    return pedirAlBackend("/prestamos", {
-        method: "POST",
-        body: JSON.stringify({ dni, libroId })
-    });
-}
-
-
 /* ==========================================================================
    GRUPO 5 — GESTIÓN DE USUARIOS
    ========================================================================== */
@@ -162,4 +141,32 @@ export async function darDeBajaUsuario(id) {
 /* --- GET /api/cursos → [ { id, nombre, alumnos } ] --- */
 export async function obtenerCursos() {
     return pedirAlBackend("/cursos");
+}
+
+
+/* ==========================================================================
+   MI PERFIL (pantalla Configuración)
+   ========================================================================== */
+
+/* --- GET /api/perfil → mis datos: { nombre_completo, dni, correo, telefono, direccion, rol, ... } --- */
+export async function obtenerMiPerfil() {
+    return pedirAlBackend("/perfil");
+}
+
+
+/* --- PUT /api/perfil → { mensaje, payload: mis datos actualizados } --- */
+export async function guardarMiPerfil(datos) {
+    return llamarAlBackend("/perfil", {
+        method: "PUT",
+        body: JSON.stringify(datos)
+    });
+}
+
+
+/* --- PUT /api/perfil/clave → { mensaje } --- */
+export async function cambiarMiClave({ clave_actual, clave_nueva, confirmacion }) {
+    return llamarAlBackend("/perfil/clave", {
+        method: "PUT",
+        body: JSON.stringify({ clave_actual, clave_nueva, confirmacion })
+    });
 }

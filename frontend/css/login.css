@@ -1,11 +1,71 @@
+
 /* =========================================================
-   LOGIN
+   PÁGINA DE INICIO DE SESIÓN
 ========================================================= */
 
 .pagina-login {
     min-height: 100vh;
+    min-height: 100dvh;   /* en el celular no cuenta la barra del navegador */
     display: flex;
     flex-direction: column;
+    background: var(--fondo-principal);
+}
+
+
+/* =========================================================
+   ENCABEZADO
+========================================================= */
+
+.encabezado-login {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 32px;
+    background: var(--fondo-sidebar);
+    border-bottom: 1px solid var(--borde-tarjeta);
+}
+
+.logo-login {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icono-logo-login {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--azul-700);
+    color: var(--blanco);
+    flex-shrink: 0;
+}
+
+.icono-logo-login svg {
+    width: 23px;
+    height: 23px;
+}
+
+.texto-logo-login {
+    color: var(--texto-principal);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.separador-login {
+    width: 1px;
+    height: 24px;
+    margin: 0 4px;
+    background: var(--borde-tarjeta);
+}
+
+.texto-panel-login {
+    color: var(--texto-secundario);
+    font-size: 13px;
 }
 
 
@@ -19,7 +79,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 48px 16px;
+    padding: clamp(16px, 4vh, 48px) 16px;
 }
 
 
@@ -30,11 +90,11 @@
 .tarjeta-login {
     width: 100%;
     max-width: 440px;
-    background: var(--blanco);
-    border: 1px solid var(--azul-100);
-    border-radius: 10px;
-    padding: 38px 36px 36px;
-    box-shadow: 0 8px 24px rgba(0, 46, 115, 0.06);
+    padding: clamp(24px, 4vh, 38px) 36px clamp(22px, 4vh, 36px);
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    box-shadow: var(--sombra-modal);
 }
 
 
@@ -43,40 +103,41 @@
 ========================================================= */
 
 .cabecera-login {
+    margin-bottom: clamp(16px, 3vh, 28px);
     text-align: center;
-    margin-bottom: 28px;
 }
 
 .icono-login {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 18px;
-    border-radius: 50%;
-    background: var(--azul-100);
-    color: var(--azul-600);
+    width: clamp(52px, 8vh, 72px);
+    height: clamp(52px, 8vh, 72px);
+    margin: 0 auto clamp(10px, 2vh, 18px);
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 50%;
+    background: var(--fondo-principal);
+    color: var(--azul-500);
 }
 
 .icono-login svg {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     stroke-width: 2;
 }
 
 .cabecera-login h1 {
+    color: var(--texto-principal);
     font-size: 28px;
     font-weight: 800;
-    letter-spacing: -1px;
-    color: var(--tinta-900);
+    letter-spacing: -0.7px;
 }
 
 .cabecera-login p {
-    margin-top: 8px;
-    color: var(--azul-700);
+    margin-top: 9px;
+    color: var(--texto-secundario);
     font-size: 14px;
-    line-height: 1.45;
+    line-height: 1.6;
 }
 
 
@@ -90,10 +151,10 @@
     gap: 10px;
     margin-bottom: 22px;
     padding: 12px 14px;
-    background: #fff3f3;
-    border: 1px solid #ffcaca;
+    background: var(--rojo-fondo);
+    border: 1px solid var(--rojo-borde);
     border-radius: 7px;
-    color: var(--rojo-700);
+    color: var(--rojo-500);
     font-size: 13px;
     font-weight: 600;
 }
@@ -111,81 +172,83 @@
 
 /* =========================================================
    CAMPOS DE ENTRADA
-   (mismo estilo que el formulario de nuevo préstamo)
 ========================================================= */
 
 .grupo-entrada {
-    margin-bottom: 22px;
+    margin-bottom: clamp(14px, 2.4vh, 22px);
 }
 
 .grupo-entrada label {
     display: block;
     margin-bottom: 9px;
-    color: var(--azul-700);
+    color: var(--texto-secundario);
     font-size: 13px;
     font-weight: 600;
 }
 
 .contenedor-entrada {
-    height: 54px;
+    height: clamp(46px, 6vh, 54px);
     display: flex;
     align-items: center;
     gap: 13px;
     padding: 0 16px;
-    background: var(--blanco);
-    border: 1px solid var(--azul-200);
+    background: var(--fondo-principal);
+    border: 1px solid var(--borde-tarjeta);
     border-radius: 7px;
-    transition: 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contenedor-entrada > svg {
     width: 21px;
     height: 21px;
     flex-shrink: 0;
-    color: var(--azul-600);
+    color: var(--texto-secundario);
 }
 
 .contenedor-entrada input {
     width: 100%;
     height: 100%;
+    min-width: 0;
     border: none;
     outline: none;
     background: transparent;
-    color: var(--tinta-900);
+    color: var(--texto-principal);
     font-family: "Inter", sans-serif;
     font-size: 14px;
 }
 
 .contenedor-entrada input::placeholder {
-    color: var(--tinta-400);
+    color: var(--texto-mutado);
 }
 
 .contenedor-entrada:focus-within {
     border-color: var(--azul-500);
-    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.08);
+    box-shadow: 0 0 0 3px var(--azul-suave);
 }
 
 
-/* --- Botón para ver la contraseña --- */
+/* =========================================================
+   MOSTRAR / OCULTAR CONTRASEÑA
+========================================================= */
 
 .boton-ver-clave {
     width: 34px;
     height: 34px;
     flex-shrink: 0;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    color: var(--tinta-500);
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.2s ease;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--texto-secundario);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .boton-ver-clave:hover {
-    background: var(--azul-50);
-    color: var(--azul-600);
+    background: var(--fondo-tarjeta-hover);
+    color: var(--azul-500);
 }
 
 .boton-ver-clave svg {
@@ -200,26 +263,26 @@
 
 .boton-login {
     width: 100%;
-    height: 48px;
+    min-height: 48px;
     margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
     border: none;
-    border-radius: 6px;
-    background: var(--azul-500);
+    border-radius: 7px;
+    background: var(--azul-700);
     color: var(--blanco);
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    transition: 0.2s ease;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .boton-login:hover {
-    background: var(--azul-600);
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.2);
+    background: var(--azul-400);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
 }
 
 .boton-login:disabled {
@@ -248,9 +311,10 @@
 ========================================================= */
 
 .pie-login {
-    margin-top: 22px;
-    color: var(--tinta-500);
+    margin-top: clamp(12px, 2.5vh, 24px);
+    color: var(--texto-mutado);
     font-size: 12px;
+    text-align: center;
 }
 
 
@@ -258,14 +322,66 @@
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 500px) {
+/* --- Pantallas bajas (notebooks chicas, celular acostado): todo entra sin scrollear --- */
+@media (max-height: 700px) {
 
-    .tarjeta-login {
-        padding: 30px 20px 26px;
+    .encabezado-login {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .cabecera-login p {
+        display: none;
     }
 
     .cabecera-login h1 {
         font-size: 24px;
     }
 
+    .boton-login {
+        min-height: 44px;
+        margin-top: 2px;
+    }
+}
+
+@media (max-height: 560px) {
+
+    .icono-login,
+    .pie-login {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .encabezado-login {
+        padding: 12px 16px;
+    }
+
+    .texto-panel-login,
+    .separador-login,
+    .texto-apariencia {
+        display: none;
+    }
+
+    .texto-logo-login {
+        font-size: 15px;
+    }
+
+    .contenedor-login {
+        justify-content: flex-start;
+        padding-top: 20px;
+    }
+
+    .tarjeta-login {
+        padding: 24px 20px 22px;
+    }
+
+    .cabecera-login h1 {
+        font-size: 24px;
+    }
+
+    .cabecera-login p {
+        font-size: 13px;
+    }
 }

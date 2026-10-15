@@ -1,18 +1,21 @@
 /* ==========================================================================
    MÓDULO: panel.js - Página principal del panel (index.html)
-   - Muestra la fecha de hoy
+   - Contador de "Atrasos pendientes" (usuarios morosos)
    - Carga la tabla "Últimos préstamos" desde la base (GET /api/prestamos)
+   (La fecha, la hora y el menú del perfil los carga js/sesion.js)
    ========================================================================== */
 
-import { obtenerUltimosPrestamos } from "./api.js";
-import { fechaCorta, fechaDeHoy } from "./fechas.js";
+import { obtenerUltimosPrestamos, listarUsuarios } from "./api.js";
+import { fechaCorta } from "./fechas.js";
 
 
 // ==========================================================================
 // 🎯 1. Nodos del DOM
 // ==========================================================================
-const cuerpoTabla = document.querySelector("#cuerpoPrestamos");
-const textoFecha  = document.querySelector("[data-fecha-hoy]");
+
+const cuerpoTabla      = document.querySelector("#cuerpoPrestamos");
+const contadorAtrasos  = document.querySelector("#contador-atrasos");
+
 
 
 // ==========================================================================
@@ -30,8 +33,9 @@ function etiquetaEstado(prestamo) {
         return { texto: "Atrasado", clase: "atrasado" };
     }
 
-    return { texto: "En curso", clase: "activo" };
+    return { texto: "En curso", clase: "en-curso" };
 }
+
 
 
 /* --- Crea una celda <td> con texto (textContent: nunca se interpreta como HTML) --- */
@@ -80,7 +84,8 @@ function mostrarPrestamos(prestamos) {
             crearCelda(prestamo.nombre_completo),
             crearCelda(prestamo.titulo),
             crearCelda(fechaCorta(prestamo.fecha_prestamo)),
-            crearCelda(fechaCorta(prestamo.fecha_devolucion_real)),
+            // Si ya lo devolvió, la fecha real; si no, la fecha en que tiene que devolverlo
+            crearCelda(fechaCorta(prestamo.fecha_devolucion_real || prestamo.fecha_devolucion_estimada)),
             celdaEstado
         );
 
@@ -109,7 +114,23 @@ async function cargarPrestamos() {
 
 
 // ==========================================================================
-// 🚀 4. Inicialización
+// ⚠️ 4. Atrasos pendientes: cuántos usuarios tienen un préstamo atrasado
+//    (una sola consulta: el listado ya trae los contadores de cada filtro)
 // ==========================================================================
-textoFecha.textContent = fechaDeHoy();
+async function cargarAtrasos() {
+
+    try {
+        const { contadores } = await listarUsuarios({ filtro: "morosos" });
+        contadorAtrasos.textContent = contadores?.morosos ?? 0;
+
+    } catch (error) {
+        contadorAtrasos.textContent = "--";
+    }
+}
+
+
+// ==========================================================================
+// 🚀 5. Inicialización
+// ==========================================================================
+cargarAtrasos();
 cargarPrestamos();

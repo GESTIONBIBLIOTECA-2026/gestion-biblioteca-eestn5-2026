@@ -1,11 +1,9 @@
 /* ==========================================================================
-   prestamos.controllers.js - Controlador de Préstamos
+   prestamos.controllers.js - Controlador de Préstamos (solo lectura)
+   Registrar préstamos y devoluciones es del Grupo 4.
    ========================================================================== */
 
-import { getUltimosPrestamos, crearPrestamo, ErrorPrestamo } from "../models/prestamo.models.js";
-import { ErrorUsuario } from "../models/usuario.models.js";
-import { ErrorLibro } from "../models/libro.models.js";
-import { DIAS_PRESTAMO } from "../config/config.js";
+import { getUltimosPrestamos } from "../models/prestamo.models.js";
 
 
 /* --------------------------------------------------------------------------
@@ -22,35 +20,3 @@ export const getPrestamos = async (req, res) => {
         return res.status(500).json({ error: "No se pudieron cargar los préstamos." });
     }
 };
-
-
-/* --------------------------------------------------------------------------
-   POST /api/prestamos   (requiere token)
-   Body: { "dni": "45123456", "libroId": 1 }
-   -------------------------------------------------------------------------- */
-export const postPrestamo = async (req, res) => {
-    try {
-        const { dni, libroId } = req.prestamo;
-
-        const prestamo = await crearPrestamo({
-            dni,
-            libroId,
-            adminId: req.usuario.id,     // quién lo registró (queda en pedido_historial)
-            dias: DIAS_PRESTAMO
-        });
-
-        return res.status(201).json({ mensaje: "Préstamo registrado con éxito.", payload: prestamo });
-
-    } catch (error) {
-
-        // Reglas de negocio (usuario suspendido, sin stock...): el controlador traduce el error a HTTP
-        if (error instanceof ErrorPrestamo || error instanceof ErrorUsuario || error instanceof ErrorLibro) {
-            const status = error.status ?? 400;
-            return res.status(status).json({ error: error.message });
-        }
-
-        console.error("Error al registrar préstamo:", error.message);
-        return res.status(500).json({ error: "No se pudo registrar el préstamo en la base de datos." });
-    }
-};
-

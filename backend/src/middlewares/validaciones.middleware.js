@@ -62,30 +62,6 @@ export const validarIdParam = (req, res, next) => {
 };
 
 
-/* --- Valida el body del préstamo: { dni, libroId } --- */
-export const validarPrestamo = (req, res, next) => {
-
-    const { dni, libroId } = req.body || {};
-    const dniLimpio = limpiarDni(dni);
-    const idLimpio = String(libroId ?? "").trim();
-
-    if (!dniLimpio || !idLimpio) {
-        return res.status(400).json({ error: "Completá el DNI del usuario y el ID del libro." });
-    }
-
-    if (!esDniValido(dniLimpio)) {
-        return res.status(400).json({ error: "El DNI tiene que tener entre 7 y 8 números." });
-    }
-
-    if (!esIdValido(idLimpio)) {
-        return res.status(400).json({ error: "El ID del libro tiene que ser un número." });
-    }
-
-    req.prestamo = { dni: dniLimpio, libroId: Number(idLimpio) };
-    next();
-};
-
-
 /* --- Valida ?limite= en la URL (entre 1 y 50, por defecto 5) --- */
 export const validarLimite = (req, res, next) => {
 
@@ -106,6 +82,64 @@ export const validarLimite = (req, res, next) => {
 
 // Texto prolijo: sin espacios al principio/final ni espacios dobles
 const limpiarTexto = (valor) => String(valor ?? "").trim().replace(/\s+/g, " ");
+
+
+/* --- Reglas que comparten el alta/modificación de usuarios y "Mi perfil" ---
+   Cada una agrega en "campos" el mensaje del campo que esté mal.            */
+
+function revisarNombre(nombre, campos) {
+    if (nombre.length < 3) {
+        campos.nombre_completo = "Escribí el nombre y apellido.";
+    } else if (nombre.length > 120) {
+        campos.nombre_completo = "El nombre puede tener hasta 120 caracteres.";
+    } else if (!esNombreValido(nombre)) {
+        campos.nombre_completo = "El nombre solo puede tener letras y espacios.";
+    }
+}
+
+function revisarContacto({ correo, telefono, direccion }, campos) {
+
+    // Correo
+    if (!esCorreoValido(correo) || correo.length > 120) {
+        campos.correo = "El correo electrónico no es válido.";
+    }
+
+    // Teléfono: números, espacios, paréntesis, + y -. Al menos 6 números.
+    const numerosTelefono = telefono.replace(/\D/g, "").length;
+
+    if (!esTelefonoValido(telefono) || numerosTelefono < 6 || telefono.length > 30) {
+        campos.telefono = "Escribí un teléfono válido (ej: 11 4444-5678).";
+    }
+
+    // Dirección
+    if (direccion.length < 3) {
+        campos.direccion = "Escribí la dirección.";
+    } else if (direccion.length > 150) {
+        campos.direccion = "La dirección puede tener hasta 150 caracteres.";
+    }
+}
+
+// Devuelve el mensaje de error de la contraseña, o null si está bien
+function revisarClave(clave) {
+    if (clave.length < 6) return "La contraseña tiene que tener al menos 6 caracteres.";
+    if (clave.length > 72) return "La contraseña puede tener hasta 72 caracteres.";
+    return null;
+}
+
+// Responde 400 con { error, campos } si hay campos mal cargados. Devuelve true si respondió.
+function responderCampos(res, campos) {
+
+    const errores = Object.values(campos);
+
+    if (errores.length === 0) return false;
+
+    res.status(400).json({
+        error: errores.length === 1 ? errores[0] : `Revisá los ${errores.length} campos marcados.`,
+        campos
+    });
+
+    return true;
+}
 
 
 /* --- Valida los 6 atributos del usuario + tipo y contraseña (alta y modificación) ---
@@ -129,14 +163,7 @@ export const validarUsuario = (req, res, next) => {
 
     const campos = {};
 
-    // Nombre completo
-    if (datos.nombre_completo.length < 3) {
-        campos.nombre_completo = "Escribí el nombre y apellido.";
-    } else if (datos.nombre_completo.length > 120) {
-        campos.nombre_completo = "El nombre puede tener hasta 120 caracteres.";
-    } else if (!esNombreValido(datos.nombre_completo)) {
-        campos.nombre_completo = "El nombre solo puede tener letras y espacios.";
-    }
+    revisarNombre(datos.nombre_completo, campos);
 
     // DNI
     if (!esDniValido(datos.dni)) {
@@ -159,42 +186,15 @@ export const validarUsuario = (req, res, next) => {
         datos.curso = null;
     }
 
-    // Correo
-    if (!esCorreoValido(datos.correo) || datos.correo.length > 120) {
-        campos.correo = "El correo electrónico no es válido.";
-    }
-
-    // Teléfono: números, espacios, paréntesis, + y -. Al menos 6 números.
-    const numerosTelefono = datos.telefono.replace(/\D/g, "").length;
-
-    if (!esTelefonoValido(datos.telefono) || numerosTelefono < 6 || datos.telefono.length > 30) {
-        campos.telefono = "Escribí un teléfono válido (ej: 11 4444-5678).";
-    }
-
-    // Dirección
-    if (datos.direccion.length < 3) {
-        campos.direccion = "Escribí la dirección.";
-    } else if (datos.direccion.length > 150) {
-        campos.direccion = "La dirección puede tener hasta 150 caracteres.";
-    }
+    revisarContacto(datos, campos);
 
     // Contraseña: obligatoria en el alta; en la modificación solo si se quiere cambiar
     if (esAlta || datos.clave) {
-        if (datos.clave.length < 6) {
-            campos.clave = "La contraseña tiene que tener al menos 6 caracteres.";
-        } else if (datos.clave.length > 72) {
-            campos.clave = "La contraseña puede tener hasta 72 caracteres.";
-        }
+        const errorClave = revisarClave(datos.clave);
+        if (errorClave) campos.clave = errorClave;
     }
 
-    const errores = Object.values(campos);
-
-    if (errores.length > 0) {
-        return res.status(400).json({
-            error: errores.length === 1 ? errores[0] : `Revisá los ${errores.length} campos marcados.`,
-            campos
-        });
-    }
+    if (responderCampos(res, campos)) return;
 
     // Datos limpios para el controlador
     req.datosUsuario = datos;
@@ -253,5 +253,68 @@ export const validarCambioEstado = (req, res, next) => {
     }
 
     req.cambioEstado = { estado, motivo: motivo || null };
+    next();
+};
+
+
+/* ==========================================================================
+   MI PERFIL (pantalla Configuración)
+   ========================================================================== */
+
+/* --- Valida los datos propios: { nombre_completo, correo, telefono, direccion }
+   El DNI y el rol no se cambian desde acá (el DNI es el usuario del login).     */
+export const validarPerfil = (req, res, next) => {
+
+    const body = req.body || {};
+
+    const datos = {
+        nombre_completo: limpiarTexto(body.nombre_completo),
+        correo: limpiarTexto(body.correo).toLowerCase(),
+        telefono: limpiarTexto(body.telefono),
+        direccion: limpiarTexto(body.direccion)
+    };
+
+    const campos = {};
+
+    revisarNombre(datos.nombre_completo, campos);
+    revisarContacto(datos, campos);
+
+    if (responderCampos(res, campos)) return;
+
+    req.datosPerfil = datos;
+    next();
+};
+
+
+/* --- Valida el cambio de contraseña: { clave_actual, clave_nueva, confirmacion } --- */
+export const validarCambioClave = (req, res, next) => {
+
+    const body = req.body || {};
+
+    const claveActual = String(body.clave_actual ?? "");
+    const claveNueva = String(body.clave_nueva ?? "");
+    const confirmacion = String(body.confirmacion ?? "");
+
+    const campos = {};
+
+    if (!claveActual) {
+        campos.clave_actual = "Escribí tu contraseña actual.";
+    }
+
+    const errorClave = revisarClave(claveNueva);
+
+    if (errorClave) {
+        campos.clave_nueva = errorClave;
+    } else if (claveNueva === claveActual) {
+        campos.clave_nueva = "La contraseña nueva tiene que ser distinta de la actual.";
+    }
+
+    if (confirmacion !== claveNueva) {
+        campos.confirmacion = "Las contraseñas no coinciden.";
+    }
+
+    if (responderCampos(res, campos)) return;
+
+    req.cambioClave = { claveActual, claveNueva };
     next();
 };

@@ -1,14 +1,17 @@
 /* ==========================================================================
    MÓDULO: sesion.js - Protección de las páginas del panel
    - Sin sesión válida → vuelve a login.html
-   - Muestra el nombre del administrador
-   - Botón "Salir"
+   - Muestra el nombre del administrador en el encabezado
+   - "Cerrar sesión" del menú del perfil
+   - Carga lo común del encabezado: fecha/hora y menú del perfil
    Se incluye en cada página protegida:
      <script type="module" src="js/sesion.js"></script>
    ========================================================================== */
 
 import { obtenerPerfil } from "./api.js";
 import { obtenerToken, borrarSesion } from "./storage.js";
+import "./fecha-hora.js";
+import "./menu-perfil.js";
 
 
 // ==========================================================================
@@ -18,17 +21,26 @@ function irAlLogin() {
     window.location.replace("login.html");
 }
 
-function mostrarUsuario({ nombre }) {
+// "administrador" → "Administrador"
+const conMayuscula = (texto = "") => texto.charAt(0).toUpperCase() + texto.slice(1);
 
-    // Nombre completo en el encabezado
+/* --- Nombre y rol en el encabezado (también lo usa Configuración al guardar) --- */
+export function mostrarNombre(nombre, rol) {
+
     document.querySelectorAll("[data-nombre-admin]").forEach((elemento) => {
         elemento.textContent = nombre;
     });
 
-    // Solo el primer nombre en la bienvenida
-    document.querySelectorAll("[data-primer-nombre]").forEach((elemento) => {
-        elemento.textContent = nombre.split(" ")[0];
-    });
+    if (rol) {
+        document.querySelectorAll("[data-rol-admin]").forEach((elemento) => {
+            elemento.textContent = conMayuscula(rol);
+        });
+    }
+}
+
+function mostrarUsuario({ nombre, rol }) {
+
+    mostrarNombre(nombre, rol);
 
     // Recién ahora se muestra la página
     document.documentElement.classList.remove("verificando-sesion");
