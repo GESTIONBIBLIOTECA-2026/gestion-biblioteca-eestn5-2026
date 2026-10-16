@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Catálogo - Biblioteca Invaluable</title>
+
+    <!-- Estilos generales -->
+    <link rel="stylesheet" href="/frontend/css/estilo-general.css">
+
+    <!-- Estilos exclusivos de esta página -->
+    <link rel="stylesheet" href="/frontend/css/admin-catalogo.css">
+
+    <!-- Fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     ENCABEZADO
+====================================================== -->
+
+<header class="encabezado">
+
+    <div class="zona-logo">
+
+        <i data-lucide="book-open" class="icono-logo"></i>
+
+        <span class="texto-logo">
+            Biblioteca Invaluable
+        </span>
+
+        <span class="separador"></span>
+
+        <span class="texto-panel">
+            Panel de Administración
+        </span>
+
+    </div>
+
+    <div class="zona-administrador">
+
+        <div class="icono-administrador">
+            <i data-lucide="user-round"></i>
+        </div>
+
+        <span>Admin</span>
+
+        <i data-lucide="chevron-down" class="flecha-desplegable"></i>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     CONTENIDO PRINCIPAL
+====================================================== -->
+
+<main class="contenedor">
+
+
+    <!-- =================================================
+         PARTE SUPERIOR
+    ================================================== -->
+
+    <section class="encabezado-catalogo">
+
+        <a href="index.html" class="enlace-volver">
+            <i data-lucide="arrow-left"></i>
+            Volver al panel
+        </a>
+
+        <div class="fila-titulo-catalogo">
+
+            <div class="icono-principal-catalogo">
+                <i data-lucide="library"></i>
+            </div>
+
+            <div>
+                <h1>Gestión de Catálogo</h1>
+                <p>Administrá el alta, modificación, baja y stock de los libros de la biblioteca.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         INDICADORES RÁPIDOS
+    ================================================== -->
+
+    <section class="rejilla-kpis">
+
+        <div class="tarjeta kpi">
+            <div class="icono-kpi azul">
+                <i data-lucide="book-marked"></i>
+            </div>
+            <div>
+                <span class="valor-kpi">128</span>
+                <span class="etiqueta-kpi">Títulos catalogados</span>
+            </div>
+        </div>
+
+        <div class="tarjeta kpi">
+            <div class="icono-kpi azul">
+                <i data-lucide="layers"></i>
+            </div>
+            <div>
+                <span class="valor-kpi">342</span>
+                <span class="etiqueta-kpi">Ejemplares totales</span>
+            </div>
+        </div>
+
+        <div class="tarjeta kpi">
+            <div class="icono-kpi verde">
+                <i data-lucide="badge-check"></i>
+            </div>
+            <div>
+                <span class="valor-kpi">276</span>
+                <span class="etiqueta-kpi">Disponibles ahora</span>
+            </div>
+        </div>
+
+        <div class="tarjeta kpi">
+            <div class="icono-kpi roja">
+                <i data-lucide="ban"></i>
+            </div>
+            <div>
+                <span class="valor-kpi">9</span>
+                <span class="etiqueta-kpi">De baja (extraviados/dañados)</span>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         REGISTRAR LIBRO NUEVO
+    ================================================== -->
+
+    <section class="tarjeta tarjeta-catalogo">
+
+        <div class="titulo-seccion-formulario">
+
+            <div class="icono-formulario">
+                <i data-lucide="book-plus"></i>
+            </div>
+
+            <div>
+                <h2>Registrar libro nuevo</h2>
+                <p>Cargá un título nuevo al catálogo con sus datos y la cantidad de ejemplares ingresados.</p>
+            </div>
+
+        </div>
+
+
+        <div class="grilla-formulario-catalogo">
+
+            <!-- TÍTULO -->
+            <div class="grupo-entrada">
+                <label for="tituloLibro">Título del libro</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="book-open"></i>
+                    <input type="text" id="tituloLibro" name="tituloLibro" placeholder="Ej: El hobbit">
+                </div>
+            </div>
+
+            <!-- AUTOR -->
+            <div class="grupo-entrada">
+                <label for="autorLibro">Autor</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="pen-line"></i>
+                    <input type="text" id="autorLibro" name="autorLibro" placeholder="Ej: J.R.R. Tolkien">
+                </div>
+            </div>
+
+            <!-- EDITORIAL -->
+            <div class="grupo-entrada">
+                <label for="editorialLibro">Editorial</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="building-2"></i>
+                    <input type="text" id="editorialLibro" name="editorialLibro" placeholder="Ej: Minotauro">
+                </div>
+            </div>
+
+            <!-- ISBN -->
+            <div class="grupo-entrada">
+                <label for="isbnLibro">ISBN</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="barcode"></i>
+                    <input type="text" id="isbnLibro" name="isbnLibro" placeholder="Ej: 978-950-490-000-1">
+                </div>
+            </div>
+
+            <!-- CATEGORÍA -->
+            <div class="grupo-entrada">
+                <label for="categoriaLibro">Categoría</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="tag"></i>
+                    <select id="categoriaLibro" name="categoriaLibro">
+                        <option value="">Seleccionar categoría</option>
+                        <option value="tecnica">Técnica</option>
+                        <option value="literatura">Literatura</option>
+                        <option value="ciencias">Ciencias</option>
+                        <option value="historia">Historia</option>
+                        <option value="informatica">Informática</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- AÑO -->
+            <div class="grupo-entrada">
+                <label for="anioLibro">Año de edición</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="calendar"></i>
+                    <input type="text" id="anioLibro" name="anioLibro" placeholder="Ej: 2019">
+                </div>
+            </div>
+
+            <!-- CANTIDAD DE EJEMPLARES -->
+            <div class="grupo-entrada">
+                <label for="cantidadEjemplares">Cantidad de ejemplares</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="layers"></i>
+                    <input type="text" id="cantidadEjemplares" name="cantidadEjemplares" placeholder="Ej: 5">
+                </div>
+            </div>
+
+            <!-- PORTADA -->
+            <div class="grupo-entrada">
+                <label for="portadaLibro">Portada</label>
+                <div class="contenedor-entrada">
+                    <i data-lucide="image"></i>
+                    <input type="text" id="portadaLibro" name="portadaLibro" placeholder="Seleccionar archivo...">
+                </div>
+            </div>
+
+        </div>
+
+        <button type="button" class="boton-catalogo">
+            <i data-lucide="save"></i>
+            Guardar libro
+        </button>
+
+    </section>
+
+
+    <!-- =================================================
+         CATÁLOGO Y BUSCADOR
+    ================================================== -->
+
+    <section class="tarjeta tarjeta-catalogo">
+
+        <div class="encabezado-tabla-catalogo">
+
+            <div class="titulo-seccion">
+                <i data-lucide="search"></i>
+                <div>
+                    <h2>Catálogo de libros</h2>
+                    <p>Buscá, modificá el stock o da de baja un título existente.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- BARRA DE FILTROS -->
+
+        <div class="barra-filtros">
+
+            <div class="contenedor-entrada">
+                <i data-lucide="search"></i>
+                <input type="text" placeholder="Buscar por título o autor...">
+            </div>
+
+            <div class="contenedor-entrada">
+                <i data-lucide="tag"></i>
+                <select>
+                    <option value="">Categoría</option>
+                    <option value="tecnica">Técnica</option>
+                    <option value="literatura">Literatura</option>
+                    <option value="ciencias">Ciencias</option>
+                    <option value="historia">Historia</option>
+                    <option value="informatica">Informática</option>
+                </select>
+            </div>
+
+            <div class="contenedor-entrada">
+                <i data-lucide="filter"></i>
+                <select>
+                    <option value="">Disponibilidad</option>
+                    <option value="disponible">Disponible</option>
+                    <option value="prestado">Prestado</option>
+                    <option value="baja">De baja</option>
+                </select>
+            </div>
+
+            <button type="button" class="boton-filtro">
+                <i data-lucide="search"></i>
+                Buscar
+            </button>
+
+        </div>
+
+
+        <!-- TABLA -->
+
+        <div class="contenedor-tabla">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Libro</th>
+                        <th>ISBN</th>
+                        <th>Categoría</th>
+                        <th>Año</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <!-- LIBRO 1 -->
+                    <tr>
+                        <td>
+                            <div class="celda-libro">
+                                <div class="mini-portada"><i data-lucide="book"></i></div>
+                                <div>
+                                    <strong>El hobbit</strong>
+                                    <span>J.R.R. Tolkien</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>978-950-490-000-1</td>
+                        <td>Literatura</td>
+                        <td>2012</td>
+                        <td>3 / 5</td>
+                        <td><span class="estado disponible">Disponible</span></td>
+                        <td>
+                            <div class="acciones-fila">
+                                <button type="button" title="Editar libro"><i data-lucide="pencil"></i></button>
+                                <button type="button" title="Actualizar stock"><i data-lucide="layers"></i></button>
+                                <button type="button" title="Dar de baja"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- LIBRO 2 -->
+                    <tr>
+                        <td>
+                            <div class="celda-libro">
+                                <div class="mini-portada"><i data-lucide="book"></i></div>
+                                <div>
+                                    <strong>1984</strong>
+                                    <span>George Orwell</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>978-950-490-000-2</td>
+                        <td>Literatura</td>
+                        <td>1949</td>
+                        <td>0 / 2</td>
+                        <td><span class="estado prestado">Prestado</span></td>
+                        <td>
+                            <div class="acciones-fila">
+                                <button type="button" title="Editar libro"><i data-lucide="pencil"></i></button>
+                                <button type="button" title="Actualizar stock"><i data-lucide="layers"></i></button>
+                                <button type="button" title="Dar de baja"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- LIBRO 3 -->
+                    <tr>
+                        <td>
+                            <div class="celda-libro">
+                                <div class="mini-portada"><i data-lucide="book"></i></div>
+                                <div>
+                                    <strong>Física I</strong>
+                                    <span>Sears &amp; Zemansky</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>978-950-490-000-3</td>
+                        <td>Técnica</td>
+                        <td>2018</td>
+                        <td>2 / 4</td>
+                        <td><span class="estado disponible">Disponible</span></td>
+                        <td>
+                            <div class="acciones-fila">
+                                <button type="button" title="Editar libro"><i data-lucide="pencil"></i></button>
+                                <button type="button" title="Actualizar stock"><i data-lucide="layers"></i></button>
+                                <button type="button" title="Dar de baja"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- LIBRO 4 -->
+                    <tr>
+                        <td>
+                            <div class="celda-libro">
+                                <div class="mini-portada"><i data-lucide="book"></i></div>
+                                <div>
+                                    <strong>Cien años de soledad</strong>
+                                    <span>Gabriel García Márquez</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>978-950-490-000-4</td>
+                        <td>Literatura</td>
+                        <td>1967</td>
+                        <td>0 / 1</td>
+                        <td><span class="estado baja">De baja</span></td>
+                        <td>
+                            <div class="acciones-fila">
+                                <button type="button" title="Editar libro"><i data-lucide="pencil"></i></button>
+                                <button type="button" title="Actualizar stock"><i data-lucide="layers"></i></button>
+                                <button type="button" title="Dar de baja"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- LIBRO 5 -->
+                    <tr>
+                        <td>
+                            <div class="celda-libro">
+                                <div class="mini-portada"><i data-lucide="book"></i></div>
+                                <div>
+                                    <strong>Dune</strong>
+                                    <span>Frank Herbert</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>978-950-490-000-5</td>
+                        <td>Ciencias</td>
+                        <td>1965</td>
+                        <td>1 / 3</td>
+                        <td><span class="estado disponible">Disponible</span></td>
+                        <td>
+                            <div class="acciones-fila">
+                                <button type="button" title="Editar libro"><i data-lucide="pencil"></i></button>
+                                <button type="button" title="Actualizar stock"><i data-lucide="layers"></i></button>
+                                <button type="button" title="Dar de baja"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<script>
+    lucide.createIcons();
+</script>
+
+
+</body>
+
+</html>
