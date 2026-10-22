@@ -6,7 +6,7 @@
    ========================================================================== */
 
 import { listarUsuarios } from "./api.js";
-import { crearFilaMensajeHTML } from "./ui.js";
+import { crearFilaMensajeHTML, activarCierreDialogos } from "./ui.js";
 import { crearFilaUsuarioHTML } from "./usuarios-ui.js";
 import { abrirFormulario, editarUsuario, verFicha, cargarCursos } from "./usuarios-dialogos.js";
 import { cambiarEstadoUsuario } from "./usuarios-estado.js";
@@ -86,6 +86,7 @@ activarMenuAcciones((id) => usuarios.find((u) => u.id === id), {
 
 // 🚀 6. Inicialización
 elegirFiltro(filtroActual);
+activarCierreDialogos();
 cargarCursos();
 cargarUsuarios();
 

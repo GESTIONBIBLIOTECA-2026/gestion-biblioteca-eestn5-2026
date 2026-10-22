@@ -5,21 +5,19 @@
    ========================================================================== */
 
 import { ROLES } from "../config/config.js";
-import { limpiar, limpiarDni, DNI, rechazar } from "./validaciones.middleware.js";
-
-const NOMBRE = /^\p{L}[\p{L} .'-]*$/u;
-const CORREO = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const TELEFONO = /^[\d\s()+-]{6,30}$/;
+import {
+    limpiar, limpiarDni, rechazar, esDniValido, esNombreValido, esCorreoValido, esTelefonoValido
+} from "./predicados.js";
 
 const claveInvalida = (clave) => clave.length < 6 || clave.length > 72;
 
 // Nombre, correo, teléfono y dirección (los comparten el ABM y "Mi perfil")
 function revisarContacto(datos, campos) {
-    if (datos.nombre_completo.length < 3 || datos.nombre_completo.length > 120 || !NOMBRE.test(datos.nombre_completo)) {
+    if (datos.nombre_completo.length < 3 || datos.nombre_completo.length > 120 || !esNombreValido(datos.nombre_completo)) {
         campos.nombre_completo = "Escribí el nombre y apellido (solo letras).";
     }
-    if (!CORREO.test(datos.correo) || datos.correo.length > 120) campos.correo = "El correo electrónico no es válido.";
-    if (!TELEFONO.test(datos.telefono)) campos.telefono = "Escribí un teléfono válido (ej: 11 4444-5678).";
+    if (!esCorreoValido(datos.correo) || datos.correo.length > 120) campos.correo = "El correo electrónico no es válido.";
+    if (!esTelefonoValido(datos.telefono)) campos.telefono = "Escribí un teléfono válido (ej: 11 4444-5678).";
     if (datos.direccion.length < 3 || datos.direccion.length > 150) campos.direccion = "Escribí la dirección (hasta 150 caracteres).";
 }
 
@@ -41,7 +39,7 @@ export const validarUsuario = (req, res, next) => {
 
     revisarContacto(datos, campos);
 
-    if (!DNI.test(datos.dni)) campos.dni = "El DNI tiene que tener entre 7 y 8 números.";
+    if (!esDniValido(datos.dni)) campos.dni = "El DNI tiene que tener entre 7 y 8 números.";
     if (!ROLES.includes(datos.rol)) campos.rol = "Elegí el tipo de usuario.";
 
     // El curso es obligatorio solo para alumnos

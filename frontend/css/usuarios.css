@@ -539,82 +539,14 @@
     background: var(--superficie-sutil);
 }
 
-.chips-filtro {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 9px;
-}
-
-.chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 35px;
-    padding: 7px 12px;
-    border: 1px solid var(--borde-tarjeta);
-    border-radius: 8px;
-    background: transparent;
-    color: var(--texto-secundario);
-    font: inherit;
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background .2s ease, color .2s ease, border-color .2s ease;
-}
-
-.chip span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 5px;
-    border-radius: 6px;
-    background: var(--superficie-activa);
-    color: var(--texto-secundario);
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.chip:hover {
-    color: var(--texto-principal);
-    background: var(--fondo-tarjeta-hover);
-    border-color: var(--azul-400);
-}
-
-.chip.activo {
-    color: var(--texto-fuerte);
-    background: var(--azul-suave);
-    border-color: var(--azul-400);
-}
-
-.chip.activo span {
-    color: var(--blanco);
-    background: var(--azul-700);
-}
+/* Los chips (.chip) están en componentes.css */
 
 /* --- CAMPO DE CONTRASEÑA Y BOTÓN PARA MOSTRARLA --- */
 
 
 /* --- AYUDAS Y ERRORES DE VALIDACIÓN --- */
 
-.pista {
-    display: block;
-    color: var(--texto-mutado);
-    font-size: 11px;
-    line-height: 1.45;
-}
-
-.pista.error {
-    color: var(--rojo-500);
-}
-
-.pista.exito {
-    color: var(--verde-600);
-}
+/* .pista está en componentes.css */
 
 .campo-formulario-usuario input:disabled,
 .campo-formulario-usuario select:disabled,
@@ -958,4 +890,11 @@
         width: 100%;
     }
 
+}
+
+.historial-vacio {
+    margin: 0;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--texto-mutado);
 }

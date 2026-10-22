@@ -6,17 +6,7 @@
    ========================================================================== */
 
 import { ESTADOS, FILTROS, USUARIOS_POR_PAGINA } from "../config/config.js";
-
-// --- Helpers que comparten los dos archivos de validaciones ---
-export const limpiar = (valor) => String(valor ?? "").trim().replace(/\s+/g, " ");
-export const limpiarDni = (dni) => String(dni ?? "").replace(/[.\s]/g, "");   // "30.111.222" → "30111222"
-export const DNI = /^\d{7,8}$/;
-
-// Responde 400 con el primer error y todos los campos marcados: { error, campos }
-export const rechazar = (res, campos) => res.status(400).json({
-    error: Object.keys(campos).length === 1 ? Object.values(campos)[0] : "Revisá los campos marcados.",
-    campos
-});
+import { limpiar, limpiarDni, esDniValido, rechazar } from "./predicados.js";
 
 /* --- ID de la URL: /api/usuarios/:id --- */
 export const validarID = (req, res, next) => {
@@ -34,7 +24,7 @@ export const validarID = (req, res, next) => {
 export const validarDniParam = (req, res, next) => {
     req.dni = limpiarDni(req.params.dni);
 
-    if (!DNI.test(req.dni)) {
+    if (!esDniValido(req.dni)) {
         return res.status(400).json({ error: "El DNI tiene que tener entre 7 y 8 números." });
     }
 
@@ -46,7 +36,7 @@ export const validarLogin = (req, res, next) => {
     const dni = limpiarDni(req.body?.dni);
     const clave = String(req.body?.clave ?? "");
 
-    if (!DNI.test(dni) || !clave) {
+    if (!esDniValido(dni) || !clave) {
         return res.status(400).json({ error: "Completá el DNI (7 u 8 números) y la contraseña." });
     }
 

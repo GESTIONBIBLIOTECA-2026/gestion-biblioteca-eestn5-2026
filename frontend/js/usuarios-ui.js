@@ -7,10 +7,8 @@ import { escapar, fechaCorta, iniciales } from "./ui.js";
 
 // Condición del usuario → texto y clase CSS de la etiqueta
 const CONDICIONES = {
-    habilitado: ["Habilitado", "activo"],
-    atraso: ["Con atraso", "inactivo"],
-    suspendido: ["Suspendido", "inactivo"],
-    baja: ["De baja", "inactivo"]
+    habilitado: ["Habilitado", "activo"], atraso: ["Con atraso", "inactivo"],
+    suspendido: ["Suspendido", "inactivo"], baja: ["De baja", "inactivo"]
 };
 
 // Estado de un préstamo del historial → [texto, clase]
@@ -28,7 +26,6 @@ const crearItemHTML = (titulo, detalle, [texto, clase]) => `
         <div><strong>${escapar(titulo)}</strong><span>${detalle}</span></div>
         <em class="etiqueta-movimiento ${clase}">${texto}</em>
     </li>`;
-
 
 // Fila de la tabla de usuarios (la dirección se ve en la ficha)
 export function crearFilaUsuarioHTML({ id, nombre_completo, correo, dni, curso, telefono, rol, condicion }) {
@@ -50,7 +47,6 @@ export function crearFilaUsuarioHTML({ id, nombre_completo, correo, dni, curso, 
         </tr>`;
 }
 
-
 // Opciones del menú "Acciones" según la condición del usuario
 export function crearOpcionesAccionesHTML({ id, condicion }) {
     const opciones = [["Ver ficha", "ver"], ["Editar", "editar"]];
@@ -64,10 +60,16 @@ export function crearOpcionesAccionesHTML({ id, condicion }) {
     ).join("");
 }
 
+// Préstamo de la ficha → ítem: los activos muestran la fecha límite; el resto, cuándo volvió
+const crearPrestamoHTML = (p) => crearItemHTML(p.titulo, `${fechaCorta(p.fecha_entrega ?? p.fecha_pedido)} · ${p.fecha_devolucion_real
+    ? `devuelto el ${fechaCorta(p.fecha_devolucion_real)}` : `fecha límite ${fechaCorta(p.fecha_devolucion_estimada)}`}`, estadoPrestamo(p));
 
-// Ficha del usuario: datos + historial activo (entregas, devoluciones, atrasos y sanciones)
+const crearListaHTML = (titulo, items, crearHTML, vacio = "") => items.length
+    ? `<h3>${titulo}</h3><ul class="ficha-movimientos">${items.map(crearHTML).join("")}</ul>`
+    : vacio && `<h3>${titulo}</h3><p class="historial-vacio">${vacio}</p>`;
+
+// Ficha del usuario: datos + historial activo (libros en su poder, devoluciones, atrasos y sanciones)
 export function crearFichaHTML({ usuario, resumen, prestamos, sanciones }) {
-
     const datos = [
         ["Correo", usuario.correo], ["Teléfono", usuario.telefono],
         ["Curso", usuario.curso ?? "—"], ["Condición", CONDICIONES[usuario.condicion][0]],
@@ -75,15 +77,12 @@ export function crearFichaHTML({ usuario, resumen, prestamos, sanciones }) {
     ].map(([etiqueta, valor, clase = ""]) => `<div class="${clase}"><dt>${etiqueta}</dt><dd>${escapar(valor)}</dd></div>`);
 
     const numeros = { Entregas: resumen.entregas, Devoluciones: resumen.devoluciones, Atrasos: resumen.atrasos, "En curso": resumen.en_curso };
+    const activos = prestamos.filter((p) => ["prestado", "vencido"].includes(p.estado));   // HOF .filter
+    const anteriores = prestamos.filter((p) => !activos.includes(p));
 
-    const listaPrestamos = prestamos.map((p) => crearItemHTML(p.titulo,
-        `${fechaCorta(p.fecha_entrega ?? p.fecha_pedido)} · ${p.fecha_devolucion_real
-            ? `devuelto el ${fechaCorta(p.fecha_devolucion_real)}` : `vence el ${fechaCorta(p.fecha_devolucion_estimada)}`}`,
-        estadoPrestamo(p))).join("");
-
-    const listaSanciones = sanciones.map((s) => crearItemHTML(s.motivo || s.tipo,
+    const crearSancionHTML = (s) => crearItemHTML(s.motivo || s.tipo,
         `Desde ${fechaCorta(s.fecha_inicio)}${s.fecha_fin ? ` hasta ${fechaCorta(s.fecha_fin)}` : ""} · ${escapar(s.aplicada_por ?? "")}`,
-        s.en_vigor ? ["En vigor", "atraso"] : ["Levantada", "neutro"])).join("");
+        s.en_vigor ? ["En vigor", "atraso"] : ["Levantada", "neutro"]);
 
     return `
         <dl class="ficha-datos">${datos.join("")}</dl>
@@ -92,7 +91,8 @@ export function crearFichaHTML({ usuario, resumen, prestamos, sanciones }) {
             <div class="ficha-resumen">
                 ${Object.entries(numeros).map(([etiqueta, n]) => `<div><strong>${n}</strong><span>${etiqueta}</span></div>`).join("")}
             </div>
-            ${listaPrestamos ? `<ul class="ficha-movimientos">${listaPrestamos}</ul>` : `<p class="historial-vacio">Todavía no tiene préstamos registrados.</p>`}
-            ${listaSanciones ? `<h3>Sanciones</h3><ul class="ficha-movimientos">${listaSanciones}</ul>` : ""}
+            ${crearListaHTML("Libros en su poder", activos, crearPrestamoHTML, "No tiene libros prestados.")}
+            ${crearListaHTML("Devoluciones y reservas", anteriores, crearPrestamoHTML)}
+            ${crearListaHTML("Sanciones", sanciones, crearSancionHTML)}
         </section>`;
 }

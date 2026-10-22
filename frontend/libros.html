@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="verificando-sesion">
+<html lang="es" class="verificando-sesion" data-acceso="admin">
 
 <head>
     <meta charset="UTF-8">
@@ -10,10 +10,11 @@
     <!-- Tema claro / oscuro (va primero para que no parpadee) -->
     <script src="js/tema.js"></script>
 
-    <!-- Estilos generales -->
+    <!-- Estilos generales y componentes compartidos -->
     <link rel="stylesheet" href="css/estilo-general.css">
+    <link rel="stylesheet" href="css/componentes.css">
 
-    <!-- Estilos exclusivos de la gestión de libros -->
+    <!-- Estilos exclusivos de esta página -->
     <link rel="stylesheet" href="css/libros.css">
 
     <!-- Fuente Inter -->
@@ -176,179 +177,70 @@
 
             </header>
 
-            <main class="contenedor pagina-libros">
+            <main class="contenedor pagina">
 
-                <!-- TÍTULO -->
-                <section class="encabezado-pagina-libros">
+                <!-- TÍTULO Y ACCIÓN PRINCIPAL -->
+                <section class="encabezado-pagina">
                     <div>
                         <h1>Gestión de catálogo</h1>
                         <p>Administrá el alta, modificación, baja y stock de los libros de la biblioteca.</p>
                     </div>
+
+                    <button type="button" class="boton-principal" id="botonNuevoLibro">
+                        <i data-lucide="book-plus"></i>
+                        Nuevo libro
+                    </button>
                 </section>
 
-                <!-- RESUMEN -->
-                <section class="resumen-libros" aria-label="Resumen del catálogo">
-                    <article class="resumen-libro">
-                        <div class="resumen-libro-icono"><i data-lucide="book-marked"></i></div>
-                        <div class="resumen-libro-texto">
-                            <span>Títulos catalogados</span>
-                            <strong>128</strong>
-                        </div>
+                <!-- RESUMEN: GET /api/libros/resumen -->
+                <section class="resumen" aria-label="Resumen del catálogo">
+                    <article class="resumen-item">
+                        <div class="resumen-icono"><i data-lucide="book-marked"></i></div>
+                        <div><span>Títulos catalogados</span><strong id="resumenTitulos">—</strong></div>
                     </article>
-
-                    <article class="resumen-libro">
-                        <div class="resumen-libro-icono"><i data-lucide="layers"></i></div>
-                        <div class="resumen-libro-texto">
-                            <span>Ejemplares totales</span>
-                            <strong>342</strong>
-                        </div>
+                    <article class="resumen-item">
+                        <div class="resumen-icono"><i data-lucide="layers"></i></div>
+                        <div><span>Ejemplares totales</span><strong id="resumenEjemplares">—</strong></div>
                     </article>
-
-                    <article class="resumen-libro">
-                        <div class="resumen-libro-icono verde"><i data-lucide="badge-check"></i></div>
-                        <div class="resumen-libro-texto">
-                            <span>Disponibles ahora</span>
-                            <strong>276</strong>
-                        </div>
+                    <article class="resumen-item">
+                        <div class="resumen-icono verde"><i data-lucide="badge-check"></i></div>
+                        <div><span>Disponibles en el estante</span><strong id="resumenDisponibles">—</strong></div>
                     </article>
-
-                    <article class="resumen-libro">
-                        <div class="resumen-libro-icono bordo"><i data-lucide="ban"></i></div>
-                        <div class="resumen-libro-texto">
-                            <span>De baja (extraviados/dañados)</span>
-                            <strong>9</strong>
-                        </div>
+                    <article class="resumen-item">
+                        <div class="resumen-icono bordo"><i data-lucide="ban"></i></div>
+                        <div><span>Fuera de servicio (baja, reparación, extravío)</span><strong id="resumenFuera">—</strong></div>
                     </article>
                 </section>
 
-                <!-- REGISTRAR LIBRO NUEVO -->
-                <section class="panel-libros" aria-labelledby="tituloRegistrar">
+                <!-- CATÁLOGO Y BUSCADOR: GET /api/libros -->
+                <section class="panel" aria-labelledby="tituloCatalogo">
 
-                    <div class="panel-libros-cabecera">
-                        <div class="panel-libros-titulo">
-                            <div class="panel-libros-icono"><i data-lucide="book-plus"></i></div>
+                    <div class="panel-cabecera">
+                        <div class="panel-titulo">
+                            <div class="panel-icono"><i data-lucide="library"></i></div>
                             <div>
-                                <h2 id="tituloRegistrar">Registrar libro nuevo</h2>
-                                <p>Cargá un título nuevo al catálogo con sus datos y la cantidad de ejemplares ingresados.</p>
+                                <h2 id="tituloCatalogo">Catálogo de libros <span class="contador-panel" id="totalLibros">0</span></h2>
+                                <p>Buscá, modificá los datos, actualizá el stock o da de baja un título.</p>
                             </div>
                         </div>
                     </div>
 
-                    <form class="formulario-libro" novalidate>
-                        <div class="campos-formulario-libro">
-                            <div class="campo-libro">
-                                <label for="tituloLibro">Título del libro</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="book-open"></i>
-                                    <input type="text" id="tituloLibro" name="tituloLibro" placeholder="Ej: El hobbit">
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="autorLibro">Autor</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="pen-line"></i>
-                                    <input type="text" id="autorLibro" name="autorLibro" placeholder="Ej: J.R.R. Tolkien">
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="editorialLibro">Editorial</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="building-2"></i>
-                                    <input type="text" id="editorialLibro" name="editorialLibro" placeholder="Ej: Minotauro">
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="isbnLibro">ISBN</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="barcode"></i>
-                                    <input type="text" id="isbnLibro" name="isbnLibro" placeholder="Ej: 978-950-490-000-1">
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="categoriaLibro">Categoría</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="tag"></i>
-                                    <select id="categoriaLibro" name="categoriaLibro">
-                                        <option value="">Seleccionar categoría</option>
-                                        <option value="tecnica">Técnica</option>
-                                        <option value="literatura">Literatura</option>
-                                        <option value="ciencias">Ciencias</option>
-                                        <option value="historia">Historia</option>
-                                        <option value="informatica">Informática</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="anioLibro">Año de edición</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="calendar"></i>
-                                    <input type="text" id="anioLibro" name="anioLibro" placeholder="Ej: 2019">
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="cantidadEjemplares">Cantidad de ejemplares</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="layers"></i>
-                                    <input type="text" id="cantidadEjemplares" name="cantidadEjemplares" placeholder="Ej: 5">
-                                </div>
-                            </div>
-                            <div class="campo-libro">
-                                <label for="portadaLibro">Portada</label>
-                                <div class="entrada-con-icono">
-                                    <i data-lucide="image"></i>
-                                    <input type="text" id="portadaLibro" name="portadaLibro" placeholder="Seleccionar archivo...">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="acciones-formulario-libro">
-                            <button type="reset" class="boton-secundario"><i data-lucide="rotate-ccw"></i> Limpiar</button>
-                            <button type="button" class="boton-principal"><i data-lucide="save"></i> Guardar libro</button>
-                        </div>
-                    </form>
-
-                </section>
-
-                <!-- CATÁLOGO Y BUSCADOR -->
-                <section class="panel-libros" aria-labelledby="tituloCatalogo">
-
-                    <div class="panel-libros-cabecera">
-                        <div>
-                            <h2 id="tituloCatalogo">Catálogo de libros</h2>
-                            <p>Buscá, modificá el stock o da de baja un título existente.</p>
-                        </div>
-                    </div>
-
-                    <!-- BARRA DE FILTROS -->
-                    <form class="barra-filtros-libros">
-                        <label class="campo-busqueda-libros">
-                            <i data-lucide="search"></i>
-                            <input type="search" placeholder="Buscar por título o autor..." aria-label="Buscar por título o autor">
-                        </label>
-
-                        <select class="filtro-libros" aria-label="Filtrar por categoría">
-                                    <option value="">Categoría</option>
-                                    <option value="tecnica">Técnica</option>
-                                    <option value="literatura">Literatura</option>
-                                    <option value="ciencias">Ciencias</option>
-                                    <option value="historia">Historia</option>
-                                    <option value="informatica">Informática</option>
+                    <form id="formularioFiltros" class="barra-filtros">
+                        <input type="search" name="texto" class="filtro ancho" placeholder="Buscar por título o autor..." aria-label="Buscar por título o autor">
+                        <select name="categoria" class="filtro" aria-label="Filtrar por categoría" data-categorias>
+                            <option value="0">Todas las categorías</option>
                         </select>
-
-                        <select class="filtro-libros" aria-label="Filtrar por disponibilidad">
-                                    <option value="">Disponibilidad</option>
-                                    <option value="disponible">Disponible</option>
-                                    <option value="prestado">Prestado</option>
-                                    <option value="baja">De baja</option>
+                        <select name="disponibilidad" class="filtro" aria-label="Filtrar por disponibilidad">
+                            <option value="">Toda la disponibilidad</option>
+                            <option value="disponible">Con ejemplares libres</option>
+                            <option value="agotado">Agotados</option>
                         </select>
-
                         <button type="submit" class="boton-principal"><i data-lucide="search"></i> Buscar</button>
                         <button type="reset" class="boton-secundario"><i data-lucide="rotate-ccw"></i> Limpiar</button>
                     </form>
 
-                    <!-- TABLA -->
-                    <div class="tabla-libros-contenedor">
-                        <table class="tabla-libros">
+                    <div class="tabla-contenedor">
+                        <table class="tabla">
                             <thead>
                                 <tr>
                                     <th scope="col">Libro</th>
@@ -360,134 +252,7 @@
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                                <!-- LIBRO 1 -->
-                                <tr>
-                                    <td>
-                                        <div class="libro-identidad">
-                                            <div class="libro-portada"><i data-lucide="book"></i></div>
-                                            <div>
-                                                <strong>El hobbit</strong>
-                                                <small>J.R.R. Tolkien</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>978-950-490-000-1</td>
-                                    <td>Literatura</td>
-                                    <td>2012</td>
-                                    <td>3 / 5</td>
-                                    <td><span class="estado-libro disponible">Disponible</span></td>
-                                    <td>
-                                        <div class="acciones-libro">
-                                            <button type="button" class="boton-icono" title="Editar libro" aria-label="Editar libro"><i data-lucide="pencil"></i></button>
-                                            <button type="button" class="boton-icono" title="Actualizar stock" aria-label="Actualizar stock"><i data-lucide="layers"></i></button>
-                                            <button type="button" class="boton-icono peligro" title="Dar de baja" aria-label="Dar de baja"><i data-lucide="trash-2"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- LIBRO 2 -->
-                                <tr>
-                                    <td>
-                                        <div class="libro-identidad">
-                                            <div class="libro-portada"><i data-lucide="book"></i></div>
-                                            <div>
-                                                <strong>1984</strong>
-                                                <small>George Orwell</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>978-950-490-000-2</td>
-                                    <td>Literatura</td>
-                                    <td>1949</td>
-                                    <td>0 / 2</td>
-                                    <td><span class="estado-libro prestado">Prestado</span></td>
-                                    <td>
-                                        <div class="acciones-libro">
-                                            <button type="button" class="boton-icono" title="Editar libro" aria-label="Editar libro"><i data-lucide="pencil"></i></button>
-                                            <button type="button" class="boton-icono" title="Actualizar stock" aria-label="Actualizar stock"><i data-lucide="layers"></i></button>
-                                            <button type="button" class="boton-icono peligro" title="Dar de baja" aria-label="Dar de baja"><i data-lucide="trash-2"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- LIBRO 3 -->
-                                <tr>
-                                    <td>
-                                        <div class="libro-identidad">
-                                            <div class="libro-portada"><i data-lucide="book"></i></div>
-                                            <div>
-                                                <strong>Física I</strong>
-                                                <small>Sears &amp; Zemansky</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>978-950-490-000-3</td>
-                                    <td>Técnica</td>
-                                    <td>2018</td>
-                                    <td>2 / 4</td>
-                                    <td><span class="estado-libro disponible">Disponible</span></td>
-                                    <td>
-                                        <div class="acciones-libro">
-                                            <button type="button" class="boton-icono" title="Editar libro" aria-label="Editar libro"><i data-lucide="pencil"></i></button>
-                                            <button type="button" class="boton-icono" title="Actualizar stock" aria-label="Actualizar stock"><i data-lucide="layers"></i></button>
-                                            <button type="button" class="boton-icono peligro" title="Dar de baja" aria-label="Dar de baja"><i data-lucide="trash-2"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- LIBRO 4 -->
-                                <tr>
-                                    <td>
-                                        <div class="libro-identidad">
-                                            <div class="libro-portada"><i data-lucide="book"></i></div>
-                                            <div>
-                                                <strong>Cien años de soledad</strong>
-                                                <small>Gabriel García Márquez</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>978-950-490-000-4</td>
-                                    <td>Literatura</td>
-                                    <td>1967</td>
-                                    <td>0 / 1</td>
-                                    <td><span class="estado-libro baja">De baja</span></td>
-                                    <td>
-                                        <div class="acciones-libro">
-                                            <button type="button" class="boton-icono" title="Editar libro" aria-label="Editar libro"><i data-lucide="pencil"></i></button>
-                                            <button type="button" class="boton-icono" title="Actualizar stock" aria-label="Actualizar stock"><i data-lucide="layers"></i></button>
-                                            <button type="button" class="boton-icono peligro" title="Dar de baja" aria-label="Dar de baja"><i data-lucide="trash-2"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                <!-- LIBRO 5 -->
-                                <tr>
-                                    <td>
-                                        <div class="libro-identidad">
-                                            <div class="libro-portada"><i data-lucide="book"></i></div>
-                                            <div>
-                                                <strong>Dune</strong>
-                                                <small>Frank Herbert</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>978-950-490-000-5</td>
-                                    <td>Ciencias</td>
-                                    <td>1965</td>
-                                    <td>1 / 3</td>
-                                    <td><span class="estado-libro disponible">Disponible</span></td>
-                                    <td>
-                                        <div class="acciones-libro">
-                                            <button type="button" class="boton-icono" title="Editar libro" aria-label="Editar libro"><i data-lucide="pencil"></i></button>
-                                            <button type="button" class="boton-icono" title="Actualizar stock" aria-label="Actualizar stock"><i data-lucide="layers"></i></button>
-                                            <button type="button" class="boton-icono peligro" title="Dar de baja" aria-label="Dar de baja"><i data-lucide="trash-2"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                            </tbody>
+                            <tbody id="cuerpoLibros"></tbody>
                         </table>
                     </div>
 
@@ -496,9 +261,134 @@
         </div>
     </div>
 
+    <!-- =========================================================
+         ALTA Y MODIFICACIÓN DE UN LIBRO (POST / PUT /api/libros)
+         ========================================================= -->
+    <dialog id="dialogoLibro" class="dialogo ancho" aria-labelledby="tituloDialogoLibro">
+        <form id="formularioLibro" novalidate>
 
-    <!-- Sesión y encabezado -->
+            <div class="dialogo-cabecera">
+                <div>
+                    <h2 id="tituloDialogoLibro">Registrar libro nuevo</h2>
+                    <p>Los campos con * son obligatorios. Si son varios autores, separalos con coma.</p>
+                </div>
+                <button type="button" class="boton-icono" data-cerrar-dialogo aria-label="Cerrar"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="formulario">
+                <div class="campos">
+                    <div class="campo doble">
+                        <label for="campoTitulo">Título *</label>
+                        <input id="campoTitulo" name="titulo" type="text" maxlength="200" placeholder="Ej.: El hobbit">
+                        <small class="pista" data-pista="titulo"></small>
+                    </div>
+                    <div class="campo doble">
+                        <label for="campoAutores">Autor/es *</label>
+                        <input id="campoAutores" name="autores" type="text" maxlength="250" placeholder="Ej.: J. R. R. Tolkien">
+                        <small class="pista" data-pista="autores"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="campoEditorial">Editorial</label>
+                        <input id="campoEditorial" name="editorial" type="text" maxlength="100" placeholder="Ej.: Minotauro">
+                        <small class="pista" data-pista="editorial"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="campoIsbn">ISBN</label>
+                        <input id="campoIsbn" name="isbn" type="text" maxlength="20" placeholder="978-950-490-000-1">
+                        <small class="pista" data-pista="isbn"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="campoCategoria">Categoría *</label>
+                        <select id="campoCategoria" name="categoria_id" data-categorias>
+                            <option value="">Elegí una categoría</option>
+                        </select>
+                        <small class="pista" data-pista="categoria_id"></small>
+                    </div>
+                    <div class="campo">
+                        <label for="campoAnio">Año de edición</label>
+                        <input id="campoAnio" name="anio" type="number" min="1450" max="2100" placeholder="Ej.: 2019">
+                        <small class="pista" data-pista="anio"></small>
+                    </div>
+                    <div class="campo" id="grupoCantidad">
+                        <label for="campoCantidad">Ejemplares que ingresan *</label>
+                        <input id="campoCantidad" name="cantidad" type="number" min="1" max="50" value="1">
+                        <small class="pista" data-pista="cantidad"></small>
+                    </div>
+                </div>
+
+                <div class="acciones-formulario">
+                    <button type="button" class="boton-secundario" data-cerrar-dialogo>Cancelar</button>
+                    <button type="submit" class="boton-principal" id="botonGuardarLibro">Guardar libro</button>
+                </div>
+            </div>
+
+        </form>
+    </dialog>
+
+
+    <!-- =========================================================
+         ACTUALIZAR STOCK (PATCH /api/libros/:id/stock)
+         ========================================================= -->
+    <dialog id="dialogoStock" class="dialogo" aria-labelledby="tituloStock">
+        <form id="formularioStock" novalidate>
+
+            <div class="dialogo-cabecera">
+                <div>
+                    <h2 id="tituloStock">Actualizar stock</h2>
+                    <p id="textoStock"></p>
+                </div>
+                <button type="button" class="boton-icono" data-cerrar-dialogo aria-label="Cerrar"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="formulario">
+                <div class="campo">
+                    <label for="campoCambio">Ejemplares a sumar o sacar *</label>
+                    <input id="campoCambio" name="cambio" type="number" min="-50" max="50" placeholder="Ej.: 3 (compra o donación) o -1 (extraviado)">
+                    <small class="pista">Positivo suma ejemplares nuevos; negativo da de baja ejemplares que están en el estante.</small>
+                    <small class="pista" data-pista="cambio"></small>
+                </div>
+
+                <div class="acciones-formulario">
+                    <button type="button" class="boton-secundario" data-cerrar-dialogo>Cancelar</button>
+                    <button type="submit" class="boton-principal">Guardar stock</button>
+                </div>
+            </div>
+
+        </form>
+    </dialog>
+
+
+    <!-- =========================================================
+         CONFIRMAR BAJA DEL TÍTULO (DELETE /api/libros/:id)
+         ========================================================= -->
+    <dialog id="dialogoBaja" class="dialogo" aria-labelledby="tituloBaja">
+        <form id="formularioBaja" novalidate>
+
+            <div class="dialogo-cabecera">
+                <div>
+                    <h2 id="tituloBaja">Dar de baja</h2>
+                    <p>Es una baja lógica: el libro deja de aparecer en el catálogo, pero su historial de préstamos se conserva.</p>
+                </div>
+                <button type="button" class="boton-icono" data-cerrar-dialogo aria-label="Cerrar"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="formulario">
+                <div class="acciones-formulario">
+                    <button type="button" class="boton-secundario" data-cerrar-dialogo>Cancelar</button>
+                    <button type="submit" class="boton-peligro">Dar de baja</button>
+                </div>
+            </div>
+
+        </form>
+    </dialog>
+
+    <!-- AVISO FLOTANTE -->
+    <div id="avisoFlotante" class="aviso-flotante" role="status" aria-live="polite" hidden></div>
+
+
+    <!-- Sesión y encabezado + lógica de la página -->
     <script type="module" src="js/sesion.js"></script>
+    <script type="module" src="js/libros.js"></script>
 
     <script>
         window.lucide?.createIcons();

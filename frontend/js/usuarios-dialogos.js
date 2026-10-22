@@ -92,7 +92,3 @@ document.querySelector("#botonEditarFicha").addEventListener("click", () => {
     dialogoFicha.close();
     editarUsuario(idFicha);
 });
-
-document.querySelectorAll("[data-cerrar-dialogo]").forEach((boton) => {
-    boton.addEventListener("click", () => boton.closest("dialog").close());
-});

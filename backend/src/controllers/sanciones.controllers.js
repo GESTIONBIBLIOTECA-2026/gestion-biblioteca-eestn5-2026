@@ -5,7 +5,7 @@
 
 import { getUsuarioPorId } from "../models/usuario.models.js";
 import { getHistorial, suspenderUsuario, habilitarUsuario, darDeBajaUsuario } from "../models/sancion.models.js";
-import { error500 } from "./usuarios.controllers.js";
+import { error500 } from "./respuestas.js";
 
 
 // Usuario + historial activo + resumen (lo comparten la ficha del admin y el inicio del alumno/docente)

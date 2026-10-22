@@ -1,0 +1,559 @@
+/* =========================================================
+   COMPONENTES COMPARTIDOS
+   Piezas que usan varias páginas del panel: título de página,
+   tarjetas de resumen, paneles, campos, tablas, etiquetas de
+   estado, chips de filtro y ventanas (dialog).
+   Usa las variables de estilo-general.css (tema claro / oscuro).
+========================================================= */
+
+.pagina {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+
+/* --- 1. Título de la página + acción principal --- */
+
+.encabezado-pagina {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.encabezado-pagina h1 {
+    color: var(--texto-principal);
+    font-size: clamp(25px, 3vw, 32px);
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+
+.encabezado-pagina p {
+    color: var(--texto-secundario);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* --- 2. Tarjetas de resumen (números rápidos) --- */
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.resumen-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    padding: 19px;
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.resumen-icono {
+    display: grid;
+    place-items: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    color: var(--azul-500);
+    background: var(--azul-suave);
+}
+
+.resumen-icono.verde { color: var(--verde-600); background: var(--verde-fondo); }
+.resumen-icono.bordo { color: var(--bordo-texto); background: var(--bordo-fondo); }
+.resumen-icono.rojo  { color: var(--rojo-500); background: var(--rojo-fondo); }
+
+.resumen-icono svg {
+    width: 21px;
+    height: 21px;
+}
+
+.resumen-item span {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--texto-secundario);
+    font-size: 12px;
+}
+
+.resumen-item strong {
+    display: block;
+    color: var(--texto-principal);
+    font-size: 24px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* --- 3. Paneles --- */
+
+.panel {
+    min-width: 0;
+    overflow: hidden;
+    background: var(--fondo-tarjeta);
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 12px;
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.panel-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--borde-tarjeta);
+}
+
+.panel-titulo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.panel-icono {
+    display: grid;
+    place-items: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    color: var(--azul-500);
+    background: var(--azul-suave);
+}
+
+.panel-icono svg {
+    width: 20px;
+    height: 20px;
+}
+
+.panel-cabecera h2 {
+    color: var(--texto-principal);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.panel-cabecera p {
+    margin-top: 5px;
+    color: var(--texto-secundario);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.contador-panel {
+    display: inline-grid;
+    place-items: center;
+    min-width: 24px;
+    height: 22px;
+    margin-left: 8px;
+    padding: 0 7px;
+    border-radius: 6px;
+    background: var(--superficie-activa);
+    color: var(--texto-secundario);
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+.panel-vacio {
+    padding: 28px 24px;
+    color: var(--texto-mutado);
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+}
+
+
+/* --- 4. Campos de formulario y filtros --- */
+
+.formulario {
+    padding: 24px;
+}
+
+.campos {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 17px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.campo.doble    { grid-column: span 2; }
+.campo.completo { grid-column: 1 / -1; }
+
+.campo label {
+    color: var(--texto-secundario);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.campo input,
+.campo select,
+.campo textarea,
+.filtro {
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 8px;
+    outline: none;
+    background: var(--fondo-campo);
+    color: var(--texto-principal);
+    font: inherit;
+    font-size: 13px;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.campo textarea {
+    height: auto;
+    padding: 10px 12px;
+    resize: vertical;
+}
+
+.campo input::placeholder,
+.campo textarea::placeholder,
+.filtro::placeholder {
+    color: var(--texto-mutado);
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus,
+.filtro:focus {
+    border-color: var(--azul-400);
+    box-shadow: 0 0 0 3px var(--azul-suave);
+}
+
+.campo input:read-only {
+    color: var(--texto-secundario);
+    background: var(--fondo-hundido);
+}
+
+.acciones-formulario {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 19px;
+    border-top: 1px solid var(--borde-tarjeta);
+}
+
+/* Ayudas y errores debajo de cada campo (los marca js/ui.js → marcarCampos) */
+.pista {
+    display: block;
+    color: var(--texto-mutado);
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.pista.error { color: var(--rojo-500); }
+.pista.exito { color: var(--verde-600); }
+
+/* Barra de búsqueda: el primer campo se estira */
+.barra-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--borde-tarjeta);
+}
+
+.barra-filtros > .filtro { flex: 1 1 160px; }
+.barra-filtros > .filtro.ancho { flex: 3 1 240px; }
+.barra-filtros > button { min-height: 42px; white-space: nowrap; }
+
+.casilla {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--texto-secundario);
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.casilla input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--azul-700);
+}
+
+
+/* --- 5. Chips de filtro rápido --- */
+
+.chips-filtro {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 35px;
+    padding: 7px 12px;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--texto-secundario);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.chip span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 6px;
+    background: var(--superficie-activa);
+    color: var(--texto-secundario);
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.chip:hover {
+    color: var(--texto-principal);
+    background: var(--fondo-tarjeta-hover);
+    border-color: var(--azul-400);
+}
+
+.chip.activo {
+    color: var(--texto-fuerte);
+    background: var(--azul-suave);
+    border-color: var(--azul-400);
+}
+
+.chip.activo span {
+    color: var(--blanco);
+    background: var(--azul-700);
+}
+
+
+/* --- 6. Tablas --- */
+
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tabla th {
+    padding: 13px 18px;
+    background: var(--fondo-hundido);
+    color: var(--texto-mutado);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .45px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.tabla td {
+    padding: 14px 18px;
+    border-top: 1px solid var(--borde-tarjeta);
+    color: var(--texto-secundario);
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.tabla tbody tr:hover {
+    background: var(--superficie-sutil);
+}
+
+.tabla td strong {
+    display: block;
+    color: var(--texto-principal);
+    font-weight: 600;
+}
+
+.tabla td small {
+    display: block;
+    margin-top: 3px;
+    color: var(--texto-mutado);
+    font-size: 11px;
+}
+
+.celda-mensaje {
+    padding: 24px;
+    color: var(--texto-mutado);
+    font-style: italic;
+    text-align: center;
+}
+
+.acciones-fila {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.acciones-fila .boton-icono {
+    width: 32px;
+    height: 32px;
+}
+
+.acciones-fila .boton-principal,
+.acciones-fila .boton-secundario {
+    padding: 7px 11px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.boton-icono.peligro {
+    color: var(--rojo-500);
+}
+
+.boton-icono.peligro:hover {
+    background: var(--bordo-fondo);
+    border-color: var(--bordo-borde);
+    color: var(--rojo-500);
+}
+
+
+/* --- 7. Etiquetas de estado (texto + color: nunca solo color) --- */
+
+.etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.etiqueta::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.etiqueta.verde  { color: var(--verde-600); background: var(--verde-fondo); }
+.etiqueta.azul   { color: var(--azul-500); background: var(--azul-suave); }
+.etiqueta.rojo   { color: var(--rojo-500); background: var(--rojo-fondo); }
+.etiqueta.ambar  { color: #f59e0b; background: rgba(245, 158, 11, .12); }
+.etiqueta.gris   { color: var(--texto-secundario); background: var(--superficie-activa); }
+
+.modo-claro .etiqueta.ambar { color: #b45309; background: #fef3c7; }
+
+
+/* --- 8. Ventanas (dialog) --- */
+
+.dialogo {
+    width: min(92vw, 560px);
+    max-width: none;
+    max-height: 90vh;
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--borde-tarjeta);
+    border-radius: 14px;
+    background: var(--fondo-sidebar);
+    color: var(--texto-principal);
+    box-shadow: var(--sombra-modal);
+}
+
+.dialogo.ancho {
+    width: min(92vw, 720px);
+}
+
+.dialogo::backdrop {
+    background: var(--overlay);
+    backdrop-filter: blur(5px);
+}
+
+.dialogo-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--borde-tarjeta);
+}
+
+.dialogo-cabecera > div {
+    flex: 1;
+    min-width: 0;
+}
+
+.dialogo-cabecera h2 {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.dialogo-cabecera p {
+    margin-top: 5px;
+    color: var(--texto-secundario);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.dialogo .campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.dialogo .campo.doble {
+    grid-column: 1 / -1;
+}
+
+
+/* --- 9. Responsive --- */
+
+@media (max-width: 1100px) {
+    .resumen,
+    .campos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .resumen,
+    .campos,
+    .dialogo .campos {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .campo.doble { grid-column: auto; }
+
+    .panel-cabecera,
+    .formulario,
+    .barra-filtros {
+        padding: 16px 18px;
+    }
+
+    .barra-filtros > button { flex: 1 1 auto; }
+}

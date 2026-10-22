@@ -1,7 +1,7 @@
 /* ==========================================================================
    MÓDULO: navegacion.js - Menú y acceso según el rol
    - Administrador ...... ve el panel completo (el menú que ya trae cada página)
-   - Alumno / docente ... menú reducido: Inicio · Libros · Configuración
+   - Alumno / docente ... menú reducido: Inicio · Catálogo · Configuración
    Cada página dice quién puede verla en <html data-acceso="...">:
      "admin" = solo administrador · "usuario" = solo alumno/docente · sin atributo = todos
    ========================================================================== */
@@ -12,7 +12,7 @@ export const inicioSegunRol = (rol) => (rol === "administrador" ? "index.html" :
 // [página, ícono Lucide, texto] del menú de alumnos y docentes
 const MENU_USUARIO = [
     ["inicio-usuario.html", "house", "Inicio"],
-    ["libros.html", "book", "Libros"],
+    ["catalogo.html", "book", "Catálogo"],
     ["configuracion.html", "settings", "Configuración"]
 ];
 

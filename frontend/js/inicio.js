@@ -1,19 +1,42 @@
 /* ==========================================================================
-   MÓDULO: inicio.js - Panel de inicio (index.html)
-   - Contador de "Atrasos pendientes" (usuarios morosos)
-   - Tabla "Últimos préstamos" (solo lectura)
+   MÓDULO: inicio.js - Panel de inicio del administrador (index.html)
+   - Métricas reales ........ GET /api/dashboard  (libros, préstamos activos, morosos)
+   - Últimos préstamos ...... GET /api/prestamos?limite=5  (solo lectura)
    ========================================================================== */
 
-import { obtenerUltimosPrestamos, listarUsuarios } from "./api.js";
+import { obtenerMetricas, obtenerUltimosPrestamos } from "./api.js";
 import { crearFilaPrestamoHTML, crearFilaMensajeHTML } from "./ui.js";
 
 
 // 🎯 1. Nodos del DOM
 const cuerpoPrestamos = document.querySelector("#cuerpoPrestamos");
-const contadorAtrasos = document.querySelector("#contador-atrasos");
+
+// Cada contador del panel ↔ la métrica que devuelve el backend
+const CONTADORES = {
+    "#total-libros": "libros_total",
+    "#total-prestamos": "prestamos_activos",
+    "#total-morosos": "alumnos_morosos"
+};
 
 
-// 🌐 2. Carga de datos (Loading → Éxito → Error)
+// 🎨 2. Funciones de UI
+function mostrarMetricas(metricas) {
+    Object.entries(CONTADORES).forEach(([selector, clave]) => {
+        document.querySelector(selector).textContent = metricas ? metricas[clave].toLocaleString("es-AR") : "--";
+    });
+}
+
+
+// 🌐 3. Carga de datos (Loading → Éxito → Error)
+async function cargarMetricas() {
+    try {
+        const { payload } = await obtenerMetricas();
+        mostrarMetricas(payload);
+    } catch (error) {
+        mostrarMetricas(null);
+    }
+}
+
 async function cargarPrestamos() {
     cuerpoPrestamos.innerHTML = crearFilaMensajeHTML("Cargando préstamos...", 5);
 
@@ -29,16 +52,6 @@ async function cargarPrestamos() {
     }
 }
 
-// El listado de usuarios ya trae cuántos hay en cada filtro: uno de ellos es "morosos"
-async function cargarAtrasos() {
-    try {
-        const { payload } = await listarUsuarios({ filtro: "morosos" });
-        contadorAtrasos.textContent = payload.contadores.morosos;
-    } catch (error) {
-        contadorAtrasos.textContent = "--";
-    }
-}
 
-
-// 🚀 3. Inicialización (las dos consultas viajan en paralelo)
-Promise.all([cargarAtrasos(), cargarPrestamos()]);
+// 🚀 4. Inicialización (las dos consultas viajan en paralelo)
+Promise.all([cargarMetricas(), cargarPrestamos()]);
