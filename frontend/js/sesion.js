@@ -1,7 +1,8 @@
 /* ==========================================================================
-   MÓDULO: sesion.js - Protege las páginas del panel y maneja el encabezado
+   MÓDULO: sesion.js - Protege las páginas y maneja el encabezado
    - Sin sesión válida → login.html
-   - Nombre y rol del administrador, fecha y hora
+   - Página de otro rol → al inicio que le corresponde (js/navegacion.js)
+   - Nombre y rol de quien inició sesión, fecha y hora
    - Menú del perfil (Ajustes, Apariencia y Cerrar sesión)
    Se incluye en cada página protegida: <script type="module" src="js/sesion.js">
    ========================================================================== */
@@ -9,6 +10,7 @@
 import { obtenerSesionActual } from "./api.js";
 import { obtenerToken, borrarSesion } from "./storage.js";
 import { fechaDeHoy } from "./ui.js";
+import { adaptarAlRol } from "./navegacion.js";
 
 
 // 🎯 1. Nodos del DOM
@@ -44,6 +46,8 @@ async function verificarSesion() {
 
     try {
         const { payload } = await obtenerSesionActual();
+        if (!adaptarAlRol(payload.rol)) return;   // página de otro rol: ya se está yendo
+
         mostrarNombre(payload.nombre, payload.rol);
 
         // Recién ahora se muestra la página

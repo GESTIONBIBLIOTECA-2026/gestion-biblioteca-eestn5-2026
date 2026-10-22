@@ -1,17 +1,21 @@
 /* ==========================================================================
-   perfil.routes.js - Rutas de "Mi perfil"  (/api/perfil)
+   perfil.routes.js - Rutas de "Mi perfil" y "Mi cuenta"  (/api/perfil)
+   Las usan TODOS los roles: alumno, docente y administrador.
+   Siempre trabajan con el usuario del token, nunca con un ID que mande el navegador.
    ========================================================================== */
 
 import express from "express";
 import { getMiPerfil, putMiPerfil, putMiClave } from "../controllers/perfil.controllers.js";
-import { verificarAdmin } from "../middlewares/auth.middleware.js";
+import { getMiHistorial } from "../controllers/sanciones.controllers.js";
+import { verificarSesion } from "../middlewares/auth.middleware.js";
 import { validarPerfil, validarClave } from "../middlewares/formularios.middleware.js";
 
 const router = express.Router();
 
-router.use(verificarAdmin);                           // todas piden sesión de administrador
+router.use(verificarSesion);                          // todas piden sesión (cualquier rol)
 
 router.get("/", getMiPerfil);                         // GET /api/perfil
+router.get("/historial", getMiHistorial);             // GET /api/perfil/historial  (inicio del alumno/docente)
 router.put("/", validarPerfil, putMiPerfil);          // PUT /api/perfil
 router.put("/clave", validarClave, putMiClave);       // PUT /api/perfil/clave
 

@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getUsuarioLogin } from "../models/usuario.models.js";
 import { JWT_SECRET, JWT_DURACION } from "../config/config.js";
+import { puedeEntrar } from "../middlewares/auth.middleware.js";
 
 // Hash de relleno: si el DNI no existe igual se compara una clave (así no se puede adivinar qué DNI existe)
 const HASH_FALSO = bcrypt.hashSync("clave-inexistente", 10);
@@ -24,11 +25,9 @@ export const postLogin = async (req, res) => {
             return res.status(401).json({ error: "DNI o contraseña incorrectos." });
         }
 
-        // 2. Reglas de negocio: solo administradores habilitados
-        if (usuario.rol !== "administrador") {
-            return res.status(403).json({ error: "Tu usuario no tiene permiso para entrar al panel." });
-        }
-        if (usuario.estado !== "habilitado") {
+        // 2. Reglas de negocio: entran alumnos, docentes y administradores.
+        //    De baja no entra nadie; un alumno/docente suspendido sí (ve su estado en el inicio).
+        if (!puedeEntrar(usuario)) {
             return res.status(403).json({ error: `Tu usuario está ${usuario.estado === "baja" ? "dado de baja" : "suspendido"}.` });
         }
 
@@ -45,5 +44,5 @@ export const postLogin = async (req, res) => {
 };
 
 
-/* --- GET /api/auth/perfil   Quién está logueado (lo carga el middleware) --- */
+/* --- GET /api/auth/perfil   Quién está logueado: { id, nombre, rol } (lo carga el middleware) --- */
 export const getPerfil = (req, res) => res.json({ payload: req.usuario });

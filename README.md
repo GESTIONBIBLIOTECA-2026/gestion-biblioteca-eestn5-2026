@@ -18,9 +18,10 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 ```text
 .
 ├── frontend/
-│   ├── login.html, index.html, usuarios.html, configuracion.html
+│   ├── login.html, index.html, usuarios.html, configuracion.html  (admin)
+│   ├── inicio-usuario.html       inicio de alumnos y docentes
 │   ├── css/                      estilo-general.css (temas, menú lateral, encabezado, botones),
-│   │                             index.css, login.css, usuarios.css, configuracion.css
+│   │                             index.css, login.css, usuarios.css, configuracion.css, inicio-usuario.css
 │   └── js/                       ES Modules (import / export), cada archivo ~100 líneas o menos
 │       ├── config.js             URL del backend
 │       ├── api.js                fetch al backend (async/await, response.ok, AbortSignal)
@@ -28,8 +29,12 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 │       ├── ui.js                 fechas, aviso flotante, errores de formularios y plantillas generales
 │       ├── tema.js               modo claro / oscuro con classList (script común en el <head>)
 │       ├── sesion.js             protege las páginas + encabezado (nombre, reloj, menú del perfil)
+│       ├── navegacion.js         menú y acceso según el rol (admin / alumno-docente)
 │       ├── login.js              login.html
 │       ├── inicio.js             index.html: atrasos pendientes y últimos préstamos
+│       ├── inicio-usuario.js     inicio-usuario.html: préstamos, devoluciones pendientes e historial
+│       ├── inicio-usuario-ui.js  plantillas: plazos, números de la cuenta, préstamos e historial
+│       ├── cuenta-usuario.js     credencial digital con QR, aviso de la cuenta y sanciones
 │       ├── usuarios.js           usuarios.html: búsqueda, chips y paginación
 │       ├── usuarios-ui.js        plantillas HTML de usuarios (fila, opciones, ficha)
 │       ├── usuarios-dialogos.js  alta / modificación y ficha con historial activo
@@ -56,13 +61,16 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 
 ### Endpoints
 
+> `/api/auth/perfil` y `/api/perfil/*` aceptan cualquier rol (`verificarSesion`). El resto es solo para el administrador (`verificarAdmin` → 403 si entra un alumno o docente). Un alumno/docente suspendido puede iniciar sesión para ver su estado; de baja no entra nadie.
+
 | Método | Ruta | Qué hace |
 |---|---|---|
-| `POST` | `/api/auth/login` | Body `{ "dni", "clave" }` → `{ payload: { token, usuario } }` |
+| `POST` | `/api/auth/login` | Body `{ "dni", "clave" }` → `{ payload: { token, usuario } }`. Entran los 3 roles: el admin va a `index.html`, alumnos y docentes a `inicio-usuario.html` |
 | `GET` | `/api/auth/perfil` | Quién está logueado → `{ payload: { id, nombre, rol } }` |
 | `GET` | `/api/perfil` | Mis datos completos (pantalla Configuración) |
 | `PUT` | `/api/perfil` | Body `{ nombre_completo, correo, telefono, direccion }` (el DNI y el rol no se cambian desde acá) |
 | `PUT` | `/api/perfil/clave` | Body `{ clave_actual, clave_nueva, confirmacion }` |
+| `GET` | `/api/perfil/historial` | Mi cuenta (alumno/docente): mis datos, préstamos con `dias_restantes`, reservas y sanciones |
 | `GET` | `/api/prestamos?limite=5` | Últimos préstamos (en curso, atrasados y devueltos) |
 | `GET` | `/api/libros/:id` | Título, autores y stock del libro |
 | **Grupo 5** | | |

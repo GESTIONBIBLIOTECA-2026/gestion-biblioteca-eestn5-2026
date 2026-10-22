@@ -4,6 +4,7 @@
 
 import { iniciarSesion, obtenerSesionActual } from "./api.js";
 import { guardarSesion, obtenerToken } from "./storage.js";
+import { inicioSegunRol } from "./navegacion.js";
 
 
 // 🎯 1. Nodos del DOM
@@ -23,13 +24,13 @@ function mostrarError(mensaje) {
 }
 
 
-// 🌐 3. Si ya hay una sesión válida, va directo al panel
+// 🌐 3. Si ya hay una sesión válida, va directo a su inicio (admin → panel, alumno/docente → su cuenta)
 async function revisarSesion() {
     if (!obtenerToken()) return;
 
     try {
-        await obtenerSesionActual();
-        window.location.replace("index.html");
+        const { payload } = await obtenerSesionActual();
+        window.location.replace(inicioSegunRol(payload.rol));
     } catch (error) {
         // Token vencido o servidor apagado: se queda en el login
     }
@@ -60,7 +61,7 @@ formulario.addEventListener("submit", async (evento) => {
         // POST /api/auth/login → { token, usuario }
         const { payload } = await iniciarSesion(campoDni.value.trim(), campoClave.value);
         guardarSesion(payload);
-        window.location.href = "index.html";
+        window.location.href = inicioSegunRol(payload.usuario.rol);
 
     } catch (error) {
         // Sin status = error de red (el backend está apagado)
