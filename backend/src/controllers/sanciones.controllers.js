@@ -8,25 +8,43 @@ import { getHistorial, suspenderUsuario, habilitarUsuario, darDeBajaUsuario } fr
 import { error500 } from "./usuarios.controllers.js";
 
 
-/* --- GET /api/usuarios/:id/historial   Historial activo + resumen --- */
+// Usuario + historial activo + resumen (lo comparten la ficha del admin y el inicio del alumno/docente)
+const armarHistorial = async (id) => {
+    const usuario = await getUsuarioPorId(id);
+    if (!usuario) return null;
+
+    const { prestamos, sanciones } = await getHistorial(id);
+
+    // Resumen con HOFs (.filter)
+    const resumen = {
+        entregas: prestamos.filter((p) => p.fecha_entrega).length,
+        devoluciones: prestamos.filter((p) => p.estado === "devuelto").length,
+        atrasos: prestamos.filter((p) => p.dias_atraso > 0).length,
+        en_curso: prestamos.filter((p) => ["prestado", "vencido"].includes(p.estado)).length,
+        reservas: prestamos.filter((p) => p.estado === "pendiente").length
+    };
+
+    return { usuario, resumen, prestamos, sanciones };
+};
+
+
+/* --- GET /api/usuarios/:id/historial   Historial activo de cualquier usuario (admin) --- */
 export const getHistorialUsuario = async (req, res) => {
     try {
-        const usuario = await getUsuarioPorId(req.id);
-        if (!usuario) return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
-
-        const { prestamos, sanciones } = await getHistorial(req.id);
-
-        // Resumen con HOFs (.filter)
-        const resumen = {
-            entregas: prestamos.filter((p) => p.fecha_entrega).length,
-            devoluciones: prestamos.filter((p) => p.estado === "devuelto").length,
-            atrasos: prestamos.filter((p) => p.dias_atraso > 0).length,
-            en_curso: prestamos.filter((p) => ["prestado", "vencido"].includes(p.estado)).length
-        };
-
-        return res.json({ payload: { usuario, resumen, prestamos, sanciones } });
+        const historial = await armarHistorial(req.id);
+        if (!historial) return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
+        return res.json({ payload: historial });
     } catch (error) {
         return error500(res, error, "No se pudo cargar el historial");
+    }
+};
+
+/* --- GET /api/perfil/historial   Mi cuenta: el historial del usuario logueado (alumno o docente) --- */
+export const getMiHistorial = async (req, res) => {
+    try {
+        return res.json({ payload: await armarHistorial(req.usuario.id) });
+    } catch (error) {
+        return error500(res, error, "No se pudo cargar tu cuenta");
     }
 };
 

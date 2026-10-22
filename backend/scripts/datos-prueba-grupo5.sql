@@ -15,7 +15,7 @@
 SET NAMES utf8mb4;
 SET time_zone = '-03:00';
 
-SET @clave_demo := '$2b$10$JyN4hbF3pwxf.JHVC7eaLej4s08ZyWdAOkSvgl0p1VZB5o6rPMfhW';
+SET @clave_demo := '$2b$10$K019tYFul0dZCPjKqJBIQOiYUqKwQi77hx78noZpRvYLqMToJcRSe';
 
 INSERT IGNORE INTO roles (nombre)
 VALUES ('alumno'), ('docente'), ('administrador');
@@ -90,6 +90,11 @@ FROM (
 ) AS d
 LEFT JOIN cursos c ON c.nombre = d.curso
 JOIN roles r ON r.nombre = d.rol;
+
+-- Mantiene disponible la clave documentada tambien si las cuentas ya existian.
+UPDATE usuarios
+SET password_hash = @clave_demo
+WHERE dni BETWEEN '99010001' AND '99010034';
 
 -- Autores (25). La tabla no tiene clave unica natural, por eso se evita
 -- insertar de nuevo un nombre que ya exista.

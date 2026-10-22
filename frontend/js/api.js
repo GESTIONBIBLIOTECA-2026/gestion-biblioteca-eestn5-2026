@@ -60,3 +60,4 @@ export const obtenerCursos = () => pedir("/cursos");
 export const obtenerMiPerfil = () => pedir("/perfil");
 export const guardarMiPerfil = (datos) => pedir("/perfil", "PUT", datos);
 export const cambiarMiClave = (datos) => pedir("/perfil/clave", "PUT", datos);
+export const obtenerMiCuenta = () => pedir("/perfil/historial");   // inicio del alumno / docente
