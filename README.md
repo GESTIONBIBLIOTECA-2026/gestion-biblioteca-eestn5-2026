@@ -1,10 +1,14 @@
-# 📚 Biblioteca Invaluable · Panel de Administración (Grupo 5)
+# 📚 Sistema de Gestión de Biblioteca · E.E.S.T N° 5 (Grupos 4, 5 y 6)
 
-Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PHP):
+Sistema integral de gestión de biblioteca con arquitectura **MVC**, todo en **JavaScript** (sin PHP):
+
+- **Grupo 4:** Módulo de Pedidos, Préstamos y Devoluciones (`frontend/pedidos.html`, API REST).
+- **Grupo 5:** Módulo de Usuarios, Autenticación y Configuración (`frontend/usuarios.html`, JWT).
+- **Grupo 6:** Módulo de Catálogo de Libros e Inventario (`frontend/libros.html`, Stock).
 
 - **Frontend:** HTML + CSS (carpeta `css/`) + JS con ES Modules.
-- **Backend:** Node.js + Express, como en la clase 06.
-- **Base de datos:** MySQL en Aiven, conectada desde Node con **`mysql2`** (pool de conexiones + SSL).
+- **Backend:** Node.js + Express, arquitectura limpia MVC.
+- **Base de datos:** MySQL en Aiven Cloud, conectada desde Node con **`mysql2`** (pool de conexiones + SSL).
 
 ```text
 [ Frontend ]  fetch()  ─►  [ Express: Router ➔ Controller ➔ Model ]  ─►  mysql2  ─►  [ MySQL Aiven ]

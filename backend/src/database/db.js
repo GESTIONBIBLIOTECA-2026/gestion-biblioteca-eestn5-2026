@@ -49,4 +49,14 @@ export const conTransaccion = async (trabajo) => {
     }
 };
 
+// 5. Testeo visual de conexión a Aiven Cloud
+export const comprobarConexion = async () => {
+    try {
+        const [filas] = await connection.query("SELECT DATABASE() AS base, VERSION() AS version");
+        console.log(`✅ MySQL ${filas[0].version} conectado a la base "${filas[0].base}" en Aiven Cloud`);
+    } catch (error) {
+        console.error(`❌ Error crítico conectando a Aiven Cloud: ${error.message}`);
+    }
+};
+
 export default connection;
