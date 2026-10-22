@@ -11,6 +11,9 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
  localhost:3000 / Live Server        backend/ (puerto 3000)              src/database/db.js
 ```
 
+> 🧠 **Guía de Razonamiento y Arquitectura MVC (Obligatoria para G4, G5 y G6):**  
+> Consultá [docs/roadmap-implementacion-mvc.md](docs/roadmap-implementacion-mvc.md) para entender el flujo mental en 4 pasos (Model ➔ Controller ➔ Router ➔ View) y el orden de dependencias entre los 3 grupos.
+
 ---
 
 ## 📂 Estructura
