@@ -7,7 +7,7 @@
 import express from "express";
 import cors from "cors";
 import { PORT, CARPETA_BACKEND } from "./src/config/config.js";
-import connection from "./src/database/db.js";
+import connection, { comprobarConexion } from "./src/database/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import perfilRoutes from "./src/routes/perfil.routes.js";
 import dashboardRoutes from "./src/routes/dashboard.routes.js";
@@ -46,10 +46,5 @@ app.use((err, req, res, next) => {
 // 6. Encender el servidor y probar la base de datos
 app.listen(PORT, async () => {
     console.log(`🚀 Servidor activo en http://localhost:${PORT}`);
-    try {
-        await connection.query("SELECT 1");
-        console.log("✅ Base de datos conectada");
-    } catch (error) {
-        console.error("⚠️  No se pudo conectar a la base de datos:", error.message);
-    }
+    await comprobarConexion();
 });
