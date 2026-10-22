@@ -9,16 +9,13 @@ import { obtenerMiPerfil, guardarMiPerfil, cambiarMiClave } from "./api.js";
 import { mostrarAviso, marcarCampos } from "./ui.js";
 import { mostrarNombre } from "./sesion.js";
 
-
 // 🎯 1. Nodos del DOM
 const formularioPerfil = document.querySelector("#formularioPerfil");
 const formularioClave  = document.querySelector("#formularioClave");
 const avisoClave       = document.querySelector("#avisoClave");
 
-
 // 🧠 2. Estado (últimos datos guardados, para "Deshacer cambios")
 let perfilGuardado = null;
-
 
 // 🎨 3. Funciones de UI
 function completarPerfil(usuario) {
@@ -33,7 +30,6 @@ function completarPerfil(usuario) {
 // Datos del formulario como objeto: { nombre_completo, correo, ... }
 const leerFormulario = (formulario) => Object.fromEntries(new FormData(formulario));
 
-
 // 🌐 4. Cargar el perfil
 async function cargarPerfil() {
     try {
@@ -43,7 +39,6 @@ async function cargarPerfil() {
         mostrarAviso(error.message, true);
     }
 }
-
 
 // 🖱️ 5. Eventos
 
@@ -95,7 +90,6 @@ formularioClave.addEventListener("click", (evento) => {
     const campo = document.getElementById(boton.dataset.verClave);
     campo.type = campo.type === "password" ? "text" : "password";
 });
-
 
 // 🚀 6. Inicialización
 cargarPerfil();

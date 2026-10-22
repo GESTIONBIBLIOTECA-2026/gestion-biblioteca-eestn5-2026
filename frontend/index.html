@@ -184,35 +184,37 @@
 
                 <h1 class="solo-lectores-pantalla">Panel de inicio</h1>
 
-                <!-- ALERTAS Y ACCIONES RÁPIDAS -->
-                <div class="grid-superior">
+                <!-- MÉTRICAS REALES: GET /api/dashboard (js/inicio.js) -->
+                <section class="grid-metricas" aria-label="Resumen de la biblioteca">
 
-                    <!-- ATRASOS PENDIENTES -->
-                    <section class="tarjeta-alerta" aria-labelledby="titulo-atrasos">
+                    <article class="tarjeta-metrica">
+                        <div class="metrica-icono"><i data-lucide="library"></i></div>
+                        <h3>Libros en catálogo</h3>
+                        <strong id="total-libros">--</strong>
+                        <p>Títulos activos cargados</p>
+                    </article>
 
-                        <div class="alerta-header">
+                    <article class="tarjeta-metrica">
+                        <div class="metrica-icono"><i data-lucide="book-up"></i></div>
+                        <h3>Préstamos activos</h3>
+                        <strong id="total-prestamos">--</strong>
+                        <p>Libros que todavía no volvieron</p>
+                    </article>
 
-                            <div class="alerta-icono">
-                                <i data-lucide="alert-triangle"></i>
-                            </div>
-
-                            <div class="alerta-info">
-                                <h3 id="titulo-atrasos">Atrasos pendientes</h3>
-                            </div>
-
-                        </div>
-
-                        <div class="alerta-contador" id="contador-atrasos">
-                            --
-                        </div>
-
+                    <article class="tarjeta-metrica alerta">
+                        <div class="metrica-icono"><i data-lucide="alert-triangle"></i></div>
+                        <h3>Usuarios morosos</h3>
+                        <strong id="total-morosos">--</strong>
                         <a href="usuarios.html?filtro=morosos" class="enlace-detalles">
                             Ver detalles
                             <i data-lucide="arrow-right"></i>
                         </a>
+                    </article>
 
-                    </section>
+                </section>
 
+
+                <div class="grid-superior">
 
                     <!-- ACCIONES RÁPIDAS -->
                     <section class="tarjeta-acciones-rapidas" aria-labelledby="titulo-acciones">
@@ -312,7 +314,7 @@
     <!-- SESIÓN, ENCABEZADO Y MENÚ DEL PERFIL -->
     <script type="module" src="js/sesion.js"></script>
 
-    <!-- ATRASOS Y ÚLTIMOS PRÉSTAMOS -->
+    <!-- MÉTRICAS Y ÚLTIMOS PRÉSTAMOS -->
     <script type="module" src="js/inicio.js"></script>
 
     <!-- ICONOS -->

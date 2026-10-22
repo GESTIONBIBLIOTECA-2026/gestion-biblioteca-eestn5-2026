@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import connection from "../database/db.js";
-import { ATRASO, CONDICION, COLUMNAS, DESDE } from "./usuario.models.js";
+import { ATRASO, CONDICION, COLUMNAS, DESDE } from "./usuario.sql.js";
 
 // Condición SQL de cada chip del buscador
 const FILTROS_SQL = {

@@ -81,3 +81,11 @@ export function crearFilaPrestamoHTML(prestamo) {
             <td><span class="estado ${etiqueta[1]}">${etiqueta[0]}</span></td>
         </tr>`;
 }
+
+
+/* --- Ventanas: cualquier botón [data-cerrar-dialogo] cierra su <dialog> (delegación) --- */
+export function activarCierreDialogos() {
+    document.addEventListener("click", (evento) => {
+        evento.target.closest("[data-cerrar-dialogo]")?.closest("dialog")?.close();
+    });
+}

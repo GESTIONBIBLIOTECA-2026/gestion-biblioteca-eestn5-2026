@@ -12,7 +12,7 @@ const ssl = !DB.ssl ? undefined
     : existsSync(DB.caPath) ? { ca: readFileSync(DB.caPath, "utf8") }
     : { rejectUnauthorized: false };
 
-// 2. Pool: conexiones abiertas y reutilizables
+// 2. Pool: conexiones abiertas y reutilizables (los datos salen SOLO del .env)
 const connection = mysql.createPool({
     host: DB.host,
     port: DB.port,
@@ -31,5 +31,22 @@ const connection = mysql.createPool({
 connection.pool.on("connection", (conexion) => {
     conexion.query("SET time_zone = ?", [DB.zonaHoraria]);
 });
+
+// 4. Transacción: varias consultas que se guardan TODAS juntas o NINGUNA (préstamos, stock).
+//    El trabajo recibe "conexion" y la usa en vez del pool, así todo va por la misma conexión.
+export const conTransaccion = async (trabajo) => {
+    const conexion = await connection.getConnection();
+    try {
+        await conexion.beginTransaction();
+        const resultado = await trabajo(conexion);
+        await conexion.commit();
+        return resultado;
+    } catch (error) {
+        await conexion.rollback();
+        throw error;
+    } finally {
+        conexion.release();
+    }
+};
 
 export default connection;

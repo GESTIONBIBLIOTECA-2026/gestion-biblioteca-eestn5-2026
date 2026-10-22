@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 import { getUsuarioLogin } from "../models/usuario.models.js";
 import { JWT_SECRET, JWT_DURACION } from "../config/config.js";
 import { puedeEntrar } from "../middlewares/auth.middleware.js";
+import { error500 } from "./respuestas.js";
 
 // Hash de relleno: si el DNI no existe igual se compara una clave (así no se puede adivinar qué DNI existe)
 const HASH_FALSO = bcrypt.hashSync("clave-inexistente", 10);
@@ -38,8 +39,7 @@ export const postLogin = async (req, res) => {
         return res.json({ payload: { token, usuario: sesion } });
 
     } catch (error) {
-        console.error("Error en el login:", error.message);
-        return res.status(500).json({ error: "No se pudo conectar con la base de datos." });
+        return error500(res, error, "No se pudo conectar con la base de datos");
     }
 };
 

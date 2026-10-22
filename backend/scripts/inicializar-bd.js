@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 import { fileURLToPath } from "url";
 import connection from "../src/database/db.js";
+import { DB } from "../src/config/config.js";
 
 const rutaEsquema = fileURLToPath(new URL("./schema.sql", import.meta.url));
 
@@ -16,7 +17,7 @@ try {
         await connection.query(sentencia);
     }
 
-    console.log(`Base "${process.env.DB_NAME || "defaultdb"}" inicializada correctamente (${sentencias.length} sentencias).`);
+    console.log(`Base "${DB.database}" inicializada correctamente (${sentencias.length} sentencias).`);
 } finally {
     await connection.end();
 }

@@ -2,61 +2,78 @@
    INDEX - PANEL DE INICIO
 ========================================================= */
 
-/* --- SECCIÓN SUPERIOR: GRID DE ALERTA + ACCIONES --- */
-.grid-superior {
+/* --- MÉTRICAS DEL INICIO (GET /api/dashboard) --- */
+.grid-metricas {
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
 }
 
-/* Tarjeta de Alerta (Atrasos pendientes) */
-.tarjeta-alerta {
+.tarjeta-metrica {
     box-shadow: var(--sombra-tarjeta);
     background: var(--fondo-tarjeta);
     border: 1px solid var(--borde-tarjeta);
-    border-left: 4px solid var(--rojo-500);
+    border-left: 4px solid var(--azul-400);
     border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.alerta-header {
-    display: flex;
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: 14px;
     align-items: center;
-    gap: 12px;
 }
 
-.alerta-icono {
+.tarjeta-metrica.alerta {
+    border-left-color: var(--rojo-500);
+}
+
+.metrica-icono {
+    grid-row: span 2;
     width: 44px;
     height: 44px;
-    background: var(--rojo-fondo);
-    border: 1px solid var(--rojo-borde);
+    background: var(--azul-suave);
+    border: 1px solid var(--azul-suave-borde);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--azul-400);
+}
+
+.tarjeta-metrica.alerta .metrica-icono {
+    background: var(--rojo-fondo);
+    border-color: var(--rojo-borde);
     color: var(--rojo-500);
 }
 
-.alerta-icono svg {
+.metrica-icono svg {
     width: 22px;
     height: 22px;
 }
 
-.alerta-info h3 {
+.tarjeta-metrica h3 {
     font-size: 13px;
     font-weight: 500;
     color: var(--texto-secundario);
 }
 
-.alerta-contador {
-    font-size: 38px;
+.tarjeta-metrica strong {
+    font-size: 34px;
     font-weight: 800;
+    line-height: 1.1;
     color: var(--texto-fuerte);
-    margin: 12px 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.tarjeta-metrica p,
+.tarjeta-metrica .enlace-detalles {
+    grid-column: 1 / -1;
+    margin-top: 12px;
+    font-size: 12px;
+}
+
+.tarjeta-metrica p {
+    color: var(--texto-mutado);
 }
 
 .enlace-detalles {
@@ -64,7 +81,6 @@
     align-items: center;
     gap: 6px;
     color: var(--rojo-500);
-    font-size: 13px;
     font-weight: 600;
     text-decoration: none;
     transition: 0.2s ease;
@@ -80,6 +96,11 @@
     height: 16px;
 }
 
+
+/* --- ACCIONES RÁPIDAS --- */
+.grid-superior {
+    margin-bottom: 28px;
+}
 
 /* Tarjeta de Acciones Rápidas */
 .tarjeta-acciones-rapidas {
@@ -278,7 +299,7 @@ tbody td {
 
 /* --- RESPONSIVE --- */
 @media (max-width: 1100px) {
-    .grid-superior {
+    .grid-metricas {
         grid-template-columns: 1fr;
     }
     .rejilla-acciones-mini {
@@ -290,4 +311,4 @@ tbody td {
     .rejilla-acciones-mini {
         grid-template-columns: 1fr;
     }
-}
+}

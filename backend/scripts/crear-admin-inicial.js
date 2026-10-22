@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { stdin, stdout } from "process";
 import { createInterface } from "readline";
 import connection from "../src/database/db.js";
+import { esDniValido } from "../src/middlewares/predicados.js";
 
 const preguntarTexto = (rl, mensaje) =>
     new Promise((resolve) => rl.question(mensaje, (respuesta) => resolve(respuesta.trim())));
@@ -61,8 +62,8 @@ const preguntarSecreto = (mensaje) => {
 
 const validarDatos = ({ dni, nombre, correo, telefono, direccion, clave }) => {
     const dniLimpio = dni.replace(/[.\s]/g, "");
-    if (!/^\d{6,10}$/.test(dniLimpio)) {
-        throw new Error("El DNI debe tener entre 6 y 10 números.");
+    if (!esDniValido(dniLimpio)) {
+        throw new Error("El DNI debe tener entre 7 y 8 números.");
     }
 
     if (nombre.length < 3 || nombre.length > 120 || !/^\p{L}[\p{L} .'-]*$/u.test(nombre)) {

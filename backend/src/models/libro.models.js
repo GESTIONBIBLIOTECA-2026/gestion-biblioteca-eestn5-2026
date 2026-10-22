@@ -1,14 +1,56 @@
 /* ==========================================================================
-   libro.models.js - Modelo de Libros (consulta para otros grupos)
+   libro.models.js - Catálogo de libros (consultas) · Grupo 6
+   El stock sale de vista_stock_libros (cuenta los ejemplares de cada título).
+   Altas, cambios, stock y bajas: inventario.models.js
    ========================================================================== */
 
 import connection from "../database/db.js";
 
-// Un libro con su stock (vista_stock_libros)
+// Columnas de un libro del catálogo (stock_reservable = disponibles - reservados)
+const COLUMNAS = `v.libro_id AS id, v.titulo, v.isbn, v.autores, v.categoria, l.categoria_id,
+    ed.nombre AS editorial, l.anio_publicacion AS anio, v.ejemplares_totales, v.ejemplares_disponibles,
+    v.cantidad_reservada, v.stock_reservable`;
+
+const DESDE = `FROM vista_stock_libros v JOIN libros l ON l.id = v.libro_id
+    LEFT JOIN editoriales ed ON ed.id = l.editorial_id`;
+
+// Filtro de disponibilidad → condición SQL (texto fijo, nunca datos del usuario)
+const DISPONIBILIDAD = {
+    "": "TRUE",
+    disponible: "v.stock_reservable > 0",
+    agotado: "v.stock_reservable = 0"
+};
+
+// Catálogo ordenado por título, con buscador (título o autor), categoría y disponibilidad
+export const getCatalogoLibros = async ({ texto, categoria, disponibilidad }) => {
+    const sql = `SELECT ${COLUMNAS} ${DESDE}
+                 WHERE (v.titulo LIKE ? OR v.autores LIKE ?)
+                   AND (? = 0 OR l.categoria_id = ?)
+                   AND ${DISPONIBILIDAD[disponibilidad]}
+                 ORDER BY v.titulo`;
+    const [rows] = await connection.query(sql, [`%${texto}%`, `%${texto}%`, categoria, categoria]);
+    return rows;
+};
+
 export const getLibroPorId = async (id) => {
-    const sql = `SELECT libro_id, isbn, titulo, categoria, autores, ejemplares_totales,
-                        ejemplares_disponibles, cantidad_reservada, stock_reservable, estado_visual
-                 FROM vista_stock_libros WHERE libro_id = ?`;
-    const [rows] = await connection.query(sql, [id]);
+    const [rows] = await connection.query(`SELECT ${COLUMNAS} ${DESDE} WHERE v.libro_id = ?`, [id]);
     return rows[0];
+};
+
+// Números del catálogo: títulos activos y ejemplares según su estado
+export const getResumenCatalogo = async () => {
+    const sql = `SELECT
+            (SELECT COUNT(*) FROM libros WHERE activo = TRUE) AS titulos,
+            COALESCE(SUM(e.estado <> 'baja'), 0) AS ejemplares,
+            COALESCE(SUM(e.estado = 'disponible'), 0) AS disponibles,
+            COALESCE(SUM(e.estado = 'prestado'), 0) AS prestados,
+            COALESCE(SUM(e.estado IN ('en_reparacion', 'extraviado', 'baja')), 0) AS fuera_de_servicio
+        FROM ejemplares e JOIN libros l ON l.id = e.libro_id AND l.activo = TRUE`;
+    const [rows] = await connection.query(sql);
+    return rows[0];
+};
+
+export const getCategorias = async () => {
+    const [rows] = await connection.query("SELECT id, nombre FROM categorias ORDER BY nombre");
+    return rows;
 };

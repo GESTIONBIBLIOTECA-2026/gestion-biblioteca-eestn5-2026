@@ -1,20 +1,13 @@
 /* ==========================================================================
    usuarios.controllers.js - Controlador de Usuarios · Grupo 5
-   Recibe la petición (req), llama al Modelo, aplica las reglas de negocio
-   y arma la respuesta (res) con su código HTTP.
+   Recibe la petición (req), aplica las reglas de negocio, le pide los datos
+   al Modelo y arma la respuesta (res) con su código HTTP.
    ========================================================================== */
 
 import bcrypt from "bcryptjs";
-import {
-    getUsuarioPorId, getUsuarioPorDni, buscarRepetidos, crearUsuario, actualizarUsuario
-} from "../models/usuario.models.js";
+import { getUsuarioPorId, getEstadoPorDni, buscarRepetidos, crearUsuario, actualizarUsuario } from "../models/usuario.models.js";
 import { buscarUsuarios } from "../models/busqueda.models.js";
-
-// Error inesperado (la base no responde, etc.) → 500. Lo usan también los otros controladores.
-export const error500 = (res, error, mensaje) => {
-    console.error(`${mensaje}:`, error.message);
-    return res.status(500).json({ error: mensaje });
-};
+import { error500, responder409 } from "./respuestas.js";
 
 // Si el DNI o el correo ya son de otro usuario → { dni: "...", correo: "..." }
 const camposRepetidos = async ({ dni, correo }, idPropio) => {
@@ -46,12 +39,16 @@ export const getUsuario = async (req, res) => {
     }
 };
 
-/* --- GET /api/usuarios/dni/:dni   (para que el Grupo 4 valide al usuario antes de un préstamo) --- */
+/* --- GET /api/usuarios/dni/:dni → { id, nombre_completo, curso, rol, estado, puede_pedir } (lo consume el Grupo 4) ---
+   estado: "habilitado" | "suspendido" | "moroso" (préstamo vencido) | "baja" */
 export const getUsuarioDni = async (req, res) => {
     try {
-        const usuario = await getUsuarioPorDni(req.dni);
+        const usuario = await getEstadoPorDni(req.dni);
         if (!usuario) return res.status(404).json({ error: "No hay ningún usuario con ese DNI." });
-        return res.json({ payload: { ...usuario, puede_pedir: usuario.condicion === "habilitado" } });
+
+        const { condicion, ...datos } = usuario;
+        const estado = condicion === "atraso" ? "moroso" : condicion;
+        return res.json({ payload: { ...datos, estado, puede_pedir: estado === "habilitado" } });
     } catch (error) {
         return error500(res, error, "No se pudo leer el usuario");
     }
@@ -64,13 +61,10 @@ export const postUsuario = async (req, res) => {
 
         // 1. El DNI y el correo no pueden estar repetidos
         const campos = await camposRepetidos(datos);
-        if (Object.keys(campos).length > 0) {
-            return res.status(409).json({ error: Object.values(campos)[0], campos });
-        }
+        if (Object.keys(campos).length > 0) return responder409(res, campos);
 
         // 2. Se guarda con la contraseña como hash bcrypt
         const id = await crearUsuario({ ...datos, password_hash: await bcrypt.hash(clave, 10) });
-
         return res.status(201).json({ mensaje: `Se registró a ${datos.nombre_completo}.`, payload: { id } });
     } catch (error) {
         return error500(res, error, "No se pudo guardar el usuario");
@@ -84,20 +78,16 @@ export const putUsuario = async (req, res) => {
 
         // 1. Un administrador no puede sacarse el rol a sí mismo (se quedaría afuera del panel)
         if (req.id === req.usuario.id && datos.rol !== "administrador") {
-            const mensaje = "No podés quitarte el rol de administrador a vos mismo.";
-            return res.status(409).json({ error: mensaje, campos: { rol: mensaje } });
+            return responder409(res, { rol: "No podés quitarte el rol de administrador a vos mismo." });
         }
 
         // 2. DNI y correo repetidos
         const campos = await camposRepetidos(datos, req.id);
-        if (Object.keys(campos).length > 0) {
-            return res.status(409).json({ error: Object.values(campos)[0], campos });
-        }
+        if (Object.keys(campos).length > 0) return responder409(res, campos);
 
-        // 3. Guardar (si no existe, no se modificó ninguna fila)
+        // 3. Guardar (si no existe, no se modificó ninguna fila → 404)
         const hash = clave ? await bcrypt.hash(clave, 10) : null;
         const modificados = await actualizarUsuario(req.id, { ...datos, password_hash: hash });
-
         if (modificados === 0) return res.status(404).json({ error: "No hay ningún usuario con ese ID." });
 
         return res.json({ mensaje: `Se guardaron los cambios de ${datos.nombre_completo}.` });

@@ -18,9 +18,11 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 ```text
 .
 ├── frontend/
-│   ├── login.html, index.html, usuarios.html, configuracion.html  (admin)
+│   ├── login.html, index.html, usuarios.html, libros.html, configuracion.html  (admin)
+│   ├── catalogo.html             catálogo de libros para alumnos y docentes (Grupo 6)
 │   ├── inicio-usuario.html       inicio de alumnos y docentes
-│   ├── css/                      estilo-general.css (temas, menú lateral, encabezado, botones),
+│   ├── css/                      estilo-general.css (temas, menú lateral, encabezado, botones), componentes.css
+│   │                             (resumen, paneles, tablas, etiquetas, chips, ventanas), libros.css, catalogo.css,
 │   │                             index.css, login.css, usuarios.css, configuracion.css, inicio-usuario.css
 │   └── js/                       ES Modules (import / export), cada archivo ~100 líneas o menos
 │       ├── config.js             URL del backend
@@ -31,10 +33,14 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 │       ├── sesion.js             protege las páginas + encabezado (nombre, reloj, menú del perfil)
 │       ├── navegacion.js         menú y acceso según el rol (admin / alumno-docente)
 │       ├── login.js              login.html
-│       ├── inicio.js             index.html: atrasos pendientes y últimos préstamos
+│       ├── inicio.js             index.html: métricas reales (GET /api/dashboard) y últimos préstamos
 │       ├── inicio-usuario.js     inicio-usuario.html: préstamos, devoluciones pendientes e historial
 │       ├── inicio-usuario-ui.js  plantillas: plazos, números de la cuenta, préstamos e historial
 │       ├── cuenta-usuario.js     credencial digital con QR, aviso de la cuenta y sanciones
+│       ├── libros.js             libros.html: resumen, catálogo y filtros (Grupo 6)
+│       ├── libros-ui.js          plantillas: fila del admin, tarjeta del alumno, estado del stock
+│       ├── libros-dialogos.js    alta / modificación, actualizar stock y baja de libros
+│       ├── catalogo.js           catalogo.html: buscador en vivo con filtros combinados
 │       ├── usuarios.js           usuarios.html: búsqueda, chips y paginación
 │       ├── usuarios-ui.js        plantillas HTML de usuarios (fila, opciones, ficha)
 │       ├── usuarios-dialogos.js  alta / modificación y ficha con historial activo
@@ -46,16 +52,20 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
     ├── index.js                  servidor Express (cors, express.json, rutas)
     ├── .env.example              plantilla (el .env real NO se sube)
     ├── src/
-    │   ├── config/config.js      variables del .env y reglas del negocio
-    │   ├── database/db.js        pool de mysql2 → MySQL Aiven (SSL)
+    │   ├── config/               env.js (.env con fail-fast), constants.js (reglas del negocio), config.js (re-exporta)
+    │   ├── database/db.js        pool de mysql2 → MySQL Aiven (SSL) + conTransaccion() (todo o nada)
     │   ├── models/               MODEL: solo SQL con comodines "?", devuelve datos
     │   │   ├── usuario.models.js, busqueda.models.js, sancion.models.js, perfil.models.js
-    │   │   └── curso.models.js, prestamo.models.js, libro.models.js
+    │   │   ├── usuario.sql.js     pedazos de SQL compartidos (atraso, condición, columnas)
+    │   │   ├── libro.models.js (catálogo), inventario.models.js (alta, cambios, stock, baja), ejemplar.models.js (stock)
+    │   │   ├── errores.models.js  ErrorNegocio: el Modelo dice QUÉ pasó, el Controlador elige el código HTTP
+    │   │   └── dashboard.models.js, curso.models.js, prestamo.models.js
     │   ├── controllers/          CONTROLLER: reglas de negocio y respuesta HTTP
     │   │   ├── auth, perfil, usuarios, sanciones
-    │   │   └── cursos, prestamos, libros
+    │   │   ├── dashboard, cursos, prestamos, libros
+    │   │   └── respuestas.js     error500, 409 y responderError (ErrorNegocio → 404 / 409)
     │   ├── routes/               ROUTER: URL + verbo HTTP → controlador
-    │   └── middlewares/          auth (token), validaciones (URL), formularios (body), límite de intentos
+    │   └── middlewares/          auth (token), validaciones (URL), formularios (body), predicados (esDniValido…), libros, límite de intentos
     └── scripts/                  schema.sql, datos-prueba-grupo5.sql, crear-admin-inicial.js
 ```
 
@@ -71,11 +81,20 @@ Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PH
 | `PUT` | `/api/perfil` | Body `{ nombre_completo, correo, telefono, direccion }` (el DNI y el rol no se cambian desde acá) |
 | `PUT` | `/api/perfil/clave` | Body `{ clave_actual, clave_nueva, confirmacion }` |
 | `GET` | `/api/perfil/historial` | Mi cuenta (alumno/docente): mis datos, préstamos con `dias_restantes`, reservas y sanciones |
+| `GET` | `/api/dashboard` | Métricas del inicio → `{ payload: { libros_total, prestamos_activos, alumnos_morosos } }` |
 | `GET` | `/api/prestamos?limite=5` | Últimos préstamos (en curso, atrasados y devueltos) |
-| `GET` | `/api/libros/:id` | Título, autores y stock del libro |
+| **Grupo 6 (integrado)** | | |
+| `GET` | `/api/libros?texto=&categoria=&disponibilidad=` | Catálogo con stock (cualquier rol). `disponibilidad`: `disponible` o `agotado` |
+| `GET` | `/api/libros/:id` | Un libro con autores, editorial, categoría y stock (cualquier rol) |
+| `GET` | `/api/libros/categorias` | Categorías para los selectores (cualquier rol) |
+| `GET` | `/api/libros/resumen` | Títulos, ejemplares, disponibles y fuera de servicio (admin) |
+| `POST` | `/api/libros` | Alta (admin). Body `{ titulo, autores, editorial, isbn, categoria_id, anio, cantidad }`; `autores` separados por coma; crea los ejemplares `INV-<id>-001…` |
+| `PUT` | `/api/libros/:id` | Modificación (admin), mismo body sin `cantidad` |
+| `PATCH` | `/api/libros/:id/stock` | Body `{ cambio }`: `3` suma ejemplares, `-2` da de baja ejemplares del estante (no los reservados) |
+| `DELETE` | `/api/libros/:id` | Baja lógica (admin): no se puede si tiene préstamos o reservas sin cerrar |
 | **Grupo 5** | | |
 | `GET` | `/api/usuarios?nombre=&dni=&curso=&filtro=&pagina=` | Búsqueda avanzada + listado (10 por página) y cantidad por filtro |
-| `GET` | `/api/usuarios/dni/:dni` | Nombre, curso y si el usuario puede llevarse libros (para validar al usuario antes de un préstamo — Grupo 4) |
+| `GET` | `/api/usuarios/dni/:dni` | Para el Grupo 4 → `{ payload: { id, nombre_completo, curso, rol, estado, puede_pedir } }`. `estado`: `habilitado`, `suspendido`, `moroso` (préstamo vencido) o `baja` |
 | `GET` | `/api/usuarios/:id` | Los 6 datos del usuario, tipo y estado |
 | `GET` | `/api/usuarios/:id/historial` | Historial activo: entregas, devoluciones, atrasos y sanciones |
 | `POST` | `/api/usuarios` | Alta. Body `{ nombre_completo, dni, rol, curso, correo, telefono, direccion, clave }` |
@@ -88,6 +107,11 @@ Si un dato está mal, la API responde `400` con `{ error, campos: { dni: "..." }
 
 Todas menos el login piden el header `Authorization: Bearer <token>`.
 Solo pueden entrar usuarios con rol **administrador** y estado **habilitado**.
+
+### Configuración (`backend/.env`)
+
+El backend **no arranca** si falta alguna variable obligatoria (`JWT_SECRET`, `DB_HOST`, `DB_PORT`, `DB_USER`,
+`DB_PASSWORD`, `DB_NAME`): avisa cuál falta y se detiene (fail-fast). No hay valores por defecto tipo `localhost` o `root`.
 
 ### Preparar la base de datos por primera vez
 

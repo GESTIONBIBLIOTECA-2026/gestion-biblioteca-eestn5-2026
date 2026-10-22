@@ -6,6 +6,7 @@
 import bcrypt from "bcryptjs";
 import { getUsuarioPorId, buscarRepetidos } from "../models/usuario.models.js";
 import { actualizarPerfil, getHashClave, actualizarClave } from "../models/perfil.models.js";
+import { error500 } from "./respuestas.js";
 
 
 /* --- GET /api/perfil --- */
@@ -14,8 +15,7 @@ export const getMiPerfil = async (req, res) => {
         const usuario = await getUsuarioPorId(req.usuario.id);
         return res.json({ payload: usuario });
     } catch (error) {
-        console.error("Error al leer el perfil:", error.message);
-        return res.status(500).json({ error: "No se pudieron leer tus datos." });
+        return error500(res, error, "No se pudieron leer tus datos");
     }
 };
 
@@ -39,8 +39,7 @@ export const putMiPerfil = async (req, res) => {
         return res.json({ mensaje: "Se guardaron los cambios de tu perfil.", payload: usuario });
 
     } catch (error) {
-        console.error("Error al guardar el perfil:", error.message);
-        return res.status(500).json({ error: "No se pudieron guardar tus datos." });
+        return error500(res, error, "No se pudieron guardar tus datos");
     }
 };
 
@@ -63,7 +62,6 @@ export const putMiClave = async (req, res) => {
         return res.json({ mensaje: "Tu contraseña se cambió correctamente." });
 
     } catch (error) {
-        console.error("Error al cambiar la contraseña:", error.message);
-        return res.status(500).json({ error: "No se pudo cambiar la contraseña." });
+        return error500(res, error, "No se pudo cambiar la contraseña");
     }
 };

@@ -4,28 +4,7 @@
    ========================================================================== */
 
 import connection from "../database/db.js";
-
-// --- Pedazos de SQL que se repiten (texto fijo: nunca llevan datos del usuario) ---
-
-// Atraso = préstamo vencido, o prestado con la fecha de devolución ya pasada
-export const ATRASO = `EXISTS (SELECT 1 FROM pedidos p WHERE p.usuario_id = u.id
-    AND (p.estado = 'vencido' OR (p.estado = 'prestado' AND p.fecha_devolucion_estimada < CURRENT_DATE)))`;
-
-// Sanción en vigor = activa y sin fecha de fin (o que todavía no llegó)
-const SANCION = `EXISTS (SELECT 1 FROM sanciones s WHERE s.usuario_id = u.id
-    AND s.activa = TRUE AND (s.fecha_fin IS NULL OR s.fecha_fin >= CURRENT_DATE))`;
-
-// Condición que ve el bibliotecario: baja / suspendido / atraso / habilitado
-export const CONDICION = `CASE WHEN u.estado = 'baja' THEN 'baja'
-    WHEN u.estado = 'suspendido' OR ${SANCION} THEN 'suspendido'
-    WHEN ${ATRASO} THEN 'atraso' ELSE 'habilitado' END`;
-
-// Datos públicos de un usuario (NUNCA el password_hash)
-export const COLUMNAS = `u.id, u.dni, u.nombre_completo, c.nombre AS curso, u.correo, u.telefono,
-    u.direccion, r.nombre AS rol, u.estado, u.fecha_alta, ${CONDICION} AS condicion,
-    (SELECT COUNT(*) FROM pedidos p WHERE p.usuario_id = u.id AND p.estado IN ('prestado', 'vencido')) AS prestamos_en_curso`;
-
-export const DESDE = "FROM usuarios u JOIN roles r ON r.id = u.rol_id LEFT JOIN cursos c ON c.id = u.curso_id";
+import { CONDICION, COLUMNAS, DESDE } from "./usuario.sql.js";
 
 
 // Usuario para el login (con el hash de la contraseña)
@@ -49,8 +28,10 @@ export const getUsuarioPorId = async (id) => {
     return rows[0];
 };
 
-export const getUsuarioPorDni = async (dni) => {
-    const [rows] = await connection.query(`SELECT ${COLUMNAS} ${DESDE} WHERE u.dni = ?`, [dni]);
+// Ficha corta por DNI para que el Grupo 4 valide al usuario antes de prestar
+export const getEstadoPorDni = async (dni) => {
+    const sql = `SELECT u.id, u.nombre_completo, c.nombre AS curso, r.nombre AS rol, ${CONDICION} AS condicion ${DESDE} WHERE u.dni = ?`;
+    const [rows] = await connection.query(sql, [dni]);
     return rows[0];
 };
 
@@ -86,3 +67,4 @@ export const actualizarUsuario = async (id, { dni, nombre_completo, rol, curso, 
         [dni, nombre_completo, await getIdCurso(curso), correo, telefono, direccion, rol, password_hash, id]);
     return resultado.affectedRows;
 };
+

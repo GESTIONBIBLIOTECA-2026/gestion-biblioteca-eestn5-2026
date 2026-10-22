@@ -28,7 +28,6 @@ export function estadoPrestamo(p) {
     return [textoPlazo(p), p.dias_restantes <= 2 ? "aviso" : "en-curso"];
 }
 
-
 /* --- Las 4 tarjetas con números de la cuenta --- */
 export function crearMetricasHTML({ activos, vencidos, reservas, proximo }) {
     const enPoder = activos.reduce((total, p) => total + p.cantidad, 0);   // un docente puede tener 10 de un mismo libro
@@ -54,7 +53,6 @@ export function crearMetricasHTML({ activos, vencidos, reservas, proximo }) {
             <p>${detalle}</p>
         </article>`).join("");
 }
-
 
 /* --- Un préstamo en mi poder, con cuenta regresiva y barra del plazo --- */
 export function crearDevolucionHTML(p) {
