@@ -1,0 +1,16 @@
+{
+  "id": ".",
+  "name": "Biblioteca Invaluable - Alumnos",
+  "short_name": "Biblioteca",
+  "description": "Catálogo, reservas e historial personal de la biblioteca escolar.",
+  "lang": "es-AR",
+  "start_url": "login.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f6fa",
+  "theme_color": "#101b36",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

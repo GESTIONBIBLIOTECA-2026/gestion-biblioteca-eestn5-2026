@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" class="verificando-sesion">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear pedido - Biblioteca Invaluable</title>
+  <script src="js/tema.js"></script>
+  <link rel="stylesheet" href="css/estilo-general.css"><link rel="stylesheet" href="css/pedidos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="layout-dashboard menu-compacto">
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar-logo" aria-label="Ir al inicio"><div class="sidebar-logo-icono"><i data-lucide="book-open"></i></div><div class="sidebar-logo-texto"><h2>BIBLIOTECA</h2><p>INVALUABLE</p></div></a>
+    <nav class="sidebar-nav" aria-label="Menú principal"><a href="index.html" class="nav-item "  title="Inicio"><i data-lucide="house"></i><span>Inicio</span></a>
+<a href="usuarios.html" class="nav-item "  title="Usuarios"><i data-lucide="users"></i><span>Usuarios</span></a>
+<a href="mesa-entrada.html" class="nav-item "  title="Mesa de entrada"><i data-lucide="book-open-check"></i><span>Mesa de entrada</span></a>
+<a href="crear-pedido.html" class="nav-item activo" aria-current="page" title="Nuevo pedido"><i data-lucide="file-plus-2"></i><span>Nuevo pedido</span></a>
+<a href="historial-pedidos.html" class="nav-item "  title="Historial"><i data-lucide="history"></i><span>Historial</span></a>
+<a href="libros.html" class="nav-item "  title="Libros"><i data-lucide="book"></i><span>Libros</span></a>
+<a href="reportes.html" class="nav-item "  title="Reportes"><i data-lucide="chart-no-axes-column"></i><span>Reportes</span></a>
+<a href="configuracion.html" class="nav-item "  title="Configuración"><i data-lucide="settings"></i><span>Configuración</span></a></nav>
+  </aside>
+  <div class="contenido-principal">
+    <header class="encabezado-superior">
+      <p class="titulo-encabezado">Panel de Administración</p>
+      <div class="encabezado-derecha">
+        <div class="info-fecha-hora"><div class="item-fecha-hora"><i data-lucide="calendar"></i><span data-fecha-hoy></span></div><div class="item-fecha-hora"><i data-lucide="clock"></i><span id="reloj-actual">--:--</span></div></div>
+        <div class="menu-perfil" data-menu-perfil>
+          <button type="button" class="usuario-perfil" data-abrir-menu-perfil aria-haspopup="menu" aria-expanded="false" aria-controls="menuPerfil"><span class="avatar-usuario"><i data-lucide="user-round"></i></span><span class="nombre-perfil" data-nombre-admin>Admin</span><i data-lucide="chevron-down" class="flecha-perfil"></i></button>
+          <div class="menu-perfil-lista" id="menuPerfil" role="menu" aria-label="Opciones del perfil" hidden>
+            <div class="menu-perfil-cabecera"><strong data-nombre-admin>Admin</strong><span data-rol-admin>Administrador</span></div>
+            <a href="configuracion.html" class="menu-perfil-opcion" role="menuitem"><i data-lucide="user-cog"></i><span class="texto-opcion">Ajustes del perfil</span></a>
+            <button type="button" class="menu-perfil-opcion" role="menuitemcheckbox" aria-checked="false" aria-label="Apariencia" data-cambiar-tema><i data-lucide="palette"></i><span class="texto-opcion">Apariencia</span><span class="switch-tema" aria-hidden="true"><i data-lucide="moon" class="switch-tema-fondo fondo-luna"></i><i data-lucide="sun" class="switch-tema-fondo fondo-sol"></i><span class="switch-tema-perilla"><i data-lucide="moon" data-icono-tema="oscuro"></i><i data-lucide="sun" data-icono-tema="claro"></i></span></span></button>
+            <hr class="menu-perfil-separador"><button type="button" class="menu-perfil-opcion peligro" role="menuitem" data-cerrar-sesion><i data-lucide="log-out"></i><span class="texto-opcion">Cerrar sesión</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="contenedor g4-page">
+<section class="g4-hero"><div><h1>Crear pedido</h1><p>Verificá la habilitación del alumno y el stock reservable antes de registrar una solicitud.</p></div><div class="g4-actions"><a class="g4-btn" href="mesa-entrada.html"><i data-lucide="arrow-left"></i> Volver a mesa de entrada</a></div></section>
+<div class="g4-form-layout">
+ <section class="g4-form-card"><h2>Datos del pedido</h2><p>Completá los datos requeridos. El backend vuelve a validar usuario, stock y fechas antes de guardar.</p>
+  <form id="formCrearPedido" novalidate>
+   <div class="g4-field"><label for="dniAlumno">DNI del alumno</label><div style="display:flex;gap:8px"><input class="g4-input" id="dniAlumno" name="dni" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="Ej. 30111222" required style="flex:1;min-width:0"><button class="g4-btn" id="validarAlumno" type="button">Verificar</button></div><small>Se consulta el registro de usuarios y su estado actual.</small><div id="resultadoAlumno" aria-live="polite"></div></div>
+   <div class="g4-field"><label for="libroId">Libro</label><select class="g4-select" id="libroId" name="libro_id" required style="width:100%"><option value="">Cargando catálogo…</option></select><small>Solo se muestran títulos activos del catálogo.</small></div>
+   <div class="g4-field-row"><div class="g4-field"><label for="cantidad">Cantidad de ejemplares</label><input class="g4-input" id="cantidad" name="cantidad" type="number" min="1" step="1" value="1" required><small>La cantidad debe estar dentro del stock reservable.</small></div><div class="g4-field"><label for="fechaDevolucion">Fecha estimada de devolución</label><input class="g4-input" id="fechaDevolucion" name="fecha_devolucion_estimada" type="date" required><small>Debe ser hoy o una fecha futura.</small></div></div>
+   <div class="g4-footer-actions"><button class="g4-btn primary" id="guardarPedido" type="submit"><i data-lucide="check-circle-2"></i> Registrar pedido</button><a class="g4-btn" href="mesa-entrada.html">Cancelar</a></div>
+  </form>
+ </section>
+ <aside class="g4-form-card"><h2>Resumen y validaciones</h2><p>Revisá la información antes de guardar la solicitud.</p>
+  <div class="g4-notice info">El pedido quedará en estado <strong>Pendiente</strong>. La entrega real se confirma después desde la mesa de entrada.</div>
+  <div id="stockLibro" class="g4-stock-result"><span>Stock reservable</span><strong id="stockCantidad">—</strong></div>
+  <div id="resumenPedido" class="g4-muted" style="font-size:13px;line-height:1.8">Primero verificá el DNI del alumno y seleccioná un libro disponible.</div>
+  <div id="mensajeFormulario" aria-live="polite"></div>
+ </aside>
+</div>
+</main>
+  </div>
+</div>
+<div id="avisoFlotante" role="status" aria-live="polite" hidden></div>
+<script type="module" src="js/sesion.js"></script><script type="module" src="js/crear-pedido.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>window.lucide?.createIcons());</script>
+</body></html>

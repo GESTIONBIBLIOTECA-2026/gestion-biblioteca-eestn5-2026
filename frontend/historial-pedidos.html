@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" class="verificando-sesion">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial de pedidos - Biblioteca Invaluable</title>
+  <script src="js/tema.js"></script>
+  <link rel="stylesheet" href="css/estilo-general.css"><link rel="stylesheet" href="css/pedidos.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+<div class="layout-dashboard menu-compacto">
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar-logo" aria-label="Ir al inicio"><div class="sidebar-logo-icono"><i data-lucide="book-open"></i></div><div class="sidebar-logo-texto"><h2>BIBLIOTECA</h2><p>INVALUABLE</p></div></a>
+    <nav class="sidebar-nav" aria-label="Menú principal"><a href="index.html" class="nav-item "  title="Inicio"><i data-lucide="house"></i><span>Inicio</span></a>
+<a href="usuarios.html" class="nav-item "  title="Usuarios"><i data-lucide="users"></i><span>Usuarios</span></a>
+<a href="mesa-entrada.html" class="nav-item "  title="Mesa de entrada"><i data-lucide="book-open-check"></i><span>Mesa de entrada</span></a>
+<a href="crear-pedido.html" class="nav-item "  title="Nuevo pedido"><i data-lucide="file-plus-2"></i><span>Nuevo pedido</span></a>
+<a href="historial-pedidos.html" class="nav-item activo" aria-current="page" title="Historial"><i data-lucide="history"></i><span>Historial</span></a>
+<a href="libros.html" class="nav-item "  title="Libros"><i data-lucide="book"></i><span>Libros</span></a>
+<a href="reportes.html" class="nav-item "  title="Reportes"><i data-lucide="chart-no-axes-column"></i><span>Reportes</span></a>
+<a href="configuracion.html" class="nav-item "  title="Configuración"><i data-lucide="settings"></i><span>Configuración</span></a></nav>
+  </aside>
+  <div class="contenido-principal">
+    <header class="encabezado-superior">
+      <p class="titulo-encabezado">Panel de Administración</p>
+      <div class="encabezado-derecha">
+        <div class="info-fecha-hora"><div class="item-fecha-hora"><i data-lucide="calendar"></i><span data-fecha-hoy></span></div><div class="item-fecha-hora"><i data-lucide="clock"></i><span id="reloj-actual">--:--</span></div></div>
+        <div class="menu-perfil" data-menu-perfil>
+          <button type="button" class="usuario-perfil" data-abrir-menu-perfil aria-haspopup="menu" aria-expanded="false" aria-controls="menuPerfil"><span class="avatar-usuario"><i data-lucide="user-round"></i></span><span class="nombre-perfil" data-nombre-admin>Admin</span><i data-lucide="chevron-down" class="flecha-perfil"></i></button>
+          <div class="menu-perfil-lista" id="menuPerfil" role="menu" aria-label="Opciones del perfil" hidden>
+            <div class="menu-perfil-cabecera"><strong data-nombre-admin>Admin</strong><span data-rol-admin>Administrador</span></div>
+            <a href="configuracion.html" class="menu-perfil-opcion" role="menuitem"><i data-lucide="user-cog"></i><span class="texto-opcion">Ajustes del perfil</span></a>
+            <button type="button" class="menu-perfil-opcion" role="menuitemcheckbox" aria-checked="false" aria-label="Apariencia" data-cambiar-tema><i data-lucide="palette"></i><span class="texto-opcion">Apariencia</span><span class="switch-tema" aria-hidden="true"><i data-lucide="moon" class="switch-tema-fondo fondo-luna"></i><i data-lucide="sun" class="switch-tema-fondo fondo-sol"></i><span class="switch-tema-perilla"><i data-lucide="moon" data-icono-tema="oscuro"></i><i data-lucide="sun" data-icono-tema="claro"></i></span></span></button>
+            <hr class="menu-perfil-separador"><button type="button" class="menu-perfil-opcion peligro" role="menuitem" data-cerrar-sesion><i data-lucide="log-out"></i><span class="texto-opcion">Cerrar sesión</span></button>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="contenedor g4-page">
+<section class="g4-hero"><div><h1>Historial de pedidos</h1><p>Consultá las solicitudes y operaciones de la biblioteca, incluidos préstamos activos, devoluciones y pedidos cancelados.</p></div><div class="g4-actions"><a class="g4-btn" href="mesa-entrada.html"><i data-lucide="arrow-left"></i> Mesa de entrada</a><button class="g4-btn primary" id="exportarCSV" type="button"><i data-lucide="download"></i> Exportar CSV</button></div></section>
+<section class="g4-panel"><div class="g4-panel-head"><div><h2>Historial general</h2><p id="textoCantidadHistorial">Cargando registros…</p></div></div>
+ <form id="filtrosHistorial" class="g4-filters"><input class="g4-input search" type="search" id="buscarHistorial" placeholder="Buscar por alumno, DNI o libro…" aria-label="Buscar en el historial"><select class="g4-select" id="estadoHistorial" aria-label="Filtrar por estado"><option value="">Todos los estados</option><option value="pendiente">Pendiente</option><option value="prestado">Prestado</option><option value="vencido">Vencido</option><option value="devuelto">Devuelto</option><option value="cancelado">Cancelado</option></select><button class="g4-btn" type="submit"><i data-lucide="search"></i> Filtrar</button><button class="g4-btn" id="limpiarHistorial" type="button">Limpiar</button></form>
+ <div class="g4-table-wrap"><table class="g4-table"><thead><tr><th>N.º</th><th>Alumno</th><th>Libro</th><th>Cant.</th><th>Fecha de pedido</th><th>Entrega</th><th>Devolución estimada</th><th>Devolución real</th><th>Atraso</th><th>Estado</th></tr></thead><tbody id="cuerpoHistorial"><tr><td colspan="10" class="g4-empty">Cargando historial…</td></tr></tbody></table></div>
+</section>
+</main>
+  </div>
+</div>
+<div id="avisoFlotante" role="status" aria-live="polite" hidden></div>
+<script type="module" src="js/sesion.js"></script><script type="module" src="js/historial-pedidos.js"></script>
+<script>window.addEventListener('DOMContentLoaded',()=>window.lucide?.createIcons());</script>
+</body></html>

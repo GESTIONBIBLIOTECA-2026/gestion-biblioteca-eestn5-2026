@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101b36"><title>Acceso de alumnos · Biblioteca Invaluable</title>
+  <link rel="stylesheet" href="css/alumno.css"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="mobile-top"><a class="brand" href="login.html"><span class="brand-mark">▤</span><span><strong>BIBLIOTECA</strong><small>INVALUABLE · EEST N.º 5</small></span></a></header>
+<main class="login-wrap"><section class="login-card">
+  <div class="login-brand"><span class="brand-mark">↗</span><div><div class="eyebrow">Área de alumnos</div><strong>Biblioteca escolar</strong></div></div>
+  <h1>Hola de nuevo</h1><p>Ingresá con tu DNI y contraseña para consultar el catálogo, solicitar libros y revisar tus pedidos.</p>
+  <form id="formLoginAlumno">
+    <div class="field"><label for="dni">DNI</label><input id="dni" name="dni" type="text" inputmode="numeric" autocomplete="username" maxlength="8" minlength="7" placeholder="Tu número de documento" required></div>
+    <div class="field"><label for="clave">Contraseña</label><input id="clave" name="clave" type="password" autocomplete="current-password" placeholder="Tu contraseña" required></div>
+    <div id="mensajeLogin" aria-live="polite"></div>
+    <button class="btn primary full" id="btnLoginAlumno" type="submit">Ingresar</button>
+  </form>
+</section></main>
+<p class="footnote">Sistema de Gestión de Biblioteca · E.E.S.T. N.º 5<br>Si no podés ingresar, consultá con el bibliotecario.</p>
+<script type="module" src="js/login.js"></script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script></body></html>

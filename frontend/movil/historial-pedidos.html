@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" class="verificando">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#101b36"><title>Mis pedidos · Biblioteca Invaluable"><link rel="stylesheet" href="css/alumno.css"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></head>
+<body>
+<header class="mobile-top"><a class="brand" href="crear-pedido.html"><span class="brand-mark">▤</span><span><strong>BIBLIOTECA</strong><small>INVALUABLE · EEST N.º 5</small></span></a><nav class="mobile-nav"><a href="crear-pedido.html">Catálogo</a><a class="active" href="historial-pedidos.html">Mis pedidos</a><button type="button" data-cerrar-sesion-alumno>Salir</button></nav></header>
+<main class="mobile-container">
+ <section class="page-intro"><p class="eyebrow">Área de alumnos</p><h1>Mis pedidos</h1><p>Hola, <strong data-nombre-alumno>alumno</strong>. Acá podés consultar el estado de tus reservas, préstamos y devoluciones.</p></section>
+ <section class="card"><div class="section-row"><h2>Historial personal</h2><small id="cantidadHistorial">Cargando…</small></div><div id="historialPedidos" class="history-list"><div class="empty-state">Cargando tus pedidos…</div></div></section>
+ <p class="footnote">Si necesitás corregir una solicitud o tenés una consulta sobre una devolución, acercate al mostrador de la biblioteca.</p>
+</main><script type="module" src="js/sesion.js"></script><script type="module" src="js/historial-pedidos.js"></script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script></body></html>

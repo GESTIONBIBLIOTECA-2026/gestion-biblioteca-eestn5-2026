@@ -1,86 +1,229 @@
-# 📚 Sistema de Gestión de Biblioteca — E.E.S.T. N° 5 (2026)
+# 📚 Biblioteca Invaluable · Panel de Administración (Grupo 5)
 
-> **Materia:** Desarrollo de Software para Plataformas Móviles (7° 5ta)  
-> **Institución:** Escuela de Educación Secundaria Técnica N° 5  
-> **Profesor:** Axel Castellano Gutiérrez  
-> **Organización GitHub:** [GESTIONBIBLIOTECA-2026](https://github.com/GESTIONBIBLIOTECA-2026)  
+Panel del bibliotecario con arquitectura **MVC**, todo en **JavaScript** (sin PHP):
 
----
+- **Frontend:** HTML + CSS (carpeta `css/`) + JS con ES Modules.
+- **Backend:** Node.js + Express, como en la clase 06.
+- **Base de datos:** MySQL en Aiven, conectada desde Node con **`mysql2`** (pool de conexiones + SSL).
 
-## 🎯 Descripción del Proyecto
+```text
+[ Frontend ]  fetch()  ─►  [ Express: Router ➔ Controller ➔ Model ]  ─►  mysql2  ─►  [ MySQL Aiven ]
+ localhost:3000 / Live Server        backend/ (puerto 3000)              src/database/db.js
+```
 
-El **Sistema de Gestión de Biblioteca** es una aplicación móvil progresiva (PWA Full-Stack) para modernizar la gestión de préstamos, catálogo de libros, solicitudes y administración de usuarios de la biblioteca de la E.E.S.T. N° 5.
-
-El desarrollo se realiza de forma colaborativa entre los **Grupos 4, 5 y 6** del Jueves (Grupo B), integrando un frontend móvil responsivo, consumo de APIs RESTful MVC y una base de datos MySQL relacional.
-
----
-
-## 👥 Estructura del Equipo y Módulos Funcionales
-
-### 👑 Liderazgo y Coordinación
-* **Líder General / Org Admin:** Dylan Andrada (`@DylanXeneizee12`)
-* **Líder de Base de Datos & Backend:** Franco Barufaldi (`@francobaru-hub`)
+> 🧠 **Guía de Razonamiento y Arquitectura MVC (Obligatoria para G4, G5 y G6):**  
+> Consultá [docs/roadmap-implementacion-mvc.md](docs/roadmap-implementacion-mvc.md) para entender el flujo mental en 4 pasos (Model ➔ Controller ➔ Router ➔ View) y el orden de dependencias entre los 3 grupos.
 
 ---
 
-### 📦 Módulos por Sub-Equipo
+## 📂 Estructura
 
-#### 🟢 Grupo 5 — Gestión de Usuarios y Panel Admin
-**Integrantes:** Franco Barufaldi (Lead DB), Dylan Andrada (Líder General), Francisco Peña, Marcos Palacios, Thiago Gioia.
-* **Alta, modificación y baja (CRUD)** de usuarios.
-* **Búsqueda avanzada** por nombre completo, DNI y curso.
-* **Gestión de atributos:** Nombre, DNI, curso, correo, teléfono y dirección.
-* **Historial activo:** Registro de entregas, devoluciones y atrasos.
-* **Panel Administrador** para gestión bibliotecaria.
+```text
+.
+├── frontend/
+│   ├── login.html, index.html, usuarios.html, configuracion.html
+│   ├── mesa-entrada.html, crear-pedido.html, historial-pedidos.html (Grupo 4)
+│   ├── movil/                    PWA del alumno: login, catálogo/reserva e historial personal
+│   ├── css/                      estilo-general.css, estilos de usuarios, configuración y pedidos
+│   └── js/                       ES Modules (import / export)
+│       ├── config.js             URL del backend
+│       ├── api.js                fetch al backend (async/await, response.ok, AbortSignal)
+│       ├── storage.js            sesión en localStorage (JSON)
+│       ├── ui.js                 fechas, aviso flotante, errores de formularios y plantillas generales
+│       ├── tema.js               modo claro / oscuro con classList (script común en el <head>)
+│       ├── sesion.js             protege las páginas + encabezado (nombre, reloj, menú del perfil)
+│       ├── login.js              login.html
+│       ├── inicio.js             index.html: atrasos pendientes y últimos préstamos
+│       ├── usuarios.js           usuarios.html: búsqueda, chips y paginación
+│       ├── usuarios-ui.js        plantillas HTML de usuarios (fila, opciones, ficha)
+│       ├── usuarios-dialogos.js  alta / modificación y ficha con historial activo
+│       ├── usuarios-estado.js    suspender, dar de baja y reactivar
+│       ├── menu-acciones.js      menú desplegable "Acciones" de la tabla
+│       └── configuracion.js      configuracion.html: mis datos y contraseña
+│
+└── backend/                      MVC: index.js ➔ Router ➔ Controller ➔ Model ➔ MySQL
+    ├── index.js                  servidor Express (cors, express.json, rutas)
+    ├── .env.example              plantilla (el .env real NO se sube)
+    ├── src/
+    │   ├── config/config.js      variables del .env y reglas del negocio
+    │   ├── database/db.js        pool de mysql2 → MySQL Aiven (SSL)
+    │   ├── models/               MODEL: solo SQL con comodines "?", devuelve datos
+    │   │   ├── usuario.models.js, busqueda.models.js, sancion.models.js, perfil.models.js
+    │   │   └── curso.models.js, prestamo.models.js, libro.models.js
+    │   ├── controllers/          CONTROLLER: reglas de negocio y respuesta HTTP
+    │   │   ├── auth, perfil, usuarios, sanciones
+    │   │   └── cursos, prestamos, libros
+    │   ├── routes/               ROUTER: URL + verbo HTTP → controlador
+    │   └── middlewares/          auth (token), validaciones (URL), formularios (body), límite de intentos
+    └── scripts/                  schema.sql, datos-prueba-grupo5.sql, crear-admin-inicial.js
+```
 
-#### 🔵 Grupo 6 — Gestión de Inventario y Catálogo
-**Integrantes:** Joaquín Trujillo, Melian Pizzorno, Leandro Vázquez, Enrique Smidt, Lautaro Garraza.
-* **Gestión del catálogo:** Registro, edición y baja de libros nuevos (CRUD de inventario).
-* **Buscador de libros:** Filtros combinados por categoría, título, autor y disponibilidad.
-* **Manejo de stock:** Actualización de cantidades de ejemplares.
-* **Indicador de estado:** Disponible / Prestado.
+### Endpoints
 
-#### 🟠 Grupo 4 — Gestión de Pedidos y Coordinación
-**Integrantes:** Tiziano Latorre, Ivan Masalis, Leonel Mirez, Alex Gauto, Mateo Grajales.
-* **Creación de pedidos:** Solicitud con usuario, libro, cantidad, fecha de pedido y devolución.
-* **Validación de reglas de negocio:** Verificación de stock disponible (vía Grupo 6) y estado habilitado del usuario (vía Grupo 5).
-* **Control del estado del pedido** e historial general.
+| Método | Ruta | Qué hace |
+|---|---|---|
+| `POST` | `/api/auth/login` | Body `{ "dni", "clave" }` → `{ payload: { token, usuario } }` |
+| `GET` | `/api/auth/perfil` | Quién está logueado → `{ payload: { id, nombre, rol } }` |
+| `GET` | `/api/perfil` | Mis datos completos (pantalla Configuración) |
+| `PUT` | `/api/perfil` | Body `{ nombre_completo, correo, telefono, direccion }` (el DNI y el rol no se cambian desde acá) |
+| `PUT` | `/api/perfil/clave` | Body `{ clave_actual, clave_nueva, confirmacion }` |
+| `GET` | `/api/prestamos?limite=5` | Últimos préstamos (en curso, atrasados y devueltos) |
+| `GET` | `/api/libros/:id` | Título, autores y stock del libro |
+| **Grupo 5** | | |
+| `GET` | `/api/usuarios?nombre=&dni=&curso=&filtro=&pagina=` | Búsqueda avanzada + listado (10 por página) y cantidad por filtro |
+| `GET` | `/api/usuarios/dni/:dni` | Nombre, curso y si el usuario puede llevarse libros (para validar al usuario antes de un préstamo — Grupo 4) |
+| `GET` | `/api/usuarios/:id` | Los 6 datos del usuario, tipo y estado |
+| `GET` | `/api/usuarios/:id/historial` | Historial activo: entregas, devoluciones, atrasos y sanciones |
+| `POST` | `/api/usuarios` | Alta. Body `{ nombre_completo, dni, rol, curso, correo, telefono, direccion, clave }` |
+| `PUT` | `/api/usuarios/:id` | Modificación (mismo body; `clave` vacía = no se cambia) |
+| `PATCH` | `/api/usuarios/:id/estado` | Body `{ "estado": "suspendido" \| "habilitado" \| "baja", "motivo" }` |
+| `GET` | `/api/cursos` | Cursos para autocompletar |
+
+`filtro` puede ser `todos`, `alumnos`, `docentes`, `administradores`, `morosos`, `suspendidos` o `bajas`.
+Si un dato está mal, la API responde `400` con `{ error, campos: { dni: "..." } }` y la pantalla marca ese campo.
+
+Las rutas administrativas (salvo `/api/auth/login`) piden el header `Authorization: Bearer <token>` de un administrador habilitado. El acceso móvil usa `/api/auth/login-alumno` y un token separado de rol **alumno**; las rutas `/api/mis-pedidos` solo devuelven o crean pedidos del alumno autenticado.
+
+### Preparar la base de datos por primera vez
+
+Configurá `backend/.env` y el certificado de Aiven según `backend/.env.example`. Desde la carpeta
+`backend/`, ejecutá `npm.cmd run db:init` en PowerShell (o `npm run db:init` en otra terminal) para crear el esquema y los datos de referencia (roles y
+categorías). El comando es idempotente y no borra filas existentes.
+
+En una instalación sin administradores, ejecutá `npm.cmd run db:admin` desde una terminal interactiva de PowerShell
+(o `npm run db:admin` en otra terminal).
+Solicita los datos del primer administrador y una contraseña que no se muestra al escribir; no hay
+credenciales predeterminadas. Las cuentas posteriores se gestionan desde la plataforma.
+
+Para iniciar el backend, ejecutá `npm.cmd start` en PowerShell (o `npm start` en otra terminal) desde `backend/`
+y abrí `http://localhost:3000`.
+
+### Pedidos, reservas y coordinación (Grupo 4)
+
+El módulo de pedidos comparte las tablas `pedidos`, `pedido_ejemplares` y `pedido_historial` del esquema. No hace falta crear tablas nuevas si la base se inicializó con `backend/scripts/schema.sql`.
+
+**Panel del bibliotecario (requiere sesión de administrador):**
+
+- `mesa-entrada.html`: buscar pedidos, consultar estados, registrar entregas, devoluciones y cancelaciones, y actualizar vencimientos.
+- `crear-pedido.html`: registrar una solicitud para un usuario existente tras validar DNI/habilitación y stock reservable.
+- `historial-pedidos.html`: historial general con filtros y exportación CSV.
+
+**Área móvil de alumnos (requiere cuenta con rol alumno):**
+
+- `movil/login.html`: acceso con DNI y contraseña de alumno.
+- `movil/crear-pedido.html`: catálogo con stock reservable y envío de reservas propias.
+- `movil/historial-pedidos.html`: historial limitado a los pedidos del alumno autenticado.
+- La PWA incluye `movil/manifest.webmanifest` y `movil/sw.js`. La API no se almacena en caché; las operaciones necesitan conexión.
+
+**Endpoints principales del Grupo 4:**
+
+| Método | Ruta | Función |
+|---|---|---|
+| `GET` | `/api/libros?q=` | Catálogo con stock reservable (área de administración) |
+| `GET` | `/api/prestamos?estado=&q=` | Mesa de entrada |
+| `POST` | `/api/prestamos` | Crear pedido desde el panel |
+| `PATCH` | `/api/prestamos/:id/estado` | Registrar entrega, devolución o cancelación |
+| `POST` | `/api/prestamos/actualizar-vencidos` | Marcar automáticamente los préstamos vencidos |
+| `GET` | `/api/prestamos/historial` | Historial general; puede filtrar con `usuario_id` |
+| `POST` | `/api/auth/login-alumno` | Ingreso al área móvil del alumno |
+| `GET` | `/api/mis-pedidos/libros` | Catálogo para alumnos autenticados |
+| `POST` | `/api/mis-pedidos` | Crear una reserva para el alumno autenticado |
+| `GET` | `/api/mis-pedidos/historial` | Historial del alumno autenticado, sin aceptar un ID ajeno |
+
+Los pedidos nuevos quedan `pendiente`. Al registrar la entrega, el backend asigna ejemplares disponibles y pasa el pedido a `prestado`; al devolver, libera los ejemplares y registra la fecha real. El servidor vuelve a validar la habilitación del alumno, la cantidad, el stock y la fecha antes de guardar. Las rutas del panel continúan limitadas a administradores; las rutas `/api/mis-pedidos` solo aceptan cuentas con rol `alumno`.
+
+Con el backend encendido, el área móvil se abre en `http://localhost:3000/movil/login.html`. Para que un alumno ingrese, debe tener una cuenta activa de rol **alumno** y contraseña registrada desde el módulo de usuarios.
+
+### Gestión de usuarios (Grupo 5)
+
+Pantalla `usuarios.html` (desde el inicio: **Añadir usuario** abre `usuarios.html#nuevo-usuario` y **Ver detalles** de atrasos abre `usuarios.html?filtro=morosos`):
+
+- **Alta y modificación** con los 6 atributos obligatorios (nombre completo, DNI, curso, correo, teléfono y dirección)
+  + tipo de usuario y contraseña. El curso es obligatorio para alumnos; si es nuevo, se crea solo en la tabla `cursos`.
+- **Búsqueda avanzada**: nombre, DNI y curso combinados, con filtros rápidos: alumnos, docentes, administradores,
+  *morosos* (con un préstamo atrasado), *suspendidos* (todos los que no pueden pedir libros) y *dados de baja*.
+- **Ficha del usuario** con el **historial activo**: entregas, devoluciones, atrasos (días) y sanciones.
+- **Sanciones**: *Suspender* pide un motivo y lo guarda en `sanciones` (si tiene un préstamo atrasado, queda asociada a ese pedido).
+  *Habilitar* la levanta (queda en el historial con fecha de fin).
+- **Baja lógica**: el usuario pasa a `estado = 'baja'` y se conserva su historial. No se puede si tiene libros sin devolver;
+  sus reservas pendientes se cancelan. Se reactiva desde el filtro *Dados de baja*.
+
+Estado que se muestra (lo calcula `usuario.models.js`):
+
+| Estado | Cuándo |
+|---|---|
+| 🟢 Habilitado | Puede pedir libros |
+| 🔴 Suspendido | Lo suspendió un administrador o tiene una sanción en vigor |
+| 🔴 Suspendido por atraso | Automático: tiene un préstamo vencido o pasado de fecha. Se habilita solo cuando lo devuelve |
+| ⚪ Dado de baja | Baja lógica |
+
+Un administrador no puede suspenderse, darse de baja ni sacarse el rol a sí mismo. El rol y el estado se vuelven
+a leer de la base en cada petición: si a un administrador lo suspenden o le sacan el rol, pierde el acceso al instante.
+
+**Datos de prueba (opcional):** `backend/scripts/datos-prueba-grupo5.sql` carga usuarios de ejemplo (DNI 99000001 a 99000006,
+clave `prueba123`) con préstamos al día, devueltos, atrasados y sanciones. Al final del archivo está cómo borrarlos.
 
 ---
 
-## 🛠️ Tecnología y Arquitectura
+## 🚀 Cómo levantarlo
 
-* **Frontend:** HTML5, CSS3 Mobile-First, JavaScript ES6+ (Async/Await, Fetch API), PWA (Service Workers & Manifest).
-* **Backend:** Node.js + Express (Patrón MVC).
-* **Base de Datos:** MySQL Relacional (diseñada y administrada por Franco Barufaldi).
-* **Control de Versiones:** Git & GitHub Flow (Pull Requests y Protección de Ramas).
+> En PowerShell usá `npm.cmd` en vez de `npm` (o cambiá la terminal a **Command Prompt**).
+
+### 1. Instalar dependencias (una sola vez, y cada vez que cambie `package.json`)
+```
+cd backend
+npm.cmd install
+```
+
+### 2. Crear `backend/.env`
+```
+copy .env.example .env
+```
+Completá los datos de Aiven, guardá el `ca.pem` de Aiven dentro de `backend/` e inventá un texto largo para `JWT_SECRET`.
+
+### 3. Encender el servidor (una sola terminal)
+```
+cd backend
+npm.cmd run dev
+```
+Tiene que decir:
+```
+🚀 Servidor activo en http://localhost:3000
+✅ MySQL 8.0.x conectado a la base "defaultdb"
+```
+
+### 4. Abrir el panel
+**http://localhost:3000**. También funciona con **Live Server** abriendo `frontend/login.html`.
+
+Usuario de ejemplo del SQL: DNI `30111222`, contraseña `gaby1234`.
 
 ---
 
-## 🌿 Gobernanza de Git & Flujo de Trabajo
+## 🕒 Zona horaria
 
-1. **Rama Principal (`main`):** Reservada para código probado e integrado.
-2. **Rama de Desarrollo (`develop`):** Integración continua de los 3 módulos.
-3. **Ramas de Funcionalidades (`feature/<modulo>-<nombre>`):** Cada integrante debe trabajar en su respectiva rama y enviar Pull Request para integración.
+Cada conexión arranca con `SET time_zone = '-03:00'`, así `NOW()` y `CURRENT_DATE` dan la hora de Argentina
+(fecha del préstamo, vencimiento y días de atraso). Se cambia con `DB_ZONA_HORARIA` en `backend/.env`.
 
 ---
 
-## 🚀 Instalación y Uso Local
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/GESTIONBIBLIOTECA-2026/gestion-biblioteca-eestn5-2026.git
-
-# 2. Entrar a la carpeta del proyecto
-cd gestion-biblioteca-eestn5-2026
-
-# 3. Instalar dependencias
-npm install
-
-# 4. Iniciar el servidor en modo desarrollo
-npm run dev
+## 👤 Crear otro administrador
+```
+npm.cmd run hash -- claveNueva123
+```
+```sql
+INSERT INTO usuarios (dni, nombre_completo, curso_id, correo, telefono, direccion, password_hash, rol_id)
+VALUES ('12345678', 'Nombre Apellido', NULL, 'mail@eest5.edu.ar', '11 0000-0000', 'Dirección', '<hash>', 3);
 ```
 
 ---
 
-📌 *Proyecto Integrador 2026 — E.E.S.T. N° 5*
+## 🧯 Problemas comunes
+
+| Mensaje | Solución |
+|---|---|
+| `Cannot find package 'mysql2'` | Falta `npm.cmd install` dentro de `backend/`. |
+| `Access denied for user` | Revisá `DB_USER` / `DB_PASSWORD` en `backend/.env`. |
+| `ETIMEDOUT` / `ENOTFOUND` | Revisá `DB_HOST` / `DB_PORT` y que el servicio de Aiven esté en **Running**. |
+| `self-signed certificate` / error de SSL | Revisá que `ca.pem` sea el de Aiven y esté en `backend/`. |
+| `Falta JWT_SECRET` | Agregalo en `backend/.env`. |
+| En la página: "No hay conexión con el servidor" | Falta la terminal con `npm.cmd run dev`. |
