@@ -5,7 +5,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getUsuarioLogin } from "../models/usuario.models.js";
-import { JWT_SECRET, JWT_DURACION } from "../config/config.js";
+import { JWT_SECRET, JWT_DURACION, ROLES_APP } from "../config/config.js";
 import { puedeEntrar } from "../middlewares/auth.middleware.js";
 import { error500 } from "./respuestas.js";
 
@@ -26,10 +26,14 @@ export const postLogin = async (req, res) => {
             return res.status(401).json({ error: "DNI o contraseña incorrectos." });
         }
 
-        // 2. Reglas de negocio: entran alumnos, docentes y administradores.
+        // 2. Reglas de negocio: la app es solo para alumnos y docentes.
         //    De baja no entra nadie; un alumno/docente suspendido sí (ve su estado en el inicio).
+        if (!ROLES_APP.includes(usuario.rol)) {
+            return res.status(403).json({ error: "Esta app es para alumnos y docentes. Usá la plataforma web de escritorio." });
+        }
+
         if (!puedeEntrar(usuario)) {
-            return res.status(403).json({ error: `Tu usuario está ${usuario.estado === "baja" ? "dado de baja" : "suspendido"}.` });
+            return res.status(403).json({ error: "Tu usuario está dado de baja." });
         }
 
         // 3. Token de sesión (nunca se manda el password_hash)

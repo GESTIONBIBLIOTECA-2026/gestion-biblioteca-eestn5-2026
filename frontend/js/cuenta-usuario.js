@@ -1,6 +1,6 @@
 /* ==========================================================================
    MÓDULO: cuenta-usuario.js - Estado de la cuenta del alumno / docente
-   - Saludo y credencial digital (con QR del DNI)
+   - Saludo y credencial digital
    - Aviso más importante: suspensión, préstamos vencidos o vencimiento cercano
    - Plantilla de las sanciones
    Lo usa inicio-usuario.js
@@ -35,14 +35,6 @@ export function mostrarCredencial(usuario) {
     $("#credencialDatos").innerHTML = datos.map(([etiqueta, valor]) => `<div><dt>${etiqueta}</dt><dd>${escapar(valor)}</dd></div>`).join("");
     $("#estadoCuenta").textContent = texto;
     $("#estadoCuenta").className = `estado-cuenta estado ${clase}`;
-
-    // QR con el DNI: el bibliotecario lo puede escanear en el mostrador
-    if (window.qrcode) {
-        const qr = window.qrcode(0, "M");
-        qr.addData(usuario.dni);
-        qr.make();
-        $("#qrCredencial").innerHTML = qr.createSvgTag({ margin: 0, scalable: true });
-    }
 }
 
 

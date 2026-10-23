@@ -44,27 +44,9 @@ async function pedir(ruta, metodo = "GET", datos = null) {
 export const iniciarSesion = (dni, clave) => pedir("/auth/login", "POST", { dni, clave });
 export const obtenerSesionActual = () => pedir("/auth/perfil");
 
-// --- Inicio del administrador ---
-export const obtenerMetricas = () => pedir("/dashboard");   // { libros_total, prestamos_activos, alumnos_morosos }
-export const obtenerUltimosPrestamos = (limite = 5) => pedir(`/prestamos?limite=${limite}`);
-
-// --- Usuarios (Grupo 5) ---
-export const listarUsuarios = (filtros) => pedir(`/usuarios?${new URLSearchParams(filtros)}`);
-export const obtenerUsuario = (id) => pedir(`/usuarios/${id}`);
-export const obtenerHistorial = (id) => pedir(`/usuarios/${id}/historial`);
-export const registrarUsuario = (datos) => pedir("/usuarios", "POST", datos);
-export const modificarUsuario = (id, datos) => pedir(`/usuarios/${id}`, "PUT", datos);
-export const cambiarEstado = (id, estado, motivo = "") => pedir(`/usuarios/${id}/estado`, "PATCH", { estado, motivo });
-export const obtenerCursos = () => pedir("/cursos");
-
-// --- Libros: catálogo e inventario (Grupo 6) ---
+// --- Catálogo de libros (Grupo 6) · solo lectura ---
 export const listarLibros = (filtros = {}) => pedir(`/libros?${new URLSearchParams(filtros)}`);
-export const obtenerResumenLibros = () => pedir("/libros/resumen");
 export const obtenerCategorias = () => pedir("/libros/categorias");
-export const registrarLibro = (datos) => pedir("/libros", "POST", datos);
-export const modificarLibro = (id, datos) => pedir(`/libros/${id}`, "PUT", datos);
-export const cambiarStock = (id, cambio) => pedir(`/libros/${id}/stock`, "PATCH", { cambio });
-export const darDeBajaLibro = (id) => pedir(`/libros/${id}`, "DELETE");
 
 // --- Mi perfil ---
 export const obtenerMiPerfil = () => pedir("/perfil");

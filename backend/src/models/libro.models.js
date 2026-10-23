@@ -1,14 +1,13 @@
 /* ==========================================================================
    libro.models.js - Catálogo de libros (consultas) · Grupo 6
    El stock sale de vista_stock_libros (cuenta los ejemplares de cada título).
-   Altas, cambios, stock y bajas: inventario.models.js
    ========================================================================== */
 
 import connection from "../database/db.js";
 
 // Columnas de un libro del catálogo (stock_reservable = disponibles - reservados)
 const COLUMNAS = `v.libro_id AS id, v.titulo, v.isbn, v.autores, v.categoria, l.categoria_id,
-    ed.nombre AS editorial, l.anio_publicacion AS anio, v.ejemplares_totales, v.ejemplares_disponibles,
+    ed.nombre AS editorial, l.anio_publicacion AS anio, l.portada_url, v.ejemplares_totales, v.ejemplares_disponibles,
     v.cantidad_reservada, v.stock_reservable`;
 
 const DESDE = `FROM vista_stock_libros v JOIN libros l ON l.id = v.libro_id
@@ -34,19 +33,6 @@ export const getCatalogoLibros = async ({ texto, categoria, disponibilidad }) =>
 
 export const getLibroPorId = async (id) => {
     const [rows] = await connection.query(`SELECT ${COLUMNAS} ${DESDE} WHERE v.libro_id = ?`, [id]);
-    return rows[0];
-};
-
-// Números del catálogo: títulos activos y ejemplares según su estado
-export const getResumenCatalogo = async () => {
-    const sql = `SELECT
-            (SELECT COUNT(*) FROM libros WHERE activo = TRUE) AS titulos,
-            COALESCE(SUM(e.estado <> 'baja'), 0) AS ejemplares,
-            COALESCE(SUM(e.estado = 'disponible'), 0) AS disponibles,
-            COALESCE(SUM(e.estado = 'prestado'), 0) AS prestados,
-            COALESCE(SUM(e.estado IN ('en_reparacion', 'extraviado', 'baja')), 0) AS fuera_de_servicio
-        FROM ejemplares e JOIN libros l ON l.id = e.libro_id AND l.activo = TRUE`;
-    const [rows] = await connection.query(sql);
     return rows[0];
 };
 

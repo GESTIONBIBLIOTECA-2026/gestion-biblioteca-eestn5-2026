@@ -1,19 +1,19 @@
 /* ==========================================================================
-   usuario.sql.js - Pedazos de SQL de usuarios que usan varios Modelos
-   (usuario, búsqueda, dashboard). Son texto fijo: NUNCA llevan datos del
+   usuario.sql.js - Pedazos de SQL de usuarios (los usa usuario.models.js)
+   Son texto fijo: NUNCA llevan datos del
    usuario; los datos siempre van aparte con comodines "?".
    ========================================================================== */
 
 // Atraso = préstamo vencido, o prestado con la fecha de devolución ya pasada
-export const ATRASO = `EXISTS (SELECT 1 FROM pedidos p WHERE p.usuario_id = u.id
+const ATRASO = `EXISTS (SELECT 1 FROM pedidos p WHERE p.usuario_id = u.id
     AND (p.estado = 'vencido' OR (p.estado = 'prestado' AND p.fecha_devolucion_estimada < CURRENT_DATE)))`;
 
 // Sanción en vigor = activa y sin fecha de fin (o que todavía no llegó)
 const SANCION = `EXISTS (SELECT 1 FROM sanciones s WHERE s.usuario_id = u.id
     AND s.activa = TRUE AND (s.fecha_fin IS NULL OR s.fecha_fin >= CURRENT_DATE))`;
 
-// Condición que ve el bibliotecario: baja / suspendido / atraso / habilitado
-export const CONDICION = `CASE WHEN u.estado = 'baja' THEN 'baja'
+// Condición de la cuenta: baja / suspendido / atraso / habilitado
+const CONDICION = `CASE WHEN u.estado = 'baja' THEN 'baja'
     WHEN u.estado = 'suspendido' OR ${SANCION} THEN 'suspendido'
     WHEN ${ATRASO} THEN 'atraso' ELSE 'habilitado' END`;
 

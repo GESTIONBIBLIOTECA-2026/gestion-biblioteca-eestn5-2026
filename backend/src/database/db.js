@@ -32,24 +32,7 @@ connection.pool.on("connection", (conexion) => {
     conexion.query("SET time_zone = ?", [DB.zonaHoraria]);
 });
 
-// 4. Transacción: varias consultas que se guardan TODAS juntas o NINGUNA (préstamos, stock).
-//    El trabajo recibe "conexion" y la usa en vez del pool, así todo va por la misma conexión.
-export const conTransaccion = async (trabajo) => {
-    const conexion = await connection.getConnection();
-    try {
-        await conexion.beginTransaction();
-        const resultado = await trabajo(conexion);
-        await conexion.commit();
-        return resultado;
-    } catch (error) {
-        await conexion.rollback();
-        throw error;
-    } finally {
-        conexion.release();
-    }
-};
-
-// 5. Testeo visual de conexión a Aiven Cloud
+// 4. Testeo visual de conexión a Aiven Cloud
 export const comprobarConexion = async () => {
     try {
         const [filas] = await connection.query("SELECT DATABASE() AS base, VERSION() AS version");

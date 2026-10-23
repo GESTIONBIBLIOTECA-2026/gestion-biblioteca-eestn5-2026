@@ -1,8 +1,7 @@
 /* ==========================================================================
    MÓDULO: sesion.js - Protege las páginas y maneja el encabezado
-   - Sin sesión válida → login.html
-   - Página de otro rol → al inicio que le corresponde (js/navegacion.js)
-   - Nombre y rol de quien inició sesión, fecha y hora
+   - Sin sesión válida → index.html (login)
+   - Nombre y rol de quien inició sesión (alumno o docente), fecha y hora
    - Menú del perfil (Ajustes, Apariencia y Cerrar sesión)
    Se incluye en cada página protegida: <script type="module" src="js/sesion.js">
    ========================================================================== */
@@ -10,7 +9,6 @@
 import { obtenerSesionActual } from "./api.js";
 import { obtenerToken, borrarSesion } from "./storage.js";
 import { fechaDeHoy } from "./ui.js";
-import { adaptarAlRol } from "./navegacion.js";
 
 
 // 🎯 1. Nodos del DOM
@@ -21,12 +19,12 @@ const menuPerfil  = document.querySelector("#menuPerfil");
 
 
 // 🎨 2. Funciones de UI
-const irAlLogin = () => window.location.replace("login.html");
+const irAlLogin = () => window.location.replace("index.html");
 
 // Nombre (y rol) en todos los lugares del encabezado. También la usa Configuración.
-export function mostrarNombre(nombre, rol = "administrador") {
-    document.querySelectorAll("[data-nombre-admin]").forEach((elemento) => { elemento.textContent = nombre; });
-    document.querySelectorAll("[data-rol-admin]").forEach((elemento) => { elemento.textContent = rol.charAt(0).toUpperCase() + rol.slice(1); });
+export function mostrarNombre(nombre, rol = "alumno") {
+    document.querySelectorAll("[data-nombre-usuario]").forEach((elemento) => { elemento.textContent = nombre; });
+    document.querySelectorAll("[data-rol-usuario]").forEach((elemento) => { elemento.textContent = rol.charAt(0).toUpperCase() + rol.slice(1); });
 }
 
 function actualizarReloj() {
@@ -46,8 +44,6 @@ async function verificarSesion() {
 
     try {
         const { payload } = await obtenerSesionActual();
-        if (!adaptarAlRol(payload.rol)) return;   // página de otro rol: ya se está yendo
-
         mostrarNombre(payload.nombre, payload.rol);
 
         // Recién ahora se muestra la página
@@ -55,7 +51,7 @@ async function verificarSesion() {
         document.dispatchEvent(new CustomEvent("sesion-verificada"));
 
     } catch (error) {
-        if (error.status === 401) borrarSesion();   // token vencido o inválido
+        if (error.status === 401) borrarSesion();   // token vencido, inválido o de un administrador
         irAlLogin();
     }
 }

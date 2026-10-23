@@ -1,14 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Backend del Panel de Administración de la Biblioteca (Grupo 5) - Express MVC + mysql2 (MySQL Aiven)",
+  "description": "Backend de la App (PWA) de la Biblioteca para alumnos y docentes (Grupo 5) - Express MVC + mysql2 (MySQL Aiven)",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
     "db:init": "node scripts/inicializar-bd.js",
-    "db:admin": "node scripts/crear-admin-inicial.js",
     "hash": "node scripts/generar-hash.js"
   },
   "dependencies": {

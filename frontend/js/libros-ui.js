@@ -1,6 +1,6 @@
 /* ==========================================================================
    MÓDULO: libros-ui.js - Plantillas HTML del catálogo · Grupo 6
-   Las usan libros.html (administrador) y catalogo.html (alumnos y docentes).
+   Las usa catalogo.html (alumnos y docentes).
    ========================================================================== */
 
 import { escapar } from "./ui.js";
@@ -20,34 +20,6 @@ export function llenarCategorias(categorias) {
         select.querySelectorAll("option:not(:first-child)").forEach((opcion) => opcion.remove());
         select.insertAdjacentHTML("beforeend", opciones);
     });
-}
-
-/* --- Fila de la tabla del administrador (las acciones van con data-accion + data-id: delegación) --- */
-export function crearFilaLibroHTML(libro) {
-    const [texto, clase] = estadoLibro(libro);
-    const reservados = libro.cantidad_reservada > 0 ? `<small>${libro.cantidad_reservada} reservado/s</small>` : "";
-
-    return `
-        <tr>
-            <td>
-                <div class="libro-identidad">
-                    <div class="libro-portada"><i data-lucide="book"></i></div>
-                    <div><strong>${escapar(libro.titulo)}</strong><small>${escapar(libro.autores ?? "Sin autor")}</small></div>
-                </div>
-            </td>
-            <td>${escapar(libro.isbn ?? "—")}</td>
-            <td>${escapar(libro.categoria)}</td>
-            <td>${libro.anio ?? "—"}</td>
-            <td><span class="stock-libro">${libro.ejemplares_disponibles} / ${libro.ejemplares_totales}</span>${reservados}</td>
-            <td><span class="etiqueta ${clase}">${texto}</span></td>
-            <td>
-                <div class="acciones-fila">
-                    <button type="button" class="boton-icono" data-accion="editar" data-id="${libro.id}" title="Editar libro" aria-label="Editar ${escapar(libro.titulo)}"><i data-lucide="pencil"></i></button>
-                    <button type="button" class="boton-icono" data-accion="stock" data-id="${libro.id}" title="Actualizar stock" aria-label="Actualizar stock de ${escapar(libro.titulo)}"><i data-lucide="layers"></i></button>
-                    <button type="button" class="boton-icono peligro" data-accion="baja" data-id="${libro.id}" title="Dar de baja" aria-label="Dar de baja ${escapar(libro.titulo)}"><i data-lucide="trash-2"></i></button>
-                </div>
-            </td>
-        </tr>`;
 }
 
 /* --- Tarjeta del catálogo para alumnos y docentes (catalogo.html) --- */
