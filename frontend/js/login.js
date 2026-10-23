@@ -1,9 +1,14 @@
 /* ==========================================================================
-   MÓDULO: login.js - Pantalla de Inicio de Sesión (login.html)
+   MÓDULO: login.js - Pantalla de Inicio de Sesión (index.html)
+   Solo entran alumnos y docentes: si entra un administrador, el backend
+   responde 403 y se muestra su mensaje.
    ========================================================================== */
 
 import { iniciarSesion, obtenerSesionActual } from "./api.js";
 import { guardarSesion, obtenerToken } from "./storage.js";
+
+// Página a la que va el alumno o docente después de entrar
+const PAGINA_INICIO = "inicio-usuario.html";
 
 
 // 🎯 1. Nodos del DOM
@@ -23,13 +28,13 @@ function mostrarError(mensaje) {
 }
 
 
-// 🌐 3. Si ya hay una sesión válida, va directo al panel
+// 🌐 3. Si ya hay una sesión válida, va directo a su inicio
 async function revisarSesion() {
     if (!obtenerToken()) return;
 
     try {
         await obtenerSesionActual();
-        window.location.replace("index.html");
+        window.location.replace(PAGINA_INICIO);
     } catch (error) {
         // Token vencido o servidor apagado: se queda en el login
     }
@@ -60,7 +65,7 @@ formulario.addEventListener("submit", async (evento) => {
         // POST /api/auth/login → { token, usuario }
         const { payload } = await iniciarSesion(campoDni.value.trim(), campoClave.value);
         guardarSesion(payload);
-        window.location.href = "index.html";
+        window.location.href = PAGINA_INICIO;
 
     } catch (error) {
         // Sin status = error de red (el backend está apagado)

@@ -18,7 +18,10 @@ export function obtenerToken() {
     }
 }
 
-// Cierra la sesión en este navegador
+// Cierra la sesión en este navegador.
+// También borra los datos de la API que guardó el Service Worker (sw.js → CACHE_API),
+// así el próximo que use este celular no ve la cuenta del anterior.
 export function borrarSesion() {
     localStorage.removeItem(SESION_KEY);
+    if ("caches" in window) caches.delete("biblioteca-api-v1");
 }

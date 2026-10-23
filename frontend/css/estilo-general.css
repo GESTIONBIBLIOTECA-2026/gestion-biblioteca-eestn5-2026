@@ -376,7 +376,7 @@ body {
     border-bottom: 1px solid var(--borde-tarjeta);
 }
 
-/* "Panel de Administración" a la izquierda */
+/* "Mi biblioteca" a la izquierda */
 .titulo-encabezado {
     color: var(--texto-fuerte);
     font-size: 15px;
@@ -686,6 +686,12 @@ button.switch-tema:focus-visible {
     background: var(--azul-100);
 }
 
+/* Botón "Instalar app" (PWA) arriba a la derecha: azul y con brillo para que llame la atención */
+.boton-instalar {
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, .45);
+}
+
 .boton-principal:disabled,
 .boton-secundario:disabled,
 .boton-peligro:disabled {
@@ -852,6 +858,7 @@ button.switch-tema:focus-visible {
     }
 
     .encabezado-superior {
+        position: relative;   /* referencia del botón "Instalar app" */
         flex-wrap: wrap;
         gap: 10px;
         padding: 12px 16px;
@@ -878,8 +885,45 @@ button.switch-tema:focus-visible {
         max-width: calc(100vw - 32px);
     }
 
+    /* "Instalar app" queda arriba a la derecha, a la altura de "Mi biblioteca" */
+    .boton-instalar {
+        position: absolute;
+        top: 7px;
+        right: 16px;
+        padding: 7px 12px;
+    }
+
     .nombre-perfil {
         font-size: 13px;
+    }
+
+    /* Menú en fila: los 3 botones se reparten el ancho (sin scroll de costado) */
+    .sidebar,
+    .menu-compacto .sidebar,
+    .menu-compacto .sidebar:hover,
+    .menu-compacto .sidebar:focus-within {
+        overflow-x: visible;
+        padding: 8px 12px;
+    }
+
+    .sidebar-nav {
+        width: 100%;
+        gap: 4px;
+    }
+
+    .nav-item,
+    .menu-compacto .nav-item {
+        flex: 1 1 0;
+        min-width: 0;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 8px;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+
+    .nav-item.activo {
+        border-bottom-color: var(--nav-activo-borde);
     }
 }
 
@@ -887,5 +931,20 @@ button.switch-tema:focus-visible {
 
     .nombre-perfil {
         display: none;
+    }
+
+    /* Ícono arriba y texto abajo, como la barra de una app */
+    .nav-item,
+    .menu-compacto .nav-item {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+
+    .nav-item span {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

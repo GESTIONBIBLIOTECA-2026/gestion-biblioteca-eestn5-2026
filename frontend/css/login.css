@@ -27,6 +27,13 @@
     border-bottom: 1px solid var(--borde-tarjeta);
 }
 
+/* Derecha del encabezado: botón "Instalar app" + Apariencia */
+.acciones-encabezado-login {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .logo-login {
     display: flex;
     align-items: center;

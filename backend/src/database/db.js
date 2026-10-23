@@ -12,7 +12,7 @@ const ssl = !DB.ssl ? undefined
     : existsSync(DB.caPath) ? { ca: readFileSync(DB.caPath, "utf8") }
     : { rejectUnauthorized: false };
 
-// 2. Pool: conexiones abiertas y reutilizables
+// 2. Pool: conexiones abiertas y reutilizables (los datos salen SOLO del .env)
 const connection = mysql.createPool({
     host: DB.host,
     port: DB.port,
@@ -31,5 +31,15 @@ const connection = mysql.createPool({
 connection.pool.on("connection", (conexion) => {
     conexion.query("SET time_zone = ?", [DB.zonaHoraria]);
 });
+
+// 4. Testeo visual de conexión a Aiven Cloud
+export const comprobarConexion = async () => {
+    try {
+        const [filas] = await connection.query("SELECT DATABASE() AS base, VERSION() AS version");
+        console.log(`✅ MySQL ${filas[0].version} conectado a la base "${filas[0].base}" en Aiven Cloud`);
+    } catch (error) {
+        console.error(`❌ Error crítico conectando a Aiven Cloud: ${error.message}`);
+    }
+};
 
 export default connection;

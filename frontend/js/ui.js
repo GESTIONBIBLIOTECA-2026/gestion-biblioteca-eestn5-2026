@@ -27,10 +27,6 @@ export function fechaDeHoy() {
     return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
-/* --- "Martina González" → "MG" --- */
-export const iniciales = (nombre) => nombre.split(" ").slice(0, 2).map((parte) => parte[0]).join("").toUpperCase();
-
-
 /* --- Aviso flotante abajo a la derecha (#avisoFlotante) --- */
 let temporizador;
 
@@ -64,20 +60,3 @@ export function marcarCampos(formulario, campos = {}) {
 // Fila con un mensaje que ocupa toda la tabla (cargando, vacío o error)
 export const crearFilaMensajeHTML = (texto, columnas) =>
     `<tr><td colspan="${columnas}" class="celda-mensaje">${escapar(texto)}</td></tr>`;
-
-
-// Fila de "Últimos préstamos" (Inicio)
-export function crearFilaPrestamoHTML(prestamo) {
-    const { nombre_completo, titulo, fecha_prestamo, fecha_devolucion_estimada, fecha_devolucion_real, estado, dias_atraso } = prestamo;
-    const atrasado = estado === "vencido" || dias_atraso > 0;
-    const etiqueta = estado === "devuelto" ? ["Devuelto", "devuelto"] : atrasado ? ["Atrasado", "atrasado"] : ["En curso", "en-curso"];
-
-    return `
-        <tr>
-            <td>${escapar(nombre_completo)}</td>
-            <td>${escapar(titulo)}</td>
-            <td>${fechaCorta(fecha_prestamo)}</td>
-            <td>${fechaCorta(fecha_devolucion_real ?? fecha_devolucion_estimada)}</td>
-            <td><span class="estado ${etiqueta[1]}">${etiqueta[0]}</span></td>
-        </tr>`;
-}

@@ -7,6 +7,14 @@
 
     <title>Configuración - Biblioteca Invaluable</title>
 
+    <!-- PWA (clase 07): manifiesto, color de la barra de estado y soporte para iOS -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1329">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Biblioteca">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+
     <!-- Tema claro / oscuro (va primero para que no parpadee) -->
     <script src="js/tema.js"></script>
 
@@ -36,7 +44,7 @@
         <!-- BARRA LATERAL -->
         <aside class="sidebar">
 
-            <a href="index.html" class="sidebar-logo" aria-label="Ir al inicio">
+            <a href="inicio-usuario.html" class="sidebar-logo" aria-label="Ir al inicio">
 
                 <div class="sidebar-logo-icono">
                     <i data-lucide="book-open"></i>
@@ -51,29 +59,14 @@
 
             <nav class="sidebar-nav" aria-label="Menú principal">
 
-                <a href="index.html" class="nav-item" title="Inicio">
+                <a href="inicio-usuario.html" class="nav-item" title="Inicio">
                     <i data-lucide="house"></i>
                     <span>Inicio</span>
                 </a>
 
-                <a href="usuarios.html" class="nav-item" title="Usuarios">
-                    <i data-lucide="users"></i>
-                    <span>Usuarios</span>
-                </a>
-
-                <a href="prestamos.html" class="nav-item" title="Préstamos">
-                    <i data-lucide="book-open-check"></i>
-                    <span>Préstamos</span>
-                </a>
-
-                <a href="libros.html" class="nav-item" title="Libros">
+                <a href="catalogo.html" class="nav-item" title="Catálogo">
                     <i data-lucide="book"></i>
-                    <span>Libros</span>
-                </a>
-
-                <a href="reportes.html" class="nav-item" title="Reportes">
-                    <i data-lucide="chart-no-axes-column"></i>
-                    <span>Reportes</span>
+                    <span>Catálogo</span>
                 </a>
 
                 <a href="configuracion.html" class="nav-item activo" aria-current="page" title="Configuración">
@@ -92,9 +85,15 @@
             <!-- ENCABEZADO SUPERIOR -->
             <header class="encabezado-superior">
 
-                <p class="titulo-encabezado">Panel de Administración</p>
+                <p class="titulo-encabezado">Mi biblioteca</p>
 
                 <div class="encabezado-derecha">
+
+                    <!-- INSTALAR LA APP (PWA · js/pwa.js): oculto hasta que el navegador lo permite -->
+                    <button type="button" id="btn-instalar-app" class="boton-principal boton-instalar" hidden>
+                        <i data-lucide="download"></i>
+                        <span>Instalar app</span>
+                    </button>
 
                     <div class="info-fecha-hora">
 
@@ -110,7 +109,7 @@
 
                     </div>
 
-                    <!-- MENÚ DEL PERFIL (js/menu-perfil.js) -->
+                    <!-- MENÚ DEL PERFIL (js/sesion.js) -->
                     <div class="menu-perfil" data-menu-perfil>
 
                         <button
@@ -125,7 +124,7 @@
                                 <i data-lucide="user-round"></i>
                             </span>
 
-                            <span class="nombre-perfil" data-nombre-admin>Admin</span>
+                            <span class="nombre-perfil" data-nombre-usuario>Usuario</span>
 
                             <i data-lucide="chevron-down" class="flecha-perfil"></i>
                         </button>
@@ -133,8 +132,8 @@
                         <div class="menu-perfil-lista" id="menuPerfil" role="menu" aria-label="Opciones del perfil" hidden>
 
                             <div class="menu-perfil-cabecera">
-                                <strong data-nombre-admin>Admin</strong>
-                                <span data-rol-admin>Administrador</span>
+                                <strong data-nombre-usuario>Usuario</strong>
+                                <span data-rol-usuario>Alumno</span>
                             </div>
 
                             <a href="configuracion.html" class="menu-perfil-opcion" role="menuitem">
@@ -184,7 +183,7 @@
                 <!-- TÍTULO -->
                 <section class="encabezado-configuracion">
                     <h1>Configuración</h1>
-                    <p>Tus datos de usuario, tu contraseña y la apariencia del panel.</p>
+                    <p>Tus datos de usuario, tu contraseña y la apariencia de la biblioteca.</p>
                 </section>
 
 
@@ -217,7 +216,7 @@
                             <div class="campo-config">
                                 <label for="perfilDni">DNI</label>
                                 <input id="perfilDni" name="dni" type="text" readonly tabindex="-1" placeholder="—">
-                                <small class="pista-config">Es tu usuario para entrar. Lo cambia otro administrador desde Usuarios.</small>
+                                <small class="pista-config">Es tu usuario para entrar. Solo se puede cambiar en la biblioteca.</small>
                             </div>
 
                             <div class="campo-config">
@@ -380,7 +379,7 @@
 
                         <div>
                             <h2 id="tituloApariencia">Apariencia</h2>
-                            <p>Elegí cómo se ve el panel. Se guarda en este navegador.</p>
+                            <p>Elegí cómo se ve la biblioteca. Se guarda en este navegador.</p>
                         </div>
                     </div>
 
@@ -418,6 +417,9 @@
 
     <!-- Datos del perfil, contraseña y tema -->
     <script type="module" src="js/configuracion.js"></script>
+
+    <!-- PWA: registro del Service Worker y botón "Instalar app" -->
+    <script src="js/pwa.js"></script>
 
     <script>
         window.lucide?.createIcons();

@@ -1,7 +1,7 @@
 /* ==========================================================================
-   MÓDULO: sesion.js - Protege las páginas del panel y maneja el encabezado
-   - Sin sesión válida → login.html
-   - Nombre y rol del administrador, fecha y hora
+   MÓDULO: sesion.js - Protege las páginas y maneja el encabezado
+   - Sin sesión válida → index.html (login)
+   - Nombre y rol de quien inició sesión (alumno o docente), fecha y hora
    - Menú del perfil (Ajustes, Apariencia y Cerrar sesión)
    Se incluye en cada página protegida: <script type="module" src="js/sesion.js">
    ========================================================================== */
@@ -19,12 +19,12 @@ const menuPerfil  = document.querySelector("#menuPerfil");
 
 
 // 🎨 2. Funciones de UI
-const irAlLogin = () => window.location.replace("login.html");
+const irAlLogin = () => window.location.replace("index.html");
 
 // Nombre (y rol) en todos los lugares del encabezado. También la usa Configuración.
-export function mostrarNombre(nombre, rol = "administrador") {
-    document.querySelectorAll("[data-nombre-admin]").forEach((elemento) => { elemento.textContent = nombre; });
-    document.querySelectorAll("[data-rol-admin]").forEach((elemento) => { elemento.textContent = rol.charAt(0).toUpperCase() + rol.slice(1); });
+export function mostrarNombre(nombre, rol = "alumno") {
+    document.querySelectorAll("[data-nombre-usuario]").forEach((elemento) => { elemento.textContent = nombre; });
+    document.querySelectorAll("[data-rol-usuario]").forEach((elemento) => { elemento.textContent = rol.charAt(0).toUpperCase() + rol.slice(1); });
 }
 
 function actualizarReloj() {
@@ -51,7 +51,7 @@ async function verificarSesion() {
         document.dispatchEvent(new CustomEvent("sesion-verificada"));
 
     } catch (error) {
-        if (error.status === 401) borrarSesion();   // token vencido o inválido
+        if (error.status === 401) borrarSesion();   // token vencido, inválido o de un administrador
         irAlLogin();
     }
 }
