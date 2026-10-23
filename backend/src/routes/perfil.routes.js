@@ -1,6 +1,6 @@
 /* ==========================================================================
    perfil.routes.js - Rutas de "Mi perfil" y "Mi cuenta"  (/api/perfil)
-   Las usan TODOS los roles: alumno, docente y administrador.
+   Las usan los alumnos y docentes de la app.
    Siempre trabajan con el usuario del token, nunca con un ID que mande el navegador.
    ========================================================================== */
 

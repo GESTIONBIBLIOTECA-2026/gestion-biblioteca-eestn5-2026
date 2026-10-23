@@ -1,32 +1,11 @@
 /* =========================================================
-   INDEX - PANEL DE INICIO
+   INICIO BASE - Íconos de métricas, accesos rápidos, tarjeta
+   de préstamos, tabla y estados del inicio de alumnos y docentes
+   (inicio-usuario.html)
 ========================================================= */
 
-/* --- MÉTRICAS DEL INICIO (GET /api/dashboard) --- */
-.grid-metricas {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-bottom: 24px;
-}
 
-.tarjeta-metrica {
-    box-shadow: var(--sombra-tarjeta);
-    background: var(--fondo-tarjeta);
-    border: 1px solid var(--borde-tarjeta);
-    border-left: 4px solid var(--azul-400);
-    border-radius: 12px;
-    padding: 22px 24px;
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    column-gap: 14px;
-    align-items: center;
-}
-
-.tarjeta-metrica.alerta {
-    border-left-color: var(--rojo-500);
-}
-
+/* --- ÍCONO DE LAS MÉTRICAS (base; inicio-usuario.css lo ajusta) --- */
 .metrica-icono {
     grid-row: span 2;
     width: 44px;
@@ -40,68 +19,13 @@
     color: var(--azul-400);
 }
 
-.tarjeta-metrica.alerta .metrica-icono {
-    background: var(--rojo-fondo);
-    border-color: var(--rojo-borde);
-    color: var(--rojo-500);
-}
-
 .metrica-icono svg {
     width: 22px;
     height: 22px;
 }
 
-.tarjeta-metrica h3 {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--texto-secundario);
-}
-
-.tarjeta-metrica strong {
-    font-size: 34px;
-    font-weight: 800;
-    line-height: 1.1;
-    color: var(--texto-fuerte);
-    font-variant-numeric: tabular-nums;
-}
-
-.tarjeta-metrica p,
-.tarjeta-metrica .enlace-detalles {
-    grid-column: 1 / -1;
-    margin-top: 12px;
-    font-size: 12px;
-}
-
-.tarjeta-metrica p {
-    color: var(--texto-mutado);
-}
-
-.enlace-detalles {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--rojo-500);
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.2s ease;
-}
-
-.enlace-detalles:hover {
-    color: var(--rojo-600);
-    text-decoration: underline;
-}
-
-.enlace-detalles svg {
-    width: 16px;
-    height: 16px;
-}
-
 
 /* --- ACCIONES RÁPIDAS --- */
-.grid-superior {
-    margin-bottom: 28px;
-}
-
 /* Tarjeta de Acciones Rápidas */
 .tarjeta-acciones-rapidas {
     box-shadow: var(--sombra-tarjeta);
@@ -199,25 +123,6 @@
     color: var(--texto-fuerte);
 }
 
-.ver-todos {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--azul-400);
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.ver-todos:hover {
-    text-decoration: underline;
-}
-
-.ver-todos svg {
-    width: 16px;
-    height: 16px;
-}
-
 
 /* --- TABLA --- */
 .contenedor-tabla {
@@ -286,9 +191,6 @@ tbody td {
 }
 
 
-/* --- ACCIONES EN TABLA (Editar / Eliminar) --- */
-
-
 .celda-mensaje {
     text-align: center;
     color: var(--texto-mutado);
@@ -299,9 +201,6 @@ tbody td {
 
 /* --- RESPONSIVE --- */
 @media (max-width: 1100px) {
-    .grid-metricas {
-        grid-template-columns: 1fr;
-    }
     .rejilla-acciones-mini {
         grid-template-columns: repeat(2, 1fr);
     }

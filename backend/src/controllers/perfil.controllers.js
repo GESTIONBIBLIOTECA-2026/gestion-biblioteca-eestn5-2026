@@ -4,7 +4,7 @@
    ========================================================================== */
 
 import bcrypt from "bcryptjs";
-import { getUsuarioPorId, buscarRepetidos } from "../models/usuario.models.js";
+import { getUsuarioPorId, buscarCorreoRepetido } from "../models/usuario.models.js";
 import { actualizarPerfil, getHashClave, actualizarClave } from "../models/perfil.models.js";
 import { error500 } from "./respuestas.js";
 
@@ -26,7 +26,7 @@ export const putMiPerfil = async (req, res) => {
         const { id } = req.usuario;
 
         // 1. El correo no puede ser de otro usuario
-        const [repetido] = await buscarRepetidos("", req.body.correo, id);
+        const [repetido] = await buscarCorreoRepetido(req.body.correo, id);
         if (repetido) {
             const mensaje = `Ese correo ya es de ${repetido.nombre_completo}.`;
             return res.status(409).json({ error: mensaje, campos: { correo: mensaje } });

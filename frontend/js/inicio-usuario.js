@@ -1,7 +1,7 @@
 /* ==========================================================================
    MÓDULO: inicio-usuario.js - Inicio de alumnos y docentes (inicio-usuario.html)
    Todo sale de UNA consulta: GET /api/perfil/historial → { usuario, prestamos, sanciones }
-   - Credencial digital con QR y estado de la cuenta
+   - Credencial digital y estado de la cuenta
    - Números: libros en mi poder, próxima devolución, vencidos y reservas
    - Devoluciones pendientes (cuántos días faltan), reservas, historial y sanciones
    ========================================================================== */

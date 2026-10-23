@@ -129,23 +129,6 @@
     gap: 16px;
 }
 
-/* El QR va siempre sobre blanco para que se pueda escanear en modo oscuro */
-.credencial-qr {
-    flex: 0 0 96px;
-    width: 96px;
-    height: 96px;
-    padding: 8px;
-    border-radius: 10px;
-    background: #ffffff;
-    border: 1px solid var(--borde-tarjeta);
-}
-
-.credencial-qr svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
 .credencial h2 {
     color: var(--texto-fuerte);
     font-size: 18px;
@@ -517,6 +500,52 @@
 
     .rejilla-acciones-mini {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Historial: cada préstamo pasa a ser una tarjeta (sin scroll de costado) */
+    #historial table {
+        min-width: 0;
+    }
+
+    #historial thead {
+        display: none;
+    }
+
+    #cuerpoHistorial tr {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px 12px;
+        padding: 14px 0;
+    }
+
+    #cuerpoHistorial td {
+        padding: 0;
+        font-size: 12px;
+    }
+
+    #cuerpoHistorial td:first-child,
+    #cuerpoHistorial td:last-child,
+    #cuerpoHistorial td[colspan] {
+        grid-column: 1 / -1;
+    }
+
+    #cuerpoHistorial td:first-child strong {
+        font-size: 14px;
+    }
+
+    /* Nombre de cada columna arriba del dato (reemplaza al encabezado oculto) */
+    #cuerpoHistorial td:nth-child(2)::before { content: "Retirado"; }
+    #cuerpoHistorial td:nth-child(3)::before { content: "Vencimiento"; }
+    #cuerpoHistorial td:nth-child(4)::before { content: "Devuelto"; }
+
+    #cuerpoHistorial td:not([colspan])::before {
+        display: block;
+        margin-bottom: 2px;
+        color: var(--texto-mutado);
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: .5px;
     }
 }
 

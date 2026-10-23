@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS libros (
     categoria_id SMALLINT UNSIGNED NOT NULL,
     editorial_id INT UNSIGNED NULL,
     anio_publicacion SMALLINT UNSIGNED NULL,
-    portada_url VARCHAR(255) NULL,
+    portada_url VARCHAR(2000) NULL,
     descripcion TEXT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (id),
@@ -78,6 +78,9 @@ CREATE TABLE IF NOT EXISTS libros (
     CONSTRAINT fk_libros_editorial FOREIGN KEY (editorial_id) REFERENCES editoriales (id)
         ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Actualiza también instalaciones existentes, donde CREATE TABLE IF NOT EXISTS no altera columnas.
+ALTER TABLE libros MODIFY COLUMN portada_url VARCHAR(2000) NULL;
 
 CREATE TABLE IF NOT EXISTS libros_autores (
     libro_id INT UNSIGNED NOT NULL,

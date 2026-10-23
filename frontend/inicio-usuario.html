@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="verificando-sesion" data-acceso="usuario">
+<html lang="es" class="verificando-sesion">
 
 <head>
     <meta charset="UTF-8">
@@ -7,12 +7,20 @@
 
     <title>Mi biblioteca - Biblioteca Invaluable</title>
 
+    <!-- PWA (clase 07): manifiesto, color de la barra de estado y soporte para iOS -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b1329">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Biblioteca">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+
     <!-- Tema claro / oscuro (va primero para que no parpadee) -->
     <script src="js/tema.js"></script>
 
-    <!-- Estilos generales + los del inicio del admin (tabla, estados y accesos rápidos) -->
+    <!-- Estilos generales + base del inicio (tabla, estados y accesos rápidos) -->
     <link rel="stylesheet" href="css/estilo-general.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/inicio-base.css">
 
     <!-- Estilos exclusivos del inicio de alumnos y docentes -->
     <link rel="stylesheet" href="css/inicio-usuario.css">
@@ -27,9 +35,6 @@
 
     <!-- Iconos Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Código QR de la credencial -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 </head>
 
 <body>
@@ -60,7 +65,6 @@
                     <span>Inicio</span>
                 </a>
 
-                <!-- El catálogo de libros lo hace el Grupo 6 -->
                 <a href="catalogo.html" class="nav-item" title="Catálogo">
                     <i data-lucide="book"></i>
                     <span>Catálogo</span>
@@ -85,6 +89,12 @@
                 <p class="titulo-encabezado">Mi biblioteca</p>
 
                 <div class="encabezado-derecha">
+
+                    <!-- INSTALAR LA APP (PWA · js/pwa.js): oculto hasta que el navegador lo permite -->
+                    <button type="button" id="btn-instalar-app" class="boton-principal boton-instalar" hidden>
+                        <i data-lucide="download"></i>
+                        <span>Instalar app</span>
+                    </button>
 
                     <div class="info-fecha-hora">
 
@@ -115,7 +125,7 @@
                                 <i data-lucide="user-round"></i>
                             </span>
 
-                            <span class="nombre-perfil" data-nombre-admin>Usuario</span>
+                            <span class="nombre-perfil" data-nombre-usuario>Usuario</span>
 
                             <i data-lucide="chevron-down" class="flecha-perfil"></i>
                         </button>
@@ -123,8 +133,8 @@
                         <div class="menu-perfil-lista" id="menuPerfil" role="menu" aria-label="Opciones del perfil" hidden>
 
                             <div class="menu-perfil-cabecera">
-                                <strong data-nombre-admin>Usuario</strong>
-                                <span data-rol-admin>Alumno</span>
+                                <strong data-nombre-usuario>Usuario</strong>
+                                <span data-rol-usuario>Alumno</span>
                             </div>
 
                             <a href="configuracion.html" class="menu-perfil-opcion" role="menuitem">
@@ -194,8 +204,6 @@
                         </div>
 
                         <div class="credencial-cuerpo">
-                            <div class="credencial-qr" id="qrCredencial" aria-hidden="true"></div>
-
                             <div>
                                 <h2 id="tituloCredencial">—</h2>
                                 <p id="credencialDetalle">—</p>
@@ -347,6 +355,9 @@
     <script type="module" src="js/inicio-usuario.js"></script>
 
     <!-- ICONOS -->
+    <!-- PWA: registro del Service Worker y botón "Instalar app" -->
+    <script src="js/pwa.js"></script>
+
     <script>
         window.lucide?.createIcons();
     </script>
