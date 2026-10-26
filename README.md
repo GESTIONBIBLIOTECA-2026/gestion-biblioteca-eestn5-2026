@@ -147,7 +147,7 @@ Tiene que decir:
 ### 4. Abrir la app
 **http://localhost:3000** (abre `index.html`, el inicio de sesión).
 
-**Datos de prueba (opcional):** `backend/scripts/datos-prueba-grupo5.sql` carga usuarios de ejemplo (DNI 99000001 a 99000006,
+**Datos de prueba (opcional):** `backend/scripts/datos-prueba-grupo5.sql` carga usuarios de ejemplo (DNI 99010016,
 clave `prueba123`) con préstamos al día, devueltos, atrasados y sanciones. Al final del archivo está cómo borrarlos.
 
 ---

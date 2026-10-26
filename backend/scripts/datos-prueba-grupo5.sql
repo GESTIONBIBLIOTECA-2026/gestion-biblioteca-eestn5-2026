@@ -4,7 +4,8 @@
 -- Se puede ejecutar mas de una vez: las filas usan claves estables.
 --
 -- Clave de acceso compartida por las cuentas de muestra: prueba123
--- Los datos propios de esta seed usan DNI 99010001..99010034, ISBN
+-- Los datos propios de esta seed usan DNI 99010001..99010034 (demo) y
+-- 99020001..99020007 (alumnos de las fichas de biblioteca), ISBN
 -- DEMO26-0001..DEMO26-0025 y codigos de inventario DEMO26-....
 --
 -- Roles se mantienen como catalogo funcional (alumno/docente/
@@ -95,6 +96,30 @@ JOIN roles r ON r.nombre = d.rol;
 UPDATE usuarios
 SET password_hash = @clave_demo
 WHERE dni BETWEEN '99010001' AND '99010034';
+
+-- Usuarios reales de las fichas de biblioteca (Fichas_biblioteca.xlsx): 7 alumnos.
+-- Las fichas no tienen DNI ni correo: se usan DNI provisorios 99020001..99020007
+-- y correos @prueba.eest5.edu.ar hasta reemplazarlos por los reales.
+-- Curso: el de la ficha 2026. Telefono/domicilio faltantes quedan pendientes.
+INSERT IGNORE INTO usuarios
+    (dni, nombre_completo, curso_id, correo, telefono, direccion, password_hash, rol_id, estado)
+SELECT d.dni, d.nombre_completo, c.id, CONCAT(d.correo, '@prueba.eest5.edu.ar'), d.telefono, d.direccion,
+       @clave_demo, r.id, 'habilitado'
+FROM (
+    SELECT '99020001' AS dni, 'Malena Abeleira' AS nombre_completo, '2do 1ra' AS curso, 'malena.abeleira' AS correo, '11 6015-3489' AS telefono, 'Monseñor Alberdi 3407' AS direccion
+    UNION ALL SELECT '99020002', 'Benicio Acevedo', '1ro 5ta', 'benicio.acevedo', '11 6355-7169', 'Pje. Aguirre 7, Avellaneda'
+    UNION ALL SELECT '99020003', 'Valentino Acevedo', '1ro 3ra', 'valentino.acevedo', '11 4914-8737', 'Sin domicilio cargado'
+    UNION ALL SELECT '99020004', 'Bautista Acosta', '7mo 1ra', 'bautista.acosta', '11 7607-5669', 'Quesada 849, Lomas de Zamora'
+    UNION ALL SELECT '99020005', 'Leonidas Aguirre', '1ro 4ta', 'leonidas.aguirre', '', 'Sitio de Montevideo 4863, Lanús Este'
+    UNION ALL SELECT '99020006', 'Tobías Álvarez', '4to 3ra', 'tobias.alvarez', '11 2471-7544', 'Villegas 5512, Wilde'
+    UNION ALL SELECT '99020007', 'Agustina Arguello', '5to 1ra', 'agustina.arguello', '11 2819-5968', 'Las Piedras 4092, Lanús Este'
+) AS d
+LEFT JOIN cursos c ON c.nombre = d.curso
+JOIN roles r ON r.nombre = 'alumno';
+
+UPDATE usuarios
+SET password_hash = @clave_demo
+WHERE dni BETWEEN '99020001' AND '99020007';
 
 -- Autores (25). La tabla no tiene clave unica natural, por eso se evita
 -- insertar de nuevo un nombre que ya exista.
@@ -476,5 +501,6 @@ WHERE NOT EXISTS (
 -- Comprobacion de volumen despues de ejecutar:
 -- SELECT 'cursos' AS tabla, COUNT(*) AS filas FROM cursos
 -- UNION ALL SELECT 'usuarios', COUNT(*) FROM usuarios WHERE dni BETWEEN '99010001' AND '99010034'
+-- UNION ALL SELECT 'usuarios fichas', COUNT(*) FROM usuarios WHERE dni BETWEEN '99020001' AND '99020007'
 -- UNION ALL SELECT 'libros', COUNT(*) FROM libros WHERE isbn LIKE 'DEMO26-%'
 -- UNION ALL SELECT 'ejemplares', COUNT(*) FROM ejemplares WHERE codigo_inventario LIKE 'DEMO26-%';

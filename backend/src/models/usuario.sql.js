@@ -19,7 +19,7 @@ const CONDICION = `CASE WHEN u.estado = 'baja' THEN 'baja'
 
 // Datos públicos de un usuario (NUNCA el password_hash)
 export const COLUMNAS = `u.id, u.dni, u.nombre_completo, c.nombre AS curso, u.correo, u.telefono,
-    u.direccion, r.nombre AS rol, u.estado, u.fecha_alta, ${CONDICION} AS condicion,
+    u.direccion, r.nombre AS rol, u.estado, u.fecha_alta, u.anio_inscripcion, ${CONDICION} AS condicion,
     (SELECT COUNT(*) FROM pedidos p WHERE p.usuario_id = u.id AND p.estado IN ('prestado', 'vencido')) AS prestamos_en_curso`;
 
 export const DESDE = "FROM usuarios u JOIN roles r ON r.id = u.rol_id LEFT JOIN cursos c ON c.id = u.curso_id";

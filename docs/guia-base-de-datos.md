@@ -66,7 +66,10 @@ Todo el trabajo con la base de datos se realiza **100% dentro de Visual Studio C
 ## 📌 Próximo Paso
 Una vez establecida la conexión en **VS Code con Database Client** sobre la base limpia de Aiven, el equipo de Barufaldi estará listo para comenzar a ejecutar los scripts `CREATE TABLE` de las entidades del proyecto.
 
+### Actualizar una base de datos existente
+
+El esquema de `usuarios` incluye `anio_inscripcion`, que toma automáticamente el año actual al crear un usuario. Para agregar o actualizar este valor predeterminado en una base ya creada, ejecutá `npm run db:init` desde la carpeta `backend`. Los registros existentes no se modifican.
+
 ---
 
 📌 *Guía Oficial de Base de Datos Nube — E.E.S.T. N° 5 (2026)*
-
