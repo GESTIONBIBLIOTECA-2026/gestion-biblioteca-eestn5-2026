@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     rol_id TINYINT UNSIGNED NOT NULL,
     estado ENUM('habilitado','suspendido','baja') NOT NULL DEFAULT 'habilitado',
     fecha_alta DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    anio_inscripcion SMALLINT UNSIGNED NULL DEFAULT (YEAR(CURRENT_DATE)),
     PRIMARY KEY (id),
     UNIQUE KEY uq_usuarios_dni (dni),
     UNIQUE KEY uq_usuarios_correo (correo),
