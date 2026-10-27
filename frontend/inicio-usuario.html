@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" class="verificando-sesion">
 
 <head>
@@ -19,11 +19,12 @@
     <script src="js/tema.js"></script>
 
     <!-- Estilos generales + base del inicio (tabla, estados y accesos rápidos) -->
-    <link rel="stylesheet" href="css/estilo-general.css">
-    <link rel="stylesheet" href="css/inicio-base.css">
+    <link rel="stylesheet" href="css/estilo-general.css?v=2">
+    <link rel="stylesheet" href="css/nav-inferior.css?v=2">
+    <link rel="stylesheet" href="css/inicio-base.css?v=2">
 
     <!-- Estilos exclusivos del inicio de alumnos y docentes -->
-    <link rel="stylesheet" href="css/inicio-usuario.css">
+    <link rel="stylesheet" href="css/inicio-usuario.css?v=2">
 
     <!-- Fuente Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -86,7 +87,15 @@
             <!-- ENCABEZADO SUPERIOR -->
             <header class="encabezado-superior">
 
-                <p class="titulo-encabezado">Mi biblioteca</p>
+                                <!-- Logo visible en movil -->
+                <div class="logo-movil" aria-hidden="true">
+                    <div class="sidebar-logo-icono"><i data-lucide="book-open"></i></div>
+                    <div class="sidebar-logo-texto">
+                        <h2>BIBLIOTECA</h2>
+                        <p>INVALUABLE</p>
+                    </div>
+                </div>
+<p class="titulo-encabezado">Mi biblioteca</p>
 
                 <div class="encabezado-derecha">
 
@@ -362,6 +371,22 @@
         window.lucide?.createIcons();
     </script>
 
+
+    <!-- NAVEGACION INFERIOR (solo movil) -->
+    <nav class="nav-inferior" aria-label="Navegacion movil">
+        <a href="inicio-usuario.html" class="nav-inferior-item activo" aria-current="page">
+            <i data-lucide="house"></i><span>Inicio</span>
+        </a>
+        <a href="catalogo.html" class="nav-inferior-item">
+            <i data-lucide="search"></i><span>Buscar</span>
+        </a>
+        <a href="#reservas" class="nav-inferior-item">
+            <i data-lucide="book-marked"></i><span>Reservas</span>
+        </a>
+        <a href="configuracion.html" class="nav-inferior-item">
+            <i data-lucide="settings"></i><span>Mas</span>
+        </a>
+    </nav>
 </body>
 
 </html>

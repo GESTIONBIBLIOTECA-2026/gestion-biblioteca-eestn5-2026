@@ -28,7 +28,7 @@
 .tarjeta-config {
     background: var(--fondo-tarjeta);
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 12px;
+    border-radius: 14px;
     box-shadow: var(--sombra-tarjeta);
     scroll-margin-top: 90px;
 }
@@ -50,6 +50,7 @@
     border-radius: 10px;
     background: var(--azul-suave);
     color: var(--azul-500);
+    border: 1px solid var(--azul-suave-borde);
 }
 
 .icono-config svg {
@@ -103,6 +104,7 @@
     color: var(--texto-secundario);
     font-size: 12px;
     font-weight: 600;
+    letter-spacing: .2px;
 }
 
 .campo-config input {
@@ -111,7 +113,7 @@
     min-height: 42px;
     padding: 10px 12px;
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 8px;
+    border-radius: 10px;
     outline: none;
     background: var(--fondo-campo);
     color: var(--texto-principal);
@@ -144,6 +146,7 @@
 
 .campo-config input[aria-invalid="true"] {
     border-color: var(--rojo-500);
+    box-shadow: 0 0 0 3px var(--rojo-fondo);
 }
 
 .campo-clave-config {
@@ -192,7 +195,7 @@
     margin-bottom: 20px;
     padding: 12px 15px;
     border: 1px solid var(--rojo-borde);
-    border-radius: 8px;
+    border-radius: 10px;
     background: var(--rojo-fondo);
     color: var(--rojo-500);
     font-size: 13px;

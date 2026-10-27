@@ -21,14 +21,15 @@
     min-width: 0;
     padding: 18px;
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 12px;
-    background: var(--superficie-sutil);
-    transition: border-color .2s ease, transform .2s ease;
+    border-radius: 14px;
+    background: var(--fondo-tarjeta);
+    transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
 .tarjeta-libro:hover {
     border-color: var(--azul-400);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(59,130,246,.15);
 }
 
 .tarjeta-libro-portada {
@@ -38,7 +39,8 @@
     height: 46px;
     border-radius: 10px;
     background: var(--azul-suave);
-    color: var(--azul-500);
+    color: var(--azul-400);
+    border: 1px solid var(--azul-suave-borde);
 }
 
 .tarjeta-libro-portada svg {
@@ -52,7 +54,7 @@
 }
 
 .tarjeta-libro h3 {
-    color: var(--texto-principal);
+    color: var(--texto-fuerte);
     font-size: 15px;
     line-height: 1.35;
 }

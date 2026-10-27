@@ -31,7 +31,7 @@
     box-shadow: var(--sombra-tarjeta);
     background: var(--fondo-tarjeta);
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 24px;
     display: flex;
     flex-direction: column;
@@ -71,9 +71,10 @@
 }
 
 .accion-mini:hover {
-    background: var(--fondo-tarjeta-hover);
+    background: var(--superficie-hover);
     border-color: var(--azul-400);
     transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(59,130,246,.12);
 }
 
 .accion-mini-icono {
@@ -106,7 +107,7 @@
     box-shadow: var(--sombra-tarjeta);
     background: var(--fondo-tarjeta);
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 24px;
 }
 
@@ -153,7 +154,7 @@ tbody tr {
 }
 
 tbody tr:hover {
-    background: var(--superficie-sutil);
+    background: var(--superficie-hover);
 }
 
 tbody td {

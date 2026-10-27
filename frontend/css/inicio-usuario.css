@@ -7,8 +7,8 @@
 /* --- Ámbar: "vence pronto" (warning de la guía de estilos) --- */
 :root {
     --ambar-texto: #fbbf24;
-    --ambar-fondo: rgba(217, 119, 6, .14);
-    --ambar-borde: rgba(217, 119, 6, .45);
+    --ambar-fondo: rgba(217,119,6,.14);
+    --ambar-borde: rgba(217,119,6,.45);
 }
 
 .modo-claro {
@@ -92,11 +92,16 @@
     gap: 18px;
     padding: 22px;
     border: 1px solid var(--borde-tarjeta);
-    border-top: 4px solid var(--azul-400);
-    border-radius: 12px;
+    border-top: 3px solid var(--azul-400);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0f1e38 0%, #152848 60%, #1a3560 100%);
+    box-shadow: 0 4px 24px rgba(59,130,246,.15), var(--sombra-tarjeta);
+    scroll-margin-top: 90px;
+}
+
+.modo-claro .credencial {
     background: var(--fondo-tarjeta);
     box-shadow: var(--sombra-tarjeta);
-    scroll-margin-top: 90px;
 }
 
 .credencial-cabecera {
@@ -104,11 +109,15 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    color: var(--texto-secundario);
+    color: var(--azul-500);
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: .5px;
+}
+
+.modo-claro .credencial-cabecera {
+    color: var(--texto-secundario);
 }
 
 .credencial-cabecera > span:first-child {
@@ -120,7 +129,7 @@
 .credencial-cabecera svg {
     width: 17px;
     height: 17px;
-    color: var(--azul-500);
+    color: var(--azul-400);
 }
 
 .credencial-cuerpo {
@@ -151,8 +160,12 @@
     display: grid;
     gap: 10px;
     padding-top: 16px;
-    border-top: 1px solid var(--borde-tarjeta);
+    border-top: 1px solid rgba(59,130,246,.2);
     font-size: 13px;
+}
+
+.modo-claro .credencial-datos {
+    border-top-color: var(--borde-tarjeta);
 }
 
 .credencial-datos div {
@@ -174,10 +187,17 @@
 .credencial-pie {
     padding: 10px 12px;
     border-radius: 8px;
-    background: var(--superficie-sutil);
-    color: var(--texto-mutado);
+    background: rgba(59,130,246,.08);
+    color: var(--texto-secundario);
     font-size: 12px;
     line-height: 1.5;
+    border: 1px solid rgba(59,130,246,.12);
+}
+
+.modo-claro .credencial-pie {
+    background: var(--superficie-sutil);
+    border-color: var(--borde-tarjeta);
+    color: var(--texto-mutado);
 }
 
 
@@ -194,7 +214,7 @@
     gap: 4px;
     padding: 18px;
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 12px;
+    border-radius: 14px;
     background: var(--fondo-tarjeta);
     box-shadow: var(--sombra-tarjeta);
 }
@@ -246,7 +266,7 @@
 .tarjeta-usuario {
     padding: 24px;
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 12px;
+    border-radius: 14px;
     background: var(--fondo-tarjeta);
     box-shadow: var(--sombra-tarjeta);
     scroll-margin-top: 90px;
@@ -414,6 +434,7 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
 
 .filtros-historial button span {
@@ -427,6 +448,7 @@
 .filtros-historial button:hover {
     border-color: var(--azul-400);
     color: var(--texto-principal);
+    background: var(--superficie-hover);
 }
 
 .filtros-historial button.activo {

@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    sw.js - Service Worker de la PWA (clase 07)
    Corre en un hilo aparte (sin DOM) y hace de "aduana": cada petición pasa
    por acá y se decide si sale de la caché o de internet.
@@ -8,7 +8,7 @@
    para que los celulares descarguen los archivos nuevos.
    ========================================================================== */
 
-const CACHE_NAME = "biblioteca-app-v3";   // App Shell (HTML, CSS, JS, íconos)
+const CACHE_NAME = "biblioteca-app-v5";   // App Shell (HTML, CSS, JS, íconos)
 const CACHE_API = "biblioteca-api-v1";    // últimas respuestas GET de la API
 
 // App Shell: lo mínimo para dibujar la app sin internet.
@@ -23,6 +23,7 @@ const RECURSOS_APP_SHELL = [
     "assets/icons/icon-192x192.png",
     "assets/icons/icon-512x512.png",
     "css/estilo-general.css",
+    "css/nav-inferior.css",
     "css/componentes.css",
     "css/login.css",
     "css/inicio-base.css",

@@ -18,19 +18,19 @@
     color-scheme: dark;
 
     /* --- Fondos --- */
-    --fondo-principal: #070d1b;
-    --fondo-sidebar: #0b1329;
-    --fondo-tarjeta: #111c34;
-    --fondo-tarjeta-hover: #162442;
-    --fondo-campo: #0b1428;
-    --fondo-hundido: rgba(7, 13, 27, .45);
-    --borde-tarjeta: #1e2a4a;
+    --fondo-principal: #060d1f;
+    --fondo-sidebar: #0a1628;
+    --fondo-tarjeta: #0f1e38;
+    --fondo-tarjeta-hover: #152848;
+    --fondo-campo: #0a1628;
+    --fondo-hundido: rgba(6,13,31,.5);
+    --borde-tarjeta: #1a2d50;
 
     /* --- Superficies translúcidas (hover, filas, etc.) --- */
-    --superficie-sutil: rgba(255, 255, 255, .02);
-    --superficie-hover: rgba(255, 255, 255, .04);
-    --superficie-activa: rgba(255, 255, 255, .08);
-    --linea-sutil: rgba(255, 255, 255, .04);
+    --superficie-sutil: rgba(255,255,255,.02);
+    --superficie-hover: rgba(59,130,246,.06);
+    --superficie-activa: rgba(59,130,246,.12);
+    --linea-sutil: rgba(255,255,255,.05);
 
     /* --- Azules --- */
     --azul-50: #1e3a8a;
@@ -39,43 +39,43 @@
     --azul-500: #60a5fa;
     --azul-600: #93c5fd;
     --azul-700: #2563eb;
-    --azul-suave: rgba(59, 130, 246, .12);
-    --azul-suave-borde: rgba(59, 130, 246, .45);
+    --azul-suave: rgba(59,130,246,.15);
+    --azul-suave-borde: rgba(59,130,246,.4);
 
     /* --- Rojos --- */
-    --rojo-500: #ef4444;
-    --rojo-600: #dc2626;
-    --rojo-fondo: #2a1215;
-    --rojo-borde: #581c1c;
+    --rojo-500: #f87171;
+    --rojo-600: #ef4444;
+    --rojo-fondo: rgba(239,68,68,.12);
+    --rojo-borde: rgba(239,68,68,.35);
 
     /* --- Bordó (estados suspendido / peligro) --- */
-    --bordo-texto: #e5a1ad;
-    --bordo-fondo: rgba(127, 29, 29, .18);
-    --bordo-fondo-fuerte: rgba(127, 29, 29, .32);
-    --bordo-borde: rgba(127, 29, 29, .55);
+    --bordo-texto: #fca5a5;
+    --bordo-fondo: rgba(239,68,68,.12);
+    --bordo-fondo-fuerte: rgba(239,68,68,.22);
+    --bordo-borde: rgba(239,68,68,.4);
 
     /* --- Verdes --- */
     --verde-600: #34d399;
-    --verde-fondo: #064e3b33;
-    --verde-borde: rgba(52, 211, 153, .25);
+    --verde-fondo: rgba(52,211,153,.12);
+    --verde-borde: rgba(52,211,153,.3);
 
     /* --- Textos --- */
     --blanco: #ffffff;
-    --texto-fuerte: #ffffff;
-    --texto-principal: #f8fafc;
-    --texto-secundario: #94a3b8;
-    --texto-mutado: #64748b;
+    --texto-fuerte: #e2eeff;
+    --texto-principal: #c8d9f0;
+    --texto-secundario: #7a9cc4;
+    --texto-mutado: #4a6a8a;
 
-    /* --- Menú lateral: elemento activo (rojo vino) --- */
-    --nav-activo-fondo: linear-gradient(90deg, #7f1d1d 0%, #450a0a 100%);
-    --nav-activo-borde: var(--rojo-500);
-    --nav-activo-texto: #ffffff;
+    /* --- Menú lateral: elemento activo (azul) --- */
+    --nav-activo-fondo: rgba(37,99,235,.18);
+    --nav-activo-borde: #3b82f6;
+    --nav-activo-texto: #93c5fd;
 
     /* --- Sombras y velos --- */
-    --overlay: rgba(2, 6, 16, .76);
-    --sombra-menu: 0 18px 45px rgba(0, 0, 0, .45);
-    --sombra-modal: 0 24px 80px rgba(0, 0, 0, .4);
-    --sombra-tarjeta: none;
+    --overlay: rgba(2,6,18,.8);
+    --sombra-menu: 0 20px 50px rgba(0,0,0,.5);
+    --sombra-modal: 0 24px 80px rgba(0,0,0,.45);
+    --sombra-tarjeta: 0 2px 12px rgba(0,0,0,.25);
 
     /* --- Medidas del menú lateral --- */
     --ancho-sidebar: 270px;
@@ -85,61 +85,60 @@
 
 /* =========================================================
    2. VARIABLES - TEMA CLARO
-   (colores de docs/eesT5-biblioteca-style-guide.html)
 ========================================================= */
 
 .modo-claro {
     color-scheme: light;
 
-    --fondo-principal: #f5f7fa;
+    --fondo-principal: #f0f4f8;
     --fondo-sidebar: #ffffff;
     --fondo-tarjeta: #ffffff;
-    --fondo-tarjeta-hover: #f1f5f9;
-    --fondo-campo: #ffffff;
-    --fondo-hundido: #f8fafc;
-    --borde-tarjeta: #e2e8f0;
+    --fondo-tarjeta-hover: #eef3fa;
+    --fondo-campo: #f8fafc;
+    --fondo-hundido: #f1f5fb;
+    --borde-tarjeta: #c5d5e8;
 
-    --superficie-sutil: #f8fafc;
-    --superficie-hover: #f1f5f9;
-    --superficie-activa: #e2e8f0;
-    --linea-sutil: #eef2f7;
+    --superficie-sutil: #f5f9ff;
+    --superficie-hover: #eaf1fb;
+    --superficie-activa: #d6e8fb;
+    --linea-sutil: #dde8f5;
 
-    --azul-50: #eaf3ff;
-    --azul-100: #0052cc;
-    --azul-400: #1677ff;
-    --azul-500: #0066ff;
-    --azul-600: #0052cc;
-    --azul-700: #0066ff;
-    --azul-suave: #eaf3ff;
-    --azul-suave-borde: #9fc5ff;
+    --azul-50: #dbeafe;
+    --azul-100: #1d4ed8;
+    --azul-400: #2563eb;
+    --azul-500: #1d4ed8;
+    --azul-600: #1e40af;
+    --azul-700: #2563eb;
+    --azul-suave: #dbeafe;
+    --azul-suave-borde: #93c5fd;
 
     --rojo-500: #dc2626;
     --rojo-600: #b91c1c;
     --rojo-fondo: #fee2e2;
-    --rojo-borde: #fecaca;
+    --rojo-borde: #fca5a5;
 
-    --bordo-texto: #b50000;
-    --bordo-fondo: #fff0f0;
-    --bordo-fondo-fuerte: #ffd6d6;
-    --bordo-borde: #ffadad;
+    --bordo-texto: #991b1b;
+    --bordo-fondo: #fee2e2;
+    --bordo-fondo-fuerte: #fecaca;
+    --bordo-borde: #f87171;
 
-    --verde-600: #16a34a;
-    --verde-fondo: #dcfce7;
-    --verde-borde: #a7e3bb;
+    --verde-600: #059669;
+    --verde-fondo: #d1fae5;
+    --verde-borde: #6ee7b7;
 
-    --texto-fuerte: #0f172a;
-    --texto-principal: #1e293b;
-    --texto-secundario: #475569;
-    --texto-mutado: #64748b;
+    --texto-fuerte: #0f1e38;
+    --texto-principal: #1a2f50;
+    --texto-secundario: #4a6a8a;
+    --texto-mutado: #7a9cc4;
 
-    --nav-activo-fondo: #fff0f0;
-    --nav-activo-borde: #d90000;
-    --nav-activo-texto: #8f0000;
+    --nav-activo-fondo: #dbeafe;
+    --nav-activo-borde: #2563eb;
+    --nav-activo-texto: #1d4ed8;
 
-    --overlay: rgba(15, 23, 42, .45);
-    --sombra-menu: 0 18px 45px rgba(15, 23, 42, .14);
-    --sombra-modal: 0 24px 60px rgba(15, 23, 42, .18);
-    --sombra-tarjeta: 0 1px 3px rgba(15, 23, 42, .06);
+    --overlay: rgba(15,30,56,.4);
+    --sombra-menu: 0 18px 45px rgba(15,30,56,.12);
+    --sombra-modal: 0 24px 60px rgba(15,30,56,.15);
+    --sombra-tarjeta: 0 1px 6px rgba(15,30,56,.08);
 }
 
 
@@ -198,8 +197,8 @@ body {
     top: 0;
     height: 100vh;
     width: var(--ancho-sidebar);
-    background: var(--fondo-sidebar);
-    border-right: 1px solid var(--borde-tarjeta);
+    background: linear-gradient(180deg, #0a1628 0%, #060d1f 100%);
+    border-right: 1px solid rgba(59,130,246,.12);
     display: flex;
     flex-direction: column;
     padding: 32px 20px;
@@ -208,14 +207,23 @@ body {
     z-index: 40;
 }
 
+.modo-claro .sidebar {
+    background: var(--fondo-sidebar);
+    border-right: 1px solid var(--borde-tarjeta);
+}
+
 .sidebar-logo {
     display: flex;
     align-items: center;
     gap: 12px;
     padding-bottom: 32px;
-    border-bottom: 1px solid var(--borde-tarjeta);
+    border-bottom: 1px solid rgba(59,130,246,.12);
     margin-bottom: 24px;
     text-decoration: none;
+}
+
+.modo-claro .sidebar-logo {
+    border-bottom-color: var(--borde-tarjeta);
 }
 
 .sidebar-logo-icono {
@@ -228,6 +236,7 @@ body {
     align-items: center;
     justify-content: center;
     color: var(--blanco);
+    box-shadow: 0 0 20px rgba(59,130,246,.3);
 }
 
 .sidebar-logo-texto {
@@ -372,8 +381,17 @@ body {
     justify-content: space-between;
     gap: 24px;
     padding: 12px 40px;
-    background: var(--fondo-sidebar);
-    border-bottom: 1px solid var(--borde-tarjeta);
+    background: rgba(10,22,40,.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(59,130,246,.1);
+}
+
+.modo-claro .encabezado-superior {
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: var(--borde-tarjeta);
 }
 
 /* "Mi biblioteca" a la izquierda */
@@ -490,7 +508,7 @@ body {
     right: 0;
     width: 250px;
     padding: 8px;
-    background: var(--fondo-sidebar);
+    background: var(--fondo-tarjeta);
     border: 1px solid var(--borde-tarjeta);
     border-radius: 12px;
     box-shadow: var(--sombra-menu);
@@ -629,7 +647,7 @@ button.switch-tema:focus-visible {
     border-radius: 50%;
     background: var(--azul-700);
     color: var(--blanco);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
     transition: transform .25s ease, background .25s ease;
 }
 
@@ -667,29 +685,32 @@ button.switch-tema:focus-visible {
     justify-content: center;
     gap: 8px;
     border: 1px solid transparent;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 10px 14px;
     font: inherit;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     text-decoration: none;
-    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    transition: background .2s ease, border-color .2s ease, transform .15s ease, box-shadow .2s ease;
 }
 
 .boton-principal {
-    background: var(--azul-700);
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: var(--blanco);
+    box-shadow: 0 4px 14px rgba(37,99,235,.35);
 }
 
 .boton-principal:hover {
-    background: var(--azul-100);
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    box-shadow: 0 6px 20px rgba(37,99,235,.45);
+    transform: translateY(-1px);
 }
 
 /* Botón "Instalar app" (PWA) arriba a la derecha: azul y con brillo para que llame la atención */
 .boton-instalar {
     white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, .45);
+    box-shadow: 0 4px 14px rgba(37,99,235,.45);
 }
 
 .boton-principal:disabled,
@@ -715,6 +736,7 @@ button.switch-tema:focus-visible {
 
 .boton-secundario:hover {
     background: var(--fondo-tarjeta-hover);
+    border-color: var(--azul-400);
 }
 
 .boton-peligro {
@@ -734,11 +756,13 @@ button.switch-tema:focus-visible {
     background: transparent;
     border-color: var(--borde-tarjeta);
     color: var(--texto-secundario);
+    border-radius: 8px;
 }
 
 .boton-icono:hover {
     background: var(--fondo-tarjeta-hover);
     color: var(--texto-principal);
+    border-color: var(--azul-400);
 }
 
 .boton-principal:focus-visible,
@@ -766,8 +790,8 @@ button.switch-tema:focus-visible {
     max-width: min(420px, calc(100vw - 32px));
     padding: 14px 18px;
     border: 1px solid var(--borde-tarjeta);
-    border-radius: 10px;
-    background: var(--fondo-sidebar);
+    border-radius: 12px;
+    background: var(--fondo-tarjeta);
     color: var(--texto-principal);
     font-size: 13px;
     line-height: 1.5;

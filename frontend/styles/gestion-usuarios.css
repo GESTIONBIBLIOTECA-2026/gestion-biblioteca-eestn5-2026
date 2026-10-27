@@ -1,0 +1,495 @@
+/* =========================================================
+   TÍTULO DE LA PÁGINA
+========================================================= */
+
+.titulo-usuarios {
+    margin-bottom: 28px;
+}
+
+.volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 18px;
+
+    color: var(--tinta-600);
+
+    font-size: 13px;
+    font-weight: 500;
+
+    text-decoration: none;
+}
+
+.volver:hover {
+    color: var(--azul-500);
+}
+
+.volver svg {
+    width: 16px;
+    height: 16px;
+}
+
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+.tarjeta-usuarios,
+.tarjeta-busqueda,
+.tarjeta-listado {
+    padding: 26px;
+    margin-bottom: 24px;
+}
+
+
+/* =========================================================
+   ENCABEZADO DE TARJETA
+========================================================= */
+
+.encabezado-tarjeta {
+    margin-bottom: 24px;
+}
+
+.encabezado-tarjeta h3,
+.encabezado-listado h3 {
+    color: var(--tinta-900);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.encabezado-tarjeta p,
+.encabezado-listado p {
+    color: var(--tinta-500);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FORMULARIO
+========================================================= */
+
+.campos-formulario {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.campo label {
+    color: var(--tinta-700);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 12px;
+
+    border: 1px solid var(--tinta-300);
+    border-radius: 7px;
+
+    background: var(--blanco);
+
+    color: var(--tinta-800);
+
+    font-family: inherit;
+    font-size: 13px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.campo input::placeholder {
+    color: var(--tinta-400);
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: var(--azul-400);
+
+    box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.10);
+}
+
+
+/* =========================================================
+   BOTONES DEL FORMULARIO
+========================================================= */
+
+.acciones-formulario {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 25px;
+    padding-top: 20px;
+
+    border-top: 1px solid var(--tinta-100);
+}
+
+.boton {
+    min-height: 40px;
+
+    padding: 0 17px;
+
+    border-radius: 7px;
+
+    border: 1px solid transparent;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.boton svg {
+    width: 17px;
+    height: 17px;
+}
+
+.boton-principal {
+    background: var(--azul-500);
+    color: var(--blanco);
+
+    border-color: var(--azul-500);
+}
+
+.boton-principal:hover {
+    background: var(--azul-600);
+    border-color: var(--azul-600);
+}
+
+.boton-secundario {
+    background: var(--blanco);
+    color: var(--tinta-700);
+
+    border-color: var(--tinta-300);
+}
+
+.boton-secundario:hover {
+    background: var(--tinta-50);
+}
+
+
+/* =========================================================
+   BÚSQUEDA
+========================================================= */
+
+.campos-busqueda {
+    display: grid;
+
+    grid-template-columns:
+        1.5fr
+        1fr
+        1fr
+        auto
+        auto;
+
+    align-items: end;
+
+    gap: 14px;
+}
+
+.entrada-icono {
+    position: relative;
+}
+
+.entrada-icono svg {
+    position: absolute;
+
+    left: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 16px;
+    height: 16px;
+
+    color: var(--tinta-400);
+}
+
+.entrada-icono input {
+    padding-left: 38px;
+}
+
+
+/* =========================================================
+   LISTADO
+========================================================= */
+
+.encabezado-listado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.cantidad-usuarios {
+    padding: 6px 10px;
+
+    background: var(--azul-50);
+    color: var(--azul-600);
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.contenedor-tabla {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.tabla-usuarios {
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: collapse;
+}
+
+.tabla-usuarios thead {
+    background: var(--tinta-50);
+}
+
+.tabla-usuarios th {
+    padding: 13px 12px;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--tinta-200);
+
+    color: var(--tinta-600);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.tabla-usuarios td {
+    padding: 15px 12px;
+
+    border-bottom: 1px solid var(--tinta-100);
+
+    color: var(--tinta-600);
+
+    font-size: 13px;
+}
+
+.tabla-usuarios tbody tr:hover {
+    background: var(--tinta-50);
+}
+
+.tabla-usuarios td:first-child {
+    color: var(--tinta-800);
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   ACCIONES DE TABLA
+========================================================= */
+
+.acciones-tabla {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.boton-icono {
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid transparent;
+    border-radius: 6px;
+
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.boton-icono svg {
+    width: 16px;
+    height: 16px;
+}
+
+.boton-ver {
+    color: var(--tinta-600);
+}
+
+.boton-ver:hover {
+    background: var(--tinta-100);
+}
+
+.boton-editar {
+    color: var(--azul-500);
+}
+
+.boton-editar:hover {
+    background: var(--azul-50);
+}
+
+.boton-eliminar {
+    color: var(--rojo-600);
+}
+
+.boton-eliminar:hover {
+    background: #fff1f1;
+}
+
+
+/* =========================================================
+   PIE DE TABLA
+========================================================= */
+
+.pie-tabla {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-top: 18px;
+
+    color: var(--tinta-500);
+
+    font-size: 12px;
+}
+
+.paginacion {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.boton-paginacion {
+    width: 32px;
+    height: 32px;
+
+    border: 1px solid var(--tinta-300);
+    border-radius: 6px;
+
+    background: var(--blanco);
+
+    color: var(--tinta-600);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+.boton-paginacion svg {
+    width: 15px;
+    height: 15px;
+}
+
+.boton-paginacion:hover {
+    background: var(--tinta-50);
+}
+
+.pagina-activa {
+    background: var(--azul-500);
+    color: var(--blanco);
+
+    border-color: var(--azul-500);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .campos-busqueda {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .titulo-usuarios {
+        margin-bottom: 22px;
+    }
+
+    .tarjeta-usuarios,
+    .tarjeta-busqueda,
+    .tarjeta-listado {
+        padding: 20px;
+    }
+
+    .campos-formulario {
+        grid-template-columns: 1fr;
+    }
+
+    .campos-busqueda {
+        grid-template-columns: 1fr;
+    }
+
+    .acciones-formulario {
+        flex-direction: column-reverse;
+    }
+
+    .acciones-formulario .boton {
+        width: 100%;
+    }
+
+    .encabezado-listado {
+        align-items: flex-start;
+        gap: 15px;
+
+        flex-direction: column;
+    }
+
+    .pie-tabla {
+        align-items: flex-start;
+        gap: 15px;
+
+        flex-direction: column;
+    }
+
+}
